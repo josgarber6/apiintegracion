@@ -38,132 +38,100 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		patatas.setAvailability("20");
 		addProduct(patatas);
 		
-		Product one=new Product();
-		one.setTitle("One");
-		one.setArtist("U2");
-		one.setYear("1992");
-		one.setAlbum("Achtung Baby");
-		addProduct(one);
-		
-		Product losingMyReligion=new Product();
-		losingMyReligion.setTitle("Losing my Religion");
-		losingMyReligion.setArtist("REM");
-		losingMyReligion.setYear("1991");
-		losingMyReligion.setAlbum("Out of Time");
-		addProduct(losingMyReligion);
-		
-		Product smellLikeTeenSpirit=new Product();
-		smellLikeTeenSpirit.setTitle("Smell Like Teen Spirit");
-		smellLikeTeenSpirit.setArtist("Nirvana");
-		smellLikeTeenSpirit.setAlbum("Nevermind");
-		smellLikeTeenSpirit.setYear("1991");
-		addProduct(smellLikeTeenSpirit);
-		
-		Product gotye=new Product();
-		gotye.setTitle("Someone that I used to know");
-		gotye.setArtist("Gotye");
-		gotye.setYear("2011");
-		gotye.setAlbum("Making Mirrors");
-		addProduct(gotye);
-		
 		// Create playlists
-		Supermarket japlaylist=new Supermarket();
-		japlaylist.setName("AISSPlayList");
-		japlaylist.setDescription("AISS PlayList");
-		addPlaylist(japlaylist);
+		Supermarket mercadona=new Supermarket();
+		mercadona.setName("Mercadona");
+		mercadona.setDescription("Supermercados Mercadona");
+		addSupermarket(mercadona);
 		
-		Supermarket playlist = new Supermarket();
-		playlist.setName("Favourites");
-		playlist.setDescription("A sample playlist");
-		addPlaylist(playlist);
+		Supermarket dia = new Supermarket();
+		dia.setName("Dia");
+		dia.setDescription("Supermercados Dia");
+		addSupermarket(dia);
 		
 		// Add songs to playlists
-		addProduct(japlaylist.getId(), patatas.getId());
-		addProduct(japlaylist.getId(), one.getId());
-		addProduct(japlaylist.getId(), smellLikeTeenSpirit.getId());
-		addProduct(japlaylist.getId(), losingMyReligion.getId());
+		addProduct(mercadona.getId(), patatas.getId());
 		
-		addProduct(playlist.getId(), losingMyReligion.getId());
-		addProduct(playlist.getId(), gotye.getId());
+		addProduct(dia.getId(), losingMyReligion.getId());
+		addProduct(dia.getId(), gotye.getId());
 	}
 	
 	// Playlist related operations
 	@Override
-	public void addPlaylist(Supermarket p) {
-		String id = "p" + index++;	
-		p.setId(id);
-		playlistMap.put(id,p);
+	public void addSupermarket(Supermarket s) {
+		String id = "s" + index++;	
+		s.setId(id);
+		supermarketMap.put(id,s);
 	}
 	
 	@Override
-	public Collection<Supermarket> getAllPlaylists() {
-			return playlistMap.values();
+	public Collection<Supermarket> getAllSupermarkets() {
+			return supermarketMap.values();
 	}
 
 	@Override
-	public Supermarket getPlaylist(String id) {
-		return playlistMap.get(id);
+	public Supermarket getSupermarket(String id) {
+		return supermarketMap.get(id);
 	}
 	
 	@Override
-	public void updatePlaylist(Supermarket p) {
-		playlistMap.put(p.getId(),p);
+	public void updateSupermarket(Supermarket p) {
+		supermarketMap.put(p.getId(),p);
 	}
 
 	@Override
-	public void deletePlaylist(String id) {	
-		playlistMap.remove(id);
+	public void deleteSupermarket(String id) {	
+		supermarketMap.remove(id);
 	}
 	
 
 	@Override
-	public void addProduct(String playlistId, String songId) {
-		Supermarket playlist = getPlaylist(playlistId);
-		playlist.addProduct(songMap.get(songId));
+	public void addProduct(String supermarketId, String songId) {
+		Supermarket supermarket = getSupermarket(supermarketId);
+		supermarket.addProduct(productMap.get(songId));
 	}
 
 	@Override
-	public Collection<Product> getAll(String playlistId) {
-		return getPlaylist(playlistId).getProducts();
+	public Collection<Product> getAll(String supermarketId) {
+		return getSupermarket(supermarketId).getProducts();
 	}
 
 	@Override
-	public void removeProduct(String playlistId, String songId) {
-		getPlaylist(playlistId).deleteProduct(songId);
+	public void removeProduct(String supermarketId, String songId) {
+		getSupermarket(supermarketId).deleteProduct(songId);
 	}
 
 	
 	// Song related operations
 	
 	@Override
-	public void addProduct(Product s) {
-		String id = "s" + index++;
-		s.setId(id);
-		songMap.put(id, s);
+	public void addProduct(Product p) {
+		String id = "p" + index++;
+		p.setId(id);
+		productMap.put(id, p);
 	}
 	
 	@Override
 	public Collection<Product> getAllProducts() {
-			return songMap.values();
+			return productMap.values();
 	}
 
 	@Override
-	public Product getProduct(String songId) {
-		return songMap.get(songId);
+	public Product getProduct(String productId) {
+		return productMap.get(productId);
 	}
 
 	@Override
-	public void updateProduct(Product s) {
-		Product song = songMap.get(s.getId());
-		song.setTitle(s.getTitle());
-		song.setAlbum(s.getAlbum());
-		song.setArtist(s.getArtist());
-		song.setYear(s.getYear());
+	public void updateProduct(Product p) {
+		Product product = productMap.get(p.getId());
+		product.setName(p.getName());
+		product.setPrice(p.getPrice());
+		product.setAvailability(p.getAvailability());
 	}
 
 	@Override
-	public void deleteProduct(String songId) {
-		songMap.remove(songId);
+	public void deleteProduct(String productId) {
+		productMap.remove(productId);
 	}
 	
 }
