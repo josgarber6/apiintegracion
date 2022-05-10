@@ -13,7 +13,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	Map<String, Supermarket> supermarketMap;
 	Map<String, Product> productMap;
 	private static MapSupermarketRepository instance=null;
-	private int index=0;			// Index to create playlists and songs' identifiers.
+	private int index=0;			// Index to create supermarket and products' identifiers.
 	
 	
 	public static MapSupermarketRepository getInstance() {
@@ -35,7 +35,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		Product patatas=new Product();
 		patatas.setName("Patatas");
 		patatas.setPrice("1,50€/kg");
-		patatas.setAvailability("20");
+		patatas.setAvailability(true);
 		addProduct(patatas);
 		
 		// Create playlists

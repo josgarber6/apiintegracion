@@ -41,6 +41,7 @@ public class ProductResource {
 	
 	private ProductResource(){
 		repository=MapSupermarketRepository.getInstance();
+
 	}
 	
 	public static ProductResource getInstance()
@@ -56,6 +57,7 @@ public class ProductResource {
 			@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset)
 	{
 		List<Product> result = new ArrayList<Product>();
+
 		for (Product product: repository.getAllProducts()) {
 			
 			if (query == null || product.getName().contains(query)
@@ -71,6 +73,7 @@ public class ProductResource {
 					Collections.sort(result, new ComparatorIdProduct());
 				} else {
 					throw new BadRequestException("The order parameter must be 'name', 'id'.");
+
 				}
 			}
 			
@@ -104,11 +107,13 @@ public class ProductResource {
 		}
 		
 		return product;
+
 	}
 	
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
+
 	
 	public Response addProduct(@Context UriInfo uriInfo, Product product) {
 		if (product.getId() == null || "".equals(product.getId()))
@@ -130,12 +135,14 @@ public class ProductResource {
 		URI uri = ub.build(product.getId());
 		ResponseBuilder resp = Response.created(uri);
 		resp.entity(product);			
+
 		return resp.build();
 	}
 	
 	
 	@PUT
 	@Consumes("application/json")
+
 	public Response updateproduct(Product product) {
 		Product oldproduct = repository.getProduct(product.getId());				
 		if (oldproduct == null) {
@@ -163,14 +170,20 @@ public class ProductResource {
 	
 	@DELETE
 	@Path("/{id}")
+
 	public Response removeproduct(@PathParam("id") String productId) {
 		Product toberemoved = repository.getProduct(productId);
-		if (toberemoved==null)
+		if (toberemoved==null) 
+			
 			throw new NotFoundException("The product with id=" + productId + " was not found");
 		else
 			repository.deleteProduct(productId);
-		
+	
 		return Response.noContent().build();
 	}
 	
+
 }
+
+
+
