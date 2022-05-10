@@ -107,7 +107,7 @@ public class SupermarketResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addPlaylist(@Context UriInfo uriInfo, Supermarket playlist) {
+	public Response addSupermarket(@Context UriInfo uriInfo, Supermarket playlist) {
 		if (playlist.getName() == null || "".equals(playlist.getName()))
 			throw new BadRequestException("The name of the supermarket must not be null");
 		
@@ -127,7 +127,7 @@ public class SupermarketResource {
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updatePlaylist(Supermarket market) {
+	public Response updateSupermarket(Supermarket market) {
 		Supermarket oldplaylist = repository.getSupermarket(market.getId());
 		if (oldplaylist == null) {
 			throw new NotFoundException("The supermarket with id="+ market.getId() +" was not found");			
@@ -149,7 +149,7 @@ public class SupermarketResource {
 	
 	@DELETE
 	@Path("/{id}")
-	public Response removePlaylist(@PathParam("id") String id) {
+	public Response removeSupermarket(@PathParam("id") String id) {
 		Supermarket toberemoved=repository.getSupermarket(id);
 		if (toberemoved == null)
 			throw new NotFoundException("The supermarket with id="+ id +" was not found");
@@ -164,7 +164,7 @@ public class SupermarketResource {
 	@Path("/{supermarketId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addSong(@Context UriInfo uriInfo,@PathParam("supermarketId") String supermarketId, @PathParam("productId") String songId)
+	public Response addProduct(@Context UriInfo uriInfo,@PathParam("supermarketId") String supermarketId, @PathParam("productId") String songId)
 	{				
 		
 		Supermarket market = repository.getSupermarket(supermarketId);
@@ -192,7 +192,7 @@ public class SupermarketResource {
 	
 	@DELETE
 	@Path("/{supermarketId}/{productId}")
-	public Response removeSong(@PathParam("supermarketId") String supermarketId, @PathParam("productId") String productId) {
+	public Response removeProduct(@PathParam("supermarketId") String supermarketId, @PathParam("productId") String productId) {
 		Supermarket market = repository.getSupermarket(supermarketId);
 		Product product = repository.getProduct(productId);
 		
