@@ -13,37 +13,37 @@ import aiss.model.Song;
 
 public class PlaylistResourceTest {
 
-	static Playlist playlist, playlist2, playlist3, playlist4;
-	static Song song;
-	static PlaylistResource plr = new PlaylistResource();
-	static SongResource sr = new SongResource();
+	static Supermarket market, market2, market3, market4;
+	static Product product;
+	static SupermarketResource smr = new SupermarketResource();
+	static ProductResource pr = new ProductResource();
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
 		
-		playlist = plr.addPlaylist(new Playlist("Test list 1"));
-		playlist2 = plr.addPlaylist(new Playlist("Test list 2"));
-		playlist3 = plr.addPlaylist(new Playlist("Test list 3"));
-		playlist4 = plr.addPlaylist(new Playlist("Test list 4"));
+		market = plr.addSupermarket(new Supermarket("Test market 1"));
+		market2 = plr.addSupermarket(new Playlist("Test market 2"));
+		market3 = plr.addSupermarket(new Playlist("Test market 3"));
+		market4 = plr.addSupermarket(new Playlist("Test market 4"));
 		
 	
-		song = sr.addSong(new Song("Test title","Test artist","Test album","2016"));
-		if(song!=null)
-			plr.addSong(playlist.getId(), song.getId());
+		product = sr.addProduct(new Song("Test name","Test price","Test availability"));
+		if(product!=null)
+			smr.addProduct(market.getId(), product.getId());
 	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {
-		plr.deletePlaylist(playlist.getId());
-		plr.deletePlaylist(playlist3.getId());
-		plr.deletePlaylist(playlist4.getId());
-		if(song!=null)
-			sr.deleteSong(song.getId());
+		plr.deleteSupermarket(market.getId());
+		plr.deleteSupermarket(market3.getId());
+		plr.deleteSupermarket(market4.getId());
+		if(product!=null)
+			pr.deleteProduct(product.getId());
 	}
 
 	@Test
 	public void testGetAll() {
-		Collection<Playlist> playlists = plr.getAll(); 
+		Collection<Supermarket> markets = smr.getAll(); 
 		
 		assertNotNull("The collection of playlists is null", playlists);
 		
