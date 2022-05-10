@@ -107,20 +107,20 @@ public class SupermarketResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addSupermarket(@Context UriInfo uriInfo, Supermarket playlist) {
-		if (playlist.getName() == null || "".equals(playlist.getName()))
+	public Response addSupermarket(@Context UriInfo uriInfo, Supermarket market) {
+		if (market.getName() == null || "".equals(market.getName()))
 			throw new BadRequestException("The name of the supermarket must not be null");
 		
-		if (playlist.getProducts()!=null)
+		if (market.getProducts()!=null)
 			throw new BadRequestException("The products property is not editable.");
 
-		repository.addSupermarket(playlist);
+		repository.addSupermarket(market);
 
 		// Builds the response. Returns the supermarket the has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(playlist.getId());
+		URI uri = ub.build(market.getId());
 		ResponseBuilder resp = Response.created(uri);
-		resp.entity(playlist);			
+		resp.entity(market);			
 		return resp.build();
 	}
 
@@ -128,8 +128,8 @@ public class SupermarketResource {
 	@PUT
 	@Consumes("application/json")
 	public Response updateSupermarket(Supermarket market) {
-		Supermarket oldplaylist = repository.getSupermarket(market.getId());
-		if (oldplaylist == null) {
+		Supermarket oldmarket = repository.getSupermarket(market.getId());
+		if (oldmarket == null) {
 			throw new NotFoundException("The supermarket with id="+ market.getId() +" was not found");			
 		}
 		
@@ -138,11 +138,11 @@ public class SupermarketResource {
 		
 		// Update name
 		if (market.getName()!=null)
-			oldplaylist.setName(market.getName());
+			oldmarket.setName(market.getName());
 		
 		// Update description
 		if (market.getDescription()!=null)
-			oldplaylist.setDescription(market.getDescription());
+			oldmarket.setDescription(market.getDescription());
 		
 		return Response.noContent().build();
 	}
