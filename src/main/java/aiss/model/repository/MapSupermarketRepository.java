@@ -16,6 +16,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	Map<String, Order> orderMap;
 	private static MapSupermarketRepository instance=null;
 	private int index=0;			// Index to create supermarkets, products and orders' identifiers.
+
 	
 	
 	public static MapSupermarketRepository getInstance() {

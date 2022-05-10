@@ -25,10 +25,10 @@ import javax.ws.rs.core.UriInfo;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
-import aiss.api.resources.comparators.ComparatorAlbumSong;
-import aiss.api.resources.comparators.ComparatorArtistSong;
-import aiss.api.resources.comparators.ComparatorYearSong;
+import aiss.api.resources.comparators.ComparatorIdProduct;
+import aiss.api.resources.comparators.ComparatorNameProduct;
 import aiss.model.Product;
+import aiss.model.repository.MapSupermarketRepository;
 import aiss.model.repository.SupermarketRepository;
 
 
@@ -40,7 +40,8 @@ public class ProductResource {
 	SupermarketRepository repository;
 	
 	private ProductResource(){
-		repository=MapPlaylistRepository.getInstance();
+		repository=MapSupermarketRepository.getInstance();
+
 	}
 	
 	public static ProductResource getInstance()
@@ -56,24 +57,23 @@ public class ProductResource {
 			@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset)
 	{
 		List<Product> result = new ArrayList<Product>();
-		
-		for (Product song: repository.getAllSongs()) {
+
+		for (Product product: repository.getAllProducts()) {
 			
-			if (query == null || song.getTitle().contains(query)
-				|| song.getAlbum().contains(query)
-				|| song.getArtist().contains(query)) {
-				result.add(song);
+			if (query == null || product.getName().contains(query)
+				|| product.getId().contains(query)
+				) {
+				result.add(product);
 			}
 			
 			if (order != null) {
-				if (order.equals("album")) {
-					Collections.sort(result, new ComparatorAlbumSong());
-				} else if (order.equals("artist")) {
-					Collections.sort(result, new ComparatorArtistSong());
-				} else if (order.equals("year")) {
-					Collections.sort(result, new ComparatorYearSong());
+				if (order.equals("name")) {
+					Collections.sort(result, new ComparatorNameProduct());
+				} else if (order.equals("id")) {
+					Collections.sort(result, new ComparatorIdProduct());
 				} else {
-					throw new BadRequestException("The order parameter must be 'album', 'artist' or 'year'.");
+					throw new BadRequestException("The order parameter must be 'name', 'id'.");
+
 				}
 			}
 			
@@ -98,81 +98,92 @@ public class ProductResource {
 	@GET
 	@Path("/{id}")
 	@Produces("application/json")
-	public Product get(@PathParam("id") String songId)
+	public Product get(@PathParam("id") String productId)
 	{
-		Product song = repository.getProduct(songId);
+		Product product = repository.getProduct(productId);			
 		
-		if (song == null) {
-			throw new NotFoundException("The song with id="+ songId +" was not found");			
+		if (product == null) {
+			throw new NotFoundException("The product with id="+ productId +" was not found");			
 		}
 		
-		return song;
+		return product;
+
 	}
 	
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addSong(@Context UriInfo uriInfo, Product song) {
-		if (song.getTitle() == null || "".equals(song.getTitle()))
-			throw new BadRequestException("The name of the song must not be null");
-		
-		if (song.getArtist()==null)
-			throw new BadRequestException("The artist of the song must not be null");
-		
-		if (song.getAlbum()==null)
-			throw new BadRequestException("The album of the song must not be null");
-		
-		if (song.getYear()==null)
-			throw new BadRequestException("The year of the song must not be null");
-		
-		repository.addSong(song);
 
-		// Builds the response. Returns the song the has just been added.
+	
+	public Response addProduct(@Context UriInfo uriInfo, Product product) {
+		if (product.getId() == null || "".equals(product.getId()))
+			throw new BadRequestException("The id of the product must not be null");
+		
+		if (product.getName()==null)
+			throw new BadRequestException("The name of the product must not be null");
+		
+		if (product.getPrice()==null)
+			throw new BadRequestException("The price of the product must not be null");
+		
+		if (product.getAvailability()==null)
+			throw new BadRequestException("The availability of the product must not be null");
+		
+		repository.addProduct(product);
+
+		// Builds the response. Returns the product the has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(song.getId());
+		URI uri = ub.build(product.getId());
 		ResponseBuilder resp = Response.created(uri);
-		resp.entity(song);			
+		resp.entity(product);			
+
 		return resp.build();
 	}
 	
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updateSong(Product song) {
-		Product oldSong = repository.getSong(song.getId());
-		if (oldSong == null) {
-			throw new NotFoundException("The song with id=" + song.getId() + " was not found");
+
+	public Response updateproduct(Product product) {
+		Product oldproduct = repository.getProduct(product.getId());				
+		if (oldproduct == null) {
+			throw new NotFoundException("The product with id=" + product.getId() + " was not found");
 		}
 		
-		// Update title
-		if (song.getTitle()!=null)
-			oldSong.setTitle(song.getTitle());
+		// Update id
+		if (product.getId()!=null)
+			oldproduct.setId(product.getId());				
 		
-		// Update album
-		if (song.getAlbum()!=null)
-			oldSong.setAlbum(song.getAlbum());
+		// Update name
+		if (product.getName()!=null)
+			oldproduct.setName(product.getName());
 		
-		// Update artist
-		if (song.getArtist()!=null)
-			oldSong.setArtist(song.getArtist());
+		// Update price
+		if (product.getPrice()!=null)
+			oldproduct.setPrice(product.getPrice());
 		
-		// Update year
-		if (song.getYear()!=null)
-			oldSong.setYear(song.getYear());
+		// Update Availability
+		if (product.getAvailability()!=null)
+			oldproduct.setAvailability(product.getAvailability());
 		
 		return Response.noContent().build();
 	}
 	
 	@DELETE
 	@Path("/{id}")
-	public Response removeSong(@PathParam("id") String songId) {
-		Product toberemoved = repository.getSong(songId);
-		if (toberemoved==null)
-			throw new NotFoundException("The song with id=" + songId + " was not found");
+
+	public Response removeproduct(@PathParam("id") String productId) {
+		Product toberemoved = repository.getProduct(productId);
+		if (toberemoved==null) 
+			
+			throw new NotFoundException("The product with id=" + productId + " was not found");
 		else
-			repository.deleteSong(songId);
-		
+			repository.deleteProduct(productId);
+	
 		return Response.noContent().build();
 	}
 	
+
 }
+
+
+
