@@ -5,18 +5,18 @@ public class Product {
 	private String id;
 	private String name;
 	private String price;
-	private String availability;
+	private Boolean availability;
 
 	public Product() {
 	}
 
-	public Product(String name, String price, String availability) {
+	public Product(String name, String price, Boolean availability) {
 		this.name = name;
 		this.price = price;
 		this.availability = availability;
 	}
 	
-	public Product(String id, String name, String price, String availability) {
+	public Product(String id, String name, String price, Boolean availability) {
 		this.id=id;
 		this.name = name;
 		this.price = price;
@@ -47,11 +47,11 @@ public class Product {
 		this.price = price;
 	}
 
-	public String getAvailability() {
+	public Boolean getAvailability() {
 		return availability;
 	}
 
-	public void setAvailability(String availability) {
+	public void setAvailability(Boolean availability) {
 		this.availability = availability;
 	}
 

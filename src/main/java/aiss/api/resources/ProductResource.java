@@ -29,25 +29,24 @@ import aiss.api.resources.comparators.ComparatorAlbumSong;
 import aiss.api.resources.comparators.ComparatorArtistSong;
 import aiss.api.resources.comparators.ComparatorYearSong;
 import aiss.model.Product;
-import aiss.model.repository.MapPlaylistRepository;
-import aiss.model.repository.PlaylistRepository;
+import aiss.model.repository.SupermarketRepository;
 
 
 
-@Path("/songs")
-public class SongResource {
+@Path("/products")
+public class ProductResource {
 
-	public static SongResource _instance=null;
-	PlaylistRepository repository;
+	public static ProductResource _instance=null;
+	SupermarketRepository repository;
 	
-	private SongResource(){
+	private ProductResource(){
 		repository=MapPlaylistRepository.getInstance();
 	}
 	
-	public static SongResource getInstance()
+	public static ProductResource getInstance()
 	{
 		if(_instance==null)
-			_instance=new SongResource();
+			_instance=new ProductResource();
 		return _instance; 
 	}
 	
@@ -101,7 +100,7 @@ public class SongResource {
 	@Produces("application/json")
 	public Product get(@PathParam("id") String songId)
 	{
-		Product song = repository.getSong(songId);
+		Product song = repository.getProduct(songId);
 		
 		if (song == null) {
 			throw new NotFoundException("The song with id="+ songId +" was not found");			

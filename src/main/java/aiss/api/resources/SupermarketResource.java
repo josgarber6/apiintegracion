@@ -36,7 +36,7 @@ import aiss.model.repository.SupermarketRepository;
 
 
 
-@Path("/lists")
+@Path("/supermarkets")
 public class SupermarketResource {
 	
 	/* Singleton */
@@ -65,7 +65,7 @@ public class SupermarketResource {
 		for (Supermarket Supermarket: repository.getAllSupermarkets()) {
 			
 			if (name == null || Supermarket.getName().equals(name)) {	// filtrado del nombre
-				if (isEmpty == null 	// filtrado de listas vacías
+				if (isEmpty == null 	// filtrado de supermercados vacías
 					|| (isEmpty && (Supermarket.getSongs() == null || Supermarket.getSongs().size() == 0))
 					|| (!isEmpty && (Supermarket.getSongs() != null && Supermarket.getSongs().size() > 0))) {
 					
