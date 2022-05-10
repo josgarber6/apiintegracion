@@ -113,8 +113,6 @@ public class ProductResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-
-	
 	public Response addProduct(@Context UriInfo uriInfo, Product product) {
 		if (product.getId() == null || "".equals(product.getId()))
 			throw new BadRequestException("The id of the product must not be null");

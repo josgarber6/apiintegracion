@@ -43,8 +43,8 @@ public class Product {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
-		this.price = price;
+	public void setPrice(String price) {
+		this.price = Integer.valueOf(price);
 	}
 
 	public Boolean getAvailability() {

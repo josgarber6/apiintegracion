@@ -139,7 +139,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	public void updateProduct(Product p) {
 		Product product = productMap.get(p.getId());
 		product.setName(p.getName());
-		product.setPrice(p.getPrice());
+		product.setPrice(""+p.getPrice());
 		product.setAvailability(p.getAvailability());
 	}
 

@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.restlet.resource.ResourceException;
 
+import aiss.model.Product;
 import aiss.model.product;
 
 public class ProductResourceTest {
@@ -19,10 +20,10 @@ public class ProductResourceTest {
 	public static void setup() throws Exception {
 		
 		// Test product 1
-		product1 = sr.addproduct(new product("Test title","Test artist","Test album","2016"));
+		product1 = sr.addproduct(new product("Test id","Test name",23,Boolean.TRUE));
 		
 		// Test product 2
-		product2 = sr.addproduct(new product("Test title 2","Test artist 2","Test album 2","2017"));
+		product2 = sr.addproduct(new product("Test id2","Test name2",22,Boolean.FALSE));
 		
 	}
 
@@ -41,20 +42,20 @@ public class ProductResourceTest {
 		// Show result
 		System.out.println("Listing all products:");
 		int i=1;
-		for (product s : products) {
-			System.out.println("product " + i++ + " : " + s.getTitle() + " (ID=" + s.getId() + ")");
+		for (Product s : products) {
+			System.out.println("product " + i++ + " : " + s.getName() + " (ID=" + s.getId() + ")");
 		}
 	}
 
 	@Test
 	public void testGetproduct() {
 		//TODO
-		product product = sr.getproduct(product2.getId());
+		Product product = sr.getproduct(product2.getId());
 		assertEquals("The id of the products do not match", product2.getId(), product.getId());
 
 		// Show result
 		System.out.println("product id: " +  product.getId());
-		System.out.println("product artist: " +  product.getArtist());
+		System.out.println("product name: " +  product.getName());
 	}
 
 	@Test
@@ -62,12 +63,12 @@ public class ProductResourceTest {
 		
 		//TODO
 		
-		String productTitle = "Burn It Up";
-		String productArtist = "Kaotix";
-		String productAlbum = "Kaos Recordings Vol. 1";
-		String productYear = "2022";
+		String productId = "3";
+		String productName = "Manolo";
+		Integer productPrice = 245;
+		Boolean productAvailability = Boolean.TRUE;
 		
-		product4 = sr.addproduct(new product(productTitle,productArtist, productAlbum, productYear));
+		product4 = sr.addproduct(new product(productId,productName, productPrice, productAvailability));
 		
 		assertNotNull("Error when adding the product", product4);
 		assertEquals("The product's name has not been setted correctly", productTitle, product4.getTitle());
@@ -80,7 +81,8 @@ public class ProductResourceTest {
 		
 		String productId = "0";
 		String productName = "Dr.Kenobi";
-		String productAlbum = "Update product test album";
+		String productPrice = "23";
+		
 		String productYear = "1995";
 		
 		// Update product
