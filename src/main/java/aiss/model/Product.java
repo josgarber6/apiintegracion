@@ -4,23 +4,23 @@ public class Product {
 
 	private String id;
 	private String name;
-	private String price;
+	private Integer price;
 	private Boolean availability;
 
 	public Product() {
 	}
 
-	public Product(String name, String price, Boolean availability) {
+	public Product(String name, String price, String availability) {
 		this.name = name;
-		this.price = price;
-		this.availability = availability;
+		this.price = Integer.valueOf(price);
+		this.availability = Boolean.valueOf(availability);
 	}
 	
-	public Product(String id, String name, String price, Boolean availability) {
+	public Product(String id, String name, String price, String availability) {
 		this.id=id;
 		this.name = name;
-		this.price = price;
-		this.availability = availability;
+		this.price = Integer.valueOf(price);
+		this.availability = Boolean.valueOf(availability);
 	}
 
 	public String getId() {
@@ -39,11 +39,11 @@ public class Product {
 		this.name = name;
 	}
 
-	public String getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 
