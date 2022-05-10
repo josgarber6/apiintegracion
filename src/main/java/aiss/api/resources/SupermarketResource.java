@@ -191,19 +191,19 @@ public class SupermarketResource {
 	
 	
 	@DELETE
-	@Path("/{playlistId}/{songId}")
-	public Response removeSong(@PathParam("playlistId") String playlistId, @PathParam("songId") String songId) {
-		Supermarket playlist = repository.getPlaylist(playlistId);
-		Product song = repository.getSong(songId);
+	@Path("/{supermarketId}/{productId}")
+	public Response removeSong(@PathParam("supermarketId") String supermarketId, @PathParam("productId") String productId) {
+		Supermarket market = repository.getSupermarket(supermarketId);
+		Product product = repository.getProduct(productId);
 		
-		if (playlist==null)
-			throw new NotFoundException("The playlist with id=" + playlistId + " was not found");
+		if (market==null)
+			throw new NotFoundException("The supermarket with id=" + supermarketId + " was not found.");
 		
-		if (song == null)
-			throw new NotFoundException("The song with id=" + songId + " was not found");
+		if (product == null)
+			throw new NotFoundException("The product with id=" + productId + " was not found.");
 		
 		
-		repository.removeSong(playlistId, songId);		
+		repository.removeProduct(supermarketId, productId);		
 		
 		return Response.noContent().build();
 	}
