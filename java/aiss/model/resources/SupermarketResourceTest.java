@@ -45,80 +45,83 @@ public class PlaylistResourceTest {
 	public void testGetAll() {
 		Collection<Supermarket> markets = smr.getAll(); 
 		
-		assertNotNull("The collection of playlists is null", playlists);
+		assertNotNull("The collection of supermarkets is null", markets);
 		
 		// Show result
-		System.out.println("Listing all playlists:");
+		System.out.println("Listing all markets:");
 		int i=1;
-		for (Playlist pl : playlists) {
-			System.out.println("Playlist " + i++ + " : " + pl.getName() + " (ID=" + pl.getId() + ")");
+		for (Supermarket sm : markets) {
+			System.out.println("Supermarket " + i++ + " : " + sm.getName() + " (ID=" + sm.getId() + ")");
 		}
 		
 	}
 
 	@Test
-	public void testGetPlaylist() {
-		Playlist p = plr.getPlaylist(playlist.getId());
+	public void testGetSupermarket() {
+		Supermarket s = smr.getSupermarket(market.getId());
 		
-		assertEquals("The id of the playlists do not match", playlist.getId(), p.getId());
-		assertEquals("The name of the playlists do not match", playlist.getName(), p.getName());
+		assertEquals("The id of the markets do not match", market.getId(), s.getId());
+		assertEquals("The names of the markets do not match", market.getName(), s.getName());
+		assertEquals("The descriptions of the markets do not match", market.getDescription(), s.getDescription());
 		
 		// Show result
-		System.out.println("Playlist id: " +  p.getId());
-		System.out.println("Playlist name: " +  p.getName());
+		System.out.println("Supermarket id: " +  s.getId());
+		System.out.println("Supermarket name: " +  s.getName());
+		System.out.println("Supermarket name: " +  s.getDescription());
 
 	}
 
 	@Test
-	public void testAddPlaylist() {
-		String playlistName = "Add playlist test title";
-		String playlistDescription = "Add playlist test description";
+	public void testAddSupermarket() {
+		String marketName = "Add supermarket test name";
+		String marketDescription = "Add supermarket test description";
 		
-		playlist4 = plr.addPlaylist(new Playlist(playlistName,playlistDescription));
+		market4 = smr.addSupermarket(new Supermarket(marketName,marketDescription));
 		
-		assertNotNull("Error when adding the playlist", playlist4);
-		assertEquals("The playlist's name has not been setted correctly", playlistName, playlist4.getName());
-		assertEquals("The playlist's description has not been setted correctly", playlistDescription, playlist4.getDescription());
+		assertNotNull("Error when adding the supermarket", market4);
+		assertEquals("The supermarket's name has not been setted correctly", marketName, markett4.getName());
+		assertEquals("The supermarket's description has not been setted correctly", marketDescription, market4.getDescription());
 	}
 
 	@Test
-	public void testUpdatePlaylist() {
-		String playlistName = "Updated playlist name";
+	public void testUpdateSupermarket() {
+		String marketName = "Updated supermarket name";
+		String marketDescription = "Updated supermarket description";
 
 		// Update playlist
-		playlist.setName(playlistName);
+		market.setName(marketName);
 
-		boolean success = plr.updatePlaylist(playlist);
+		boolean success = smr.updateSupermarket(market);
 		
-		assertTrue("Error when updating the playlist", success);
+		assertTrue("Error when updating the supermarket", success);
 		
-		Playlist pl  = plr.getPlaylist(playlist.getId());
-		assertEquals("The playlist's name has not been updated correctly", playlistName, pl.getName());
+		Supermarket sm  = smr.getSupermarket(market.getId());
+		assertEquals("The supermarket's name has not been updated correctly", marketName, sm.getName());
 
 	}
 
 	@Test
-	public void testDeletePlaylist() {
-		boolean success = plr.deletePlaylist(playlist2.getId());
-		assertTrue("Error when deleting the playlist", success);
+	public void testDeleteSupermarket() {
+		boolean success = smr.deleteSupermarket(market2.getId());
+		assertTrue("Error when deleting the supermarket", success);
 		
-		Playlist pl = plr.getPlaylist(playlist2.getId());
-		assertNull("The playlist has not been deleted correctly", pl);
+		Supermarket sm = smr.getSupermarket(market2.getId());
+		assertNull("The supermarket has not been deleted correctly", sm);
 	}
 
 	@Test
-	public void testAddSong() {
-		if(song!=null) {
-			boolean success = plr.addSong(playlist3.getId(), song.getId());
-			assertTrue("Error when adding the song", success);
+	public void testAddProduct() {
+		if(product!=null) {
+			boolean success = smr.addProduct(market3.getId(), product.getId());
+			assertTrue("Error when adding the product", success);
 		}
 	}
 
 	@Test
-	public void testRemoveSong() {
+	public void testRemoveProduct() {
 		//TODO
-		boolean success = plr.removeSong(playlist3.getId(), song.getId());
-		assertTrue("Error when removing the song", success);
+		boolean success = smr.removeProduct(market3.getId(), product.getId());
+		assertTrue("Error when removing the product", success);
 	}
 
 }
