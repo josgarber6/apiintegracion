@@ -25,33 +25,33 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
-import aiss.api.resources.comparators.ComparatorNamePlaylist;
-import aiss.api.resources.comparators.ComparatorNamePlaylistReversed;
+import aiss.api.resources.comparators.ComparatorNameSupermarket;
+import aiss.api.resources.comparators.ComparatorNameSupermarketReversed;
 import aiss.model.Supermarket;
 import aiss.model.Product;
-import aiss.model.repository.MapPlaylistRepository;
-import aiss.model.repository.PlaylistRepository;
+import aiss.model.repository.MapSupermarketRepository;
+import aiss.model.repository.SupermarketRepository;
 
 
 
 
 
 @Path("/lists")
-public class PlaylistResource {
+public class SupermarketResource {
 	
 	/* Singleton */
-	private static PlaylistResource _instance=null;
-	PlaylistRepository repository;
+	private static SupermarketResource _instance=null;
+	SupermarketRepository repository;
 	
-	private PlaylistResource() {
-		repository=MapPlaylistRepository.getInstance();
+	private SupermarketResource() {
+		repository=MapSupermarketRepository.getInstance();
 
 	}
 	
-	public static PlaylistResource getInstance()
+	public static SupermarketResource getInstance()
 	{
 		if(_instance==null)
-				_instance=new PlaylistResource();
+				_instance=new SupermarketResource();
 		return _instance;
 	}
 	
@@ -62,24 +62,24 @@ public class PlaylistResource {
 			 @QueryParam("name") String name, @QueryParam("isEmpty") Boolean isEmpty)
 	{
 		List<Supermarket> result = new ArrayList<Supermarket>();
-		for (Supermarket playlist: repository.getAllPlaylists()) {
+		for (Supermarket market: repository.getAllSupermarkets()) {
 			
-			if (name == null || playlist.getName().equals(name)) {	// filtrado del nombre
+			if (name == null || market.getName().equals(name)) {	// filtrado del nombre
 				if (isEmpty == null 	// filtrado de listas vacías
-					|| (isEmpty && (playlist.getSongs() == null || playlist.getSongs().size() == 0))
-					|| (!isEmpty && (playlist.getSongs() != null && playlist.getSongs().size() > 0))) {
+					|| (isEmpty && (market.getProducts() == null || market.getProducts().size() == 0))
+					|| (!isEmpty && (market.getProducts() != null && market.getProducts().size() > 0))) {
 					
-					result.add(playlist);
+					result.add(market);
 				}
 					
 			}
 			
 			if (order != null) {
 				if (order.equals("name")) {
-					Collections.sort(result, new ComparatorNamePlaylist());
+					Collections.sort(result, new ComparatorNameSupermarket());
 				}
 				else if (order.equals("-name")) {
-					Collections.sort(result, new ComparatorNamePlaylistReversed());
+					Collections.sort(result, new ComparatorNameSupermarketReversed());
 				}
 				else {
 					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
@@ -95,10 +95,10 @@ public class PlaylistResource {
 	@Path("/{id}")
 	@Produces("application/json")
 	public Supermarket get(@PathParam("id") String id)	{
-		Supermarket list = repository.getPlaylist(id);
+		Supermarket list = repository.getSupermarket(id);
 		
 		if (list == null) {
-			throw new NotFoundException("The playlist with id="+ id +" was not found");			
+			throw new NotFoundException("The supermarket with id="+ id +" was not found");			
 		}
 		
 		return list;
@@ -109,14 +109,14 @@ public class PlaylistResource {
 	@Produces("application/json")
 	public Response addPlaylist(@Context UriInfo uriInfo, Supermarket playlist) {
 		if (playlist.getName() == null || "".equals(playlist.getName()))
-			throw new BadRequestException("The name of the playlist must not be null");
+			throw new BadRequestException("The name of the supermarket must not be null");
 		
-		if (playlist.getSongs()!=null)
-			throw new BadRequestException("The songs property is not editable.");
+		if (playlist.getProducts()!=null)
+			throw new BadRequestException("The products property is not editable.");
 
-		repository.addPlaylist(playlist);
+		repository.addSupermarket(playlist);
 
-		// Builds the response. Returns the playlist the has just been added.
+		// Builds the response. Returns the supermarket the has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
 		URI uri = ub.build(playlist.getId());
 		ResponseBuilder resp = Response.created(uri);
@@ -128,13 +128,13 @@ public class PlaylistResource {
 	@PUT
 	@Consumes("application/json")
 	public Response updatePlaylist(Supermarket playlist) {
-		Supermarket oldplaylist = repository.getPlaylist(playlist.getId());
+		Supermarket oldplaylist = repository.getSupermarket(playlist.getId());
 		if (oldplaylist == null) {
-			throw new NotFoundException("The playlist with id="+ playlist.getId() +" was not found");			
+			throw new NotFoundException("The supermarket with id="+ playlist.getId() +" was not found");			
 		}
 		
-		if (playlist.getSongs()!=null)
-			throw new BadRequestException("The songs property is not editable.");
+		if (playlist.getProducts()!=null)
+			throw new BadRequestException("The products property is not editable.");
 		
 		// Update name
 		if (playlist.getName()!=null)
@@ -150,11 +150,11 @@ public class PlaylistResource {
 	@DELETE
 	@Path("/{id}")
 	public Response removePlaylist(@PathParam("id") String id) {
-		Supermarket toberemoved=repository.getPlaylist(id);
+		Supermarket toberemoved=repository.getSupermarket(id);
 		if (toberemoved == null)
-			throw new NotFoundException("The playlist with id="+ id +" was not found");
+			throw new NotFoundException("The supermarket with id="+ id +" was not found");
 		else
-			repository.deletePlaylist(id);
+			repository.deleteSupermarket(id);
 		
 		return Response.noContent().build();
 	}
