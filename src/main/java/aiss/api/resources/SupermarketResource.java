@@ -127,22 +127,22 @@ public class SupermarketResource {
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updatePlaylist(Supermarket playlist) {
-		Supermarket oldplaylist = repository.getSupermarket(playlist.getId());
+	public Response updatePlaylist(Supermarket market) {
+		Supermarket oldplaylist = repository.getSupermarket(market.getId());
 		if (oldplaylist == null) {
-			throw new NotFoundException("The supermarket with id="+ playlist.getId() +" was not found");			
+			throw new NotFoundException("The supermarket with id="+ market.getId() +" was not found");			
 		}
 		
-		if (playlist.getProducts()!=null)
+		if (market.getProducts()!=null)
 			throw new BadRequestException("The products property is not editable.");
 		
 		// Update name
-		if (playlist.getName()!=null)
-			oldplaylist.setName(playlist.getName());
+		if (market.getName()!=null)
+			oldplaylist.setName(market.getName());
 		
 		// Update description
-		if (playlist.getDescription()!=null)
-			oldplaylist.setDescription(playlist.getDescription());
+		if (market.getDescription()!=null)
+			oldplaylist.setDescription(market.getDescription());
 		
 		return Response.noContent().build();
 	}
