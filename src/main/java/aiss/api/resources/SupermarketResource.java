@@ -25,8 +25,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
-import aiss.api.resources.comparators.ComparatorNameSupermarket;
-import aiss.api.resources.comparators.ComparatorNameSupermarketReversed;
+
 import aiss.model.Supermarket;
 import aiss.model.Product;
 import aiss.model.repository.MapSupermarketRepository;
