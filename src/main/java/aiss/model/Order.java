@@ -13,6 +13,11 @@ public class Order {
 
 	public Order() {}
 	
+	public Order(String id, List<Product> ps) {
+		this.id = id;
+		this.products = ps;
+	}
+	
 	public void setProducts(List<Product> ps) {
 		products = ps;
 	}
