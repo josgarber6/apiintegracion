@@ -13,8 +13,8 @@ public class Order {
 
 	public Order() {}
 	
-	protected void setProducts(List<Product> s) {
-		products = s;
+	public void setProducts(List<Product> ps) {
+		products = ps;
 	}
 
 	public String getId() {
@@ -63,9 +63,9 @@ public class Order {
 	
 //	Getting the order price
 	
-	public String getOrderPrice(List<Product> s) {
+	public String getOrderPrice(List<Product> ps) {
 		
-		Double sum = s.stream().mapToDouble(x -> Double.valueOf(x.getPrice())).sum();
+		Double sum = ps.stream().mapToDouble(x -> Double.valueOf(x.getPrice())).sum();
 		return sum.toString();
 		
 	}
