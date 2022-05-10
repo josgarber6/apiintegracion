@@ -161,31 +161,31 @@ public class SupermarketResource {
 	
 	
 	@POST	
-	@Path("/{playlistId}/{songId}")
+	@Path("/{supermarketId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addSong(@Context UriInfo uriInfo,@PathParam("playlistId") String playlistId, @PathParam("songId") String songId)
+	public Response addSong(@Context UriInfo uriInfo,@PathParam("supermarketId") String supermarketId, @PathParam("productId") String songId)
 	{				
 		
-		Supermarket playlist = repository.getPlaylist(playlistId);
-		Product song = repository.getSong(songId);
+		Supermarket market = repository.getSupermarket(supermarketId);
+		Product product = repository.getProduct(songId);
 		
-		if (playlist==null)
-			throw new NotFoundException("The playlist with id=" + playlistId + " was not found");
+		if (market==null)
+			throw new NotFoundException("The supermarket with id=" + supermarketId + " was not found");
 		
-		if (song == null)
-			throw new NotFoundException("The song with id=" + songId + " was not found");
+		if (product == null)
+			throw new NotFoundException("The product with id=" + songId + " was not found");
 		
-		if (playlist.getSong(songId)!=null)
-			throw new BadRequestException("The song is already included in the playlist.");
+		if (market.getProduct(songId)!=null)
+			throw new BadRequestException("The product is already included in the supermarket.");
 			
-		repository.addSong(playlistId, songId);		
+		repository.addProduct(supermarketId, songId);		
 
 		// Builds the response
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(playlistId);
+		URI uri = ub.build(supermarketId);
 		ResponseBuilder resp = Response.created(uri);
-		resp.entity(playlist);			
+		resp.entity(market);			
 		return resp.build();
 	}
 	
