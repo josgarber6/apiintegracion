@@ -37,9 +37,21 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		// Create products
 		Product patatas=new Product();
 		patatas.setName("Patatas");
-		patatas.setPrice("1,50€/kg");
-		patatas.setAvailability(true);
+		patatas.setPrice("1,50€");
+		patatas.setAvailability("true");
 		addProduct(patatas);
+		
+		Product cornFlakes = new Product();
+		cornFlakes.setName("CornFlakes");
+		cornFlakes.setPrice("2.50");
+		cornFlakes.setAvailability("true");
+		addProduct(cornFlakes);
+		
+		Product macarrones = new Product();
+		macarrones.setName("Macarrones");
+		macarrones.setPrice("2");
+		macarrones.setAvailability("false");
+		addProduct(macarrones);
 		
 		// Create supermarkets
 		Supermarket mercadona=new Supermarket();
@@ -62,11 +74,16 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		
 		// Add products to supermarkets and orders
 		addProduct(mercadona.getId(), patatas.getId());
+		addProduct(mercadona.getId(), cornFlakes.getId());
+		addProduct(mercadona.getId(), macarrones.getId());
 		
-//		addProduct(dia.getId(), losingMyReligion.getId());
-//		addProduct(dia.getId(), gotye.getId());
+		addProduct(dia.getId(), patatas.getId());
+		addProduct(dia.getId(), cornFlakes.getId());
+		addProduct(dia.getId(), macarrones.getId());
 		
 		addProduct(o1.getId(), patatas.getId());
+		addProduct(o1.getId(), cornFlakes.getId());
+		addProduct(o1.getId(), macarrones.getId());
 		
 	}
 	
@@ -140,7 +157,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		Product product = productMap.get(p.getId());
 		product.setName(p.getName());
 		product.setPrice(""+p.getPrice());
-		product.setAvailability(p.getAvailability());
+		product.setAvailability(""+p.getAvailability());
 	}
 
 	@Override

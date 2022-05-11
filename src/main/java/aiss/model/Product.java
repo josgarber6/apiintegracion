@@ -4,7 +4,7 @@ public class Product {
 
 	private String id;
 	private String name;
-	private Integer price;
+	private Double price;
 	private Boolean availability;
 
 	public Product() {
@@ -12,14 +12,14 @@ public class Product {
 
 	public Product(String name, String price, String availability) {
 		this.name = name;
-		this.price = Integer.valueOf(price);
+		this.price = Double.valueOf(price);
 		this.availability = Boolean.valueOf(availability);
 	}
 	
 	public Product(String id, String name, String price, String availability) {
 		this.id=id;
 		this.name = name;
-		this.price = Integer.valueOf(price);
+		this.price = Double.valueOf(price);
 		this.availability = Boolean.valueOf(availability);
 	}
 
@@ -39,20 +39,20 @@ public class Product {
 		this.name = name;
 	}
 
-	public Integer getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
 	public void setPrice(String price) {
-		this.price = Integer.valueOf(price);
+		this.price = Double.valueOf(price);
 	}
 
 	public Boolean getAvailability() {
 		return availability;
 	}
 
-	public void setAvailability(Boolean availability) {
-		this.availability = availability;
+	public void setAvailability(String availability) {
+		this.availability = Boolean.valueOf(availability);
 	}
 
 }

@@ -9,6 +9,7 @@ class ProductResourceTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		
 	}
 
 	@Test
