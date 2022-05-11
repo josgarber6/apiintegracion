@@ -35,22 +35,13 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		productMap = new HashMap<String,Product>();
 		
 		// Create products
-		Product patatas=new Product();
-		patatas.setName("Patatas");
-		patatas.setPrice("1,50€");
-		patatas.setAvailability("true");
+		Product patatas = new Product("Patatas", "1,50€", "64", "30/05/2022");
 		addProduct(patatas);
 		
-		Product cornFlakes = new Product();
-		cornFlakes.setName("CornFlakes");
-		cornFlakes.setPrice("2.50");
-		cornFlakes.setAvailability("true");
+		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "15/02/2023");
 		addProduct(cornFlakes);
 		
-		Product macarrones = new Product();
-		macarrones.setName("Macarrones");
-		macarrones.setPrice("2");
-		macarrones.setAvailability("false");
+		Product macarrones = new Product("Macarrones", "2", "150", "null");
 		addProduct(macarrones);
 		
 		// Create supermarkets
@@ -157,7 +148,8 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		Product product = productMap.get(p.getId());
 		product.setName(p.getName());
 		product.setPrice(""+p.getPrice());
-		product.setAvailability(""+p.getAvailability());
+		product.setQuantity(""+p.getQuantity());;
+		product.setExpirationDate(""+p.getExpirationDate());
 	}
 
 	@Override
