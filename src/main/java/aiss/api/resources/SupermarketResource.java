@@ -62,14 +62,14 @@ public class SupermarketResource {
 			 @QueryParam("name") String name, @QueryParam("isEmpty") Boolean isEmpty)
 	{
 		List<Supermarket> result = new ArrayList<Supermarket>();
-		for (Supermarket Supermarket: repository.getAllSupermarkets()) {
+		for (Supermarket market: repository.getAllSupermarkets()) {
 			
-			if (name == null || Supermarket.getName().equals(name)) {	// filtrado del nombre
+			if (name == null || market.getName().equals(name)) {	// filtrado del nombre
 				if (isEmpty == null 	// filtrado de listas vacías
-					|| (isEmpty && (Supermarket.getSongs() == null || Supermarket.getSongs().size() == 0))
-					|| (!isEmpty && (Supermarket.getSongs() != null && Supermarket.getSongs().size() > 0))) {
+					|| (isEmpty && (market.getProducts() == null || market.getProducts().size() == 0))
+					|| (!isEmpty && (market.getProducts() != null && market.getProducts().size() > 0))) {
 					
-					result.add(Supermarket);
+					result.add(market);
 				}
 					
 			}
@@ -98,7 +98,7 @@ public class SupermarketResource {
 		Supermarket list = repository.getSupermarket(id);
 		
 		if (list == null) {
-			throw new NotFoundException("The Supermarket with id="+ id +" was not found");			
+			throw new NotFoundException("The supermarket with id="+ id +" was not found");			
 		}
 		
 		return list;
@@ -107,42 +107,42 @@ public class SupermarketResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addSupermarket(@Context UriInfo uriInfo, Supermarket Supermarket) {
-		if (Supermarket.getName() == null || "".equals(Supermarket.getName()))
-			throw new BadRequestException("The name of the Supermarket must not be null");
+	public Response addSupermarket(@Context UriInfo uriInfo, Supermarket market) {
+		if (market.getName() == null || "".equals(market.getName()))
+			throw new BadRequestException("The name of the supermarket must not be null");
 		
-		if (Supermarket.getSongs()!=null)
-			throw new BadRequestException("The songs property is not editable.");
+		if (market.getProducts()!=null)
+			throw new BadRequestException("The products property is not editable.");
 
-		repository.addSupermarket(Supermarket);
+		repository.addSupermarket(market);
 
-		// Builds the response. Returns the Supermarket the has just been added.
+		// Builds the response. Returns the supermarket the has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(Supermarket.getId());
+		URI uri = ub.build(market.getId());
 		ResponseBuilder resp = Response.created(uri);
-		resp.entity(Supermarket);			
+		resp.entity(market);			
 		return resp.build();
 	}
 
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updateSupermarket(Supermarket Supermarket) {
-		Supermarket oldSupermarket = repository.getSupermarket(Supermarket.getId());
-		if (oldSupermarket == null) {
-			throw new NotFoundException("The Supermarket with id="+ Supermarket.getId() +" was not found");			
+	public Response updateSupermarket(Supermarket market) {
+		Supermarket oldmarket = repository.getSupermarket(market.getId());
+		if (oldmarket == null) {
+			throw new NotFoundException("The supermarket with id="+ market.getId() +" was not found");			
 		}
 		
-		if (Supermarket.getSongs()!=null)
-			throw new BadRequestException("The songs property is not editable.");
+		if (market.getProducts()!=null)
+			throw new BadRequestException("The products property is not editable.");
 		
 		// Update name
-		if (Supermarket.getName()!=null)
-			oldSupermarket.setName(Supermarket.getName());
+		if (market.getName()!=null)
+			oldmarket.setName(market.getName());
 		
 		// Update description
-		if (Supermarket.getDescription()!=null)
-			oldSupermarket.setDescription(Supermarket.getDescription());
+		if (market.getDescription()!=null)
+			oldmarket.setDescription(market.getDescription());
 		
 		return Response.noContent().build();
 	}
@@ -152,7 +152,7 @@ public class SupermarketResource {
 	public Response removeSupermarket(@PathParam("id") String id) {
 		Supermarket toberemoved=repository.getSupermarket(id);
 		if (toberemoved == null)
-			throw new NotFoundException("The Supermarket with id="+ id +" was not found");
+			throw new NotFoundException("The supermarket with id="+ id +" was not found");
 		else
 			repository.deleteSupermarket(id);
 		
@@ -161,49 +161,49 @@ public class SupermarketResource {
 	
 	
 	@POST	
-	@Path("/{SupermarketId}/{songId}")
+	@Path("/{supermarketId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addSong(@Context UriInfo uriInfo,@PathParam("SupermarketId") String SupermarketId, @PathParam("songId") String songId)
+	public Response addProduct(@Context UriInfo uriInfo,@PathParam("supermarketId") String supermarketId, @PathParam("productId") String songId)
 	{				
 		
-		Supermarket Supermarket = repository.getSupermarket(SupermarketId);
-		Product song = repository.getSong(songId);
+		Supermarket market = repository.getSupermarket(supermarketId);
+		Product product = repository.getProduct(songId);
 		
-		if (Supermarket==null)
-			throw new NotFoundException("The Supermarket with id=" + SupermarketId + " was not found");
+		if (market==null)
+			throw new NotFoundException("The supermarket with id=" + supermarketId + " was not found");
 		
-		if (song == null)
-			throw new NotFoundException("The song with id=" + songId + " was not found");
+		if (product == null)
+			throw new NotFoundException("The product with id=" + songId + " was not found");
 		
-		if (Supermarket.getSong(songId)!=null)
-			throw new BadRequestException("The song is already included in the Supermarket.");
+		if (market.getProduct(songId)!=null)
+			throw new BadRequestException("The product is already included in the supermarket.");
 			
-		repository.addSong(SupermarketId, songId);		
+		repository.addProduct(supermarketId, songId);		
 
 		// Builds the response
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(SupermarketId);
+		URI uri = ub.build(supermarketId);
 		ResponseBuilder resp = Response.created(uri);
-		resp.entity(Supermarket);			
+		resp.entity(market);			
 		return resp.build();
 	}
 	
 	
 	@DELETE
-	@Path("/{SupermarketId}/{songId}")
-	public Response removeSong(@PathParam("SupermarketId") String SupermarketId, @PathParam("songId") String songId) {
-		Supermarket Supermarket = repository.getSupermarket(SupermarketId);
-		Product song = repository.getSong(songId);
+	@Path("/{supermarketId}/{productId}")
+	public Response removeProduct(@PathParam("supermarketId") String supermarketId, @PathParam("productId") String productId) {
+		Supermarket market = repository.getSupermarket(supermarketId);
+		Product product = repository.getProduct(productId);
 		
-		if (Supermarket==null)
-			throw new NotFoundException("The Supermarket with id=" + SupermarketId + " was not found");
+		if (market==null)
+			throw new NotFoundException("The supermarket with id=" + supermarketId + " was not found.");
 		
-		if (song == null)
-			throw new NotFoundException("The song with id=" + songId + " was not found");
+		if (product == null)
+			throw new NotFoundException("The product with id=" + productId + " was not found.");
 		
 		
-		repository.removeSong(SupermarketId, songId);		
+		repository.removeProduct(supermarketId, productId);		
 		
 		return Response.noContent().build();
 	}
