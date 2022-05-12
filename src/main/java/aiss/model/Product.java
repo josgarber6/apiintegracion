@@ -11,6 +11,7 @@ public class Product {
 	private Integer rating;
 	private Integer quantity;
 	private LocalDate expirationDate;
+	private ProductType type;
 	
 	public enum ProductType{
 		LEISURE, FOOD, CLOTHES,  HEALTH, SPORT
@@ -25,26 +26,25 @@ public class Product {
 	 * @param name String, name of the product.
 	 * @param price String, price of the product.
 	 * @param quantity String, quantity of the product.
-	 * @param date String, date of expiration, format yyyy-mm-dd, dd/mm/yyyy, or null if the product is timeless.
-	 * @param rating String, valuation of the product.
+	 * @param date String, date of expiration, format yyyy-mm-dd, or null if the product is timeless.
+	 * @param rating String, valuation of the product, is a value between 1-5.
+	 * @param type String, category of the product, it can be {LEISURE, FOOD, CLOTHES,  HEALTH, SPORT}.
 	 */
-	public Product(String name, String price, String quantity, String date, String rating) {
+	public Product(String name, String price, String quantity, String date, String rating, String type) {
 		/*
 		 * PARA LOS PRODUCTOS QUE NO TENGAN CADUCIDAD EL VALOR expirationDate SERA El LocalDate.MAX
 		 * EL FORMATO DE LocalDate es yyyy-mm-dd
 		 */
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
-		if(ISODateFormat.asMatchPredicate().test(date)) this.expirationDate = LocalDate.parse(date);
-		else if(date.equals("null")) this.expirationDate = LocalDate.MAX;
-		this.
-		else {
-			String[] ParseDate = date.split("/");
-			this.expirationDate = LocalDate.of(Integer.valueOf(ParseDate[2]), Integer.valueOf(ParseDate[1]), Integer.valueOf(ParseDate[0]));
-		}
+		if(ISODateFormat.asMatchPredicate().test(date)) {
+			this.expirationDate = LocalDate.parse(date);
+		} else if (date.equals("null")) this.expirationDate = LocalDate.MAX;
+		else this.expirationDate = null;
 		this.name = name;
 		this.price = Double.valueOf(price);
 		this.quantity = Integer.valueOf(quantity);
 		this.rating = Integer.valueOf(rating);
+		this.type = ProductType.valueOf(type);
 	}
 	
 	/**
@@ -53,26 +53,26 @@ public class Product {
 	 * @param name String, name of the product.
 	 * @param price String, price of the product.
 	 * @param quantity String, quantity of the product.
-	 * @param date String, date of expirationformat yyyy-mm-dd, dd/mm/yyyy, or null if the product is timeless.
-	 * @param rating String, valuation of the product.
+	 * @param date String, date of expiration yyyy-mm-dd or null if the product is timeless.
+	 * @param rating String, valuation of the product, is a value between 1-5.
+	 * @param type String, category of the product, it can be {LEISURE, FOOD, CLOTHES,  HEALTH, SPORT}.
 	 */
-	public Product(String id, String name, String price, String quantity, String date, String rating) {
+	public Product(String id, String name, String price, String quantity, String date, String rating, String type) {
 		/*
 		 * PARA LOS PRODUCTOS QUE NO TENGAN CADUCIDAD EL VALOR expirationDate SERA El LocalDate.MAX
 		 * EL FORMATO DE LocalDate es yyyy-mm-dd
 		 */
 		this.id = id;
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
-		if(ISODateFormat.asMatchPredicate().test(date)) this.expirationDate = LocalDate.parse(date);
-		else if(date.equals("null")) this.expirationDate = LocalDate.MAX;
-		else {
-			String[] ParseDate = date.split("/");
-			this.expirationDate = LocalDate.of(Integer.valueOf(ParseDate[2]), Integer.valueOf(ParseDate[1]), Integer.valueOf(ParseDate[0]));
-		}
+		if(ISODateFormat.asMatchPredicate().test(date)) {
+			this.expirationDate = LocalDate.parse(date);
+		} else if (date.equals("null")) this.expirationDate = LocalDate.MAX;
+		else this.expirationDate = null;
 		this.name = name;
 		this.price = Double.valueOf(price);
 		this.quantity = Integer.valueOf(quantity);
 		this.rating = Integer.valueOf(rating);
+		this.type = ProductType.valueOf(type);
 	}
 
 	public String getId() {
@@ -108,16 +108,14 @@ public class Product {
 	}
 	/**
 	 * 
-	 * @param expirationDate String, format yyyy-mm-dd, dd/mm/yyyy, or null if the product is timeless.
+	 * @param expirationDate String, format yyyy-mm-dd, or null if the product is timeless.
 	 */
 	public void setExpirationDate(String expirationDate) {
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
-		if(ISODateFormat.asMatchPredicate().test(expirationDate)) this.expirationDate = LocalDate.parse(expirationDate);
-		else if(expirationDate.equals("null")) this.expirationDate = LocalDate.MAX;
-		else {
-			String[] ParseDate = expirationDate.split("/");
-			this.expirationDate = LocalDate.of(Integer.valueOf(ParseDate[2]), Integer.valueOf(ParseDate[1]), Integer.valueOf(ParseDate[0]));
-		}
+		if(ISODateFormat.asMatchPredicate().test(expirationDate)) {
+			this.expirationDate = LocalDate.parse(expirationDate);
+		} else if (expirationDate.equals("null")) this.expirationDate = LocalDate.MAX;
+		else this.expirationDate = null;
 	}
 
 	public Integer getQuantity() {
@@ -134,6 +132,14 @@ public class Product {
 
 	public void setRating(String rating) {
 		this.rating = Integer.valueOf(rating);
+	}
+
+	public ProductType getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = ProductType.valueOf(type);
 	}
 
 }

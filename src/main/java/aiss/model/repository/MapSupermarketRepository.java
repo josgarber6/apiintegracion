@@ -35,13 +35,13 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		productMap = new HashMap<String,Product>();
 		
 		// Create products
-		Product patatas = new Product("Patatas", "1,50€", "64", "2022-05-30");
+		Product patatas = new Product("Patatas", "1,50€", "64", "2022-05-30", "3", "FOOD");
 		addProduct(patatas);
 		
-		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "15/02/2023");
+		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "15/02/2023", "2", "FOOD");
 		addProduct(cornFlakes);
 		
-		Product macarrones = new Product("Macarrones", "2", "150", "null");
+		Product macarrones = new Product("Macarrones", "2", "150", "null", "4", "FOOD");
 		addProduct(macarrones);
 		
 		// Create supermarkets

@@ -9,16 +9,16 @@ El contrato de servicios de los productos se detalla a continuación.
 ### Recurso Product ###
 | HTTP  | URI | Descripción |
 | ------------- | ------------- | ------------- |
-| GET |  /product | Devuelve todos los productos de la aplicación. •	Es posible ordenar los productos por la categoria con el parámetro de query “order”, que acepta los valores “price”, “-price”, “quantity” o “-quantity”. •	También es posible filtrar los productos devueltas con el parámetro de query “q”, que devuelve aquellos productos cuya categoria, nombre contengan la cadena enviada (ignorando mayúsculas y minúsculas), o los valores “price”, “-price”, “rating” o “-rating” y “quantity” o “-quantity” que devuelve los productos que tengan el precio o la valoracion mayor o menor que la cadena enviada.|
-| GET | /product/{productId}  |  Devuelve el producto con i:productId. Si el producto no existe devuelve un “404 Not Found”. |
-| POST | /product | Añade un nuevo producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (no se debe pasar id, se genera automáticamente). Si el nombre del producto no es válido (null o vacío), si la fecha de caducidad no es valida (anterior a la fecha actual o vacío), si el precio o la cantidad son negativos devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido del producto. |
-| PUT | /product  | Actualiza el producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id del producto). Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”. |
-| DELETE | /product/{productId}  |  Elimina el producto con i:productId. Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”.|
+| GET |  /products | Devuelve todos los productos de la aplicación. •	Es posible ordenar los productos por la categoria con el parámetro de query “order”, que acepta los valores “price”, “-price”, “quantity” o “-quantity”. •	También es posible filtrar los productos devueltas con el parámetro de query “q”, que devuelve aquellos productos cuya categoria, nombre contengan la cadena enviada (ignorando mayúsculas y minúsculas), o los valores “price”, “-price”, “rating” o “-rating” y “quantity” o “-quantity” que devuelve los productos que tengan el precio o la valoracion mayor o menor que la cadena enviada.|
+| GET | /products/{productId}  |  Devuelve el producto con i:productId. Si el producto no existe devuelve un “404 Not Found”. |
+| POST | /products | Añade un nuevo producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (no se debe pasar id, se genera automáticamente). Si el nombre del producto no es válido (null o vacío), si la fecha de caducidad no es valida (anterior a la fecha actual o vacío), si el precio o la cantidad son negativos devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido del producto. |
+| PUT | /products  | Actualiza el producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id del producto). Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”. |
+| DELETE | /products/{productId}  |  Elimina el producto con i:productId. Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”.|
 
 ### Ejemplos Product ###
 
 1. GET: /product
-**Datos en formato JSON de salida*
+**Datos en formato JSON de salida**
 ```cpp
 {
   "products": [
@@ -51,8 +51,7 @@ El contrato de servicios de los productos se detalla a continuación.
 **Datos en formato JSON de entrada**
 ```cpp
 {
-	"id":"p3",
-	"name":"Macarrones",
+	"name":"Macarrones ",
 	"price":"2.5",
 	"rating":"4",
 	"quantity":"1991",
@@ -65,10 +64,12 @@ El contrato de servicios de los productos se detalla a continuación.
 ```cpp
 {
 	"id":"p3",
+	"name":"null",
 	"price":"2.5",
 	"rating":"4",
 	"quantity":"1991",
-	"expirationDate": "2023-05-18"
+	"expirationDate": "2023-05-18",
+	"type": "null"
 }
 ```
 5. DELETE: /product/{productId}

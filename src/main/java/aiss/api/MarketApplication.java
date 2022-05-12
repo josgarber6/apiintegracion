@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
+
+import aiss.api.resources.OrderResource;
 import aiss.api.resources.ProductResource;
 import aiss.api.resources.SupermarketResource;
 
