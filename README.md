@@ -1,19 +1,19 @@
 # Implementación de una API REST 
 
-Práctica 5 de la asignatura AISS
+Proyecto de Integracion de la asignutara AISS.
 
-La API REST estará formada por dos recursos que permitirán manipular listas de reproducción y canciones respectivamente. 
+La API REST estará formada por cuatro recursos que permitirán manipular grandes almacenes, pedidos a estos almacenes, los productos que almacenan y la informacion del usuario actual.
 
-El contrato de servicios de listas de reproducción se detalla a continuación. No todas las opciones han sido implementadas en el código proporcionado. El objetivo de esta práctica es se implementen todos los métodos necesarios para que la API funcione como se detalla a continuación. 
+El contrato de servicios de los productos se detalla a continuación.
 
-### Recurso Song ###
-| HTTP  | URI | Descripción |
+### Recurso Product ###
+| HTTP  | URI | Descripción | Ejemplo
 | ------------- | ------------- | ------------- |
-| GET |  /song | Devuelve todas las canciones de la aplicación. •	Es posible ordenar las canciones por el álbum o el artista con el parámetro de query “order”, que acepta los valores “album”, “-album”, “artist” o “-artist”. •	También es posible filtrar las canciones devueltas con el parámetro de query “q”, que devuelve aquellas canciones cuyo título, álbum o artista contengan la cadena enviada (ignorando mayúsculas y minúsculas).|
-| GET | /song/{songId}  |  Devuelve la canción con id=songId. Si la canción no existe devuelve un “404 Not Found”. |
-| POST | /song | Añade una nueva canción cuyos datos se pasan en el cuerpo de la petición en formato JSON (no se debe pasar id, se genera automáticamente). Si el nombre de la canción no es válido (null o vacío) devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido de la canción. |
-| PUT | /song  | Actualiza la canción cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id de la canción). Si la canción no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”. |
-| DELETE | /song/{songId}  |  Elimina la canción con id=songId. Si la canción no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”.|
+| GET |  /product | Devuelve todos los productos de la aplicación. •	Es posible ordenar los productos por el álbum o el artista con el parámetro de query “order”, que acepta los valores “album”, “-album”, “artist” o “-artist”. •	También es posible filtrar las canciones devueltas con el parámetro de query “q”, que devuelve aquellas canciones cuyo título, álbum o artista contengan la cadena enviada (ignorando mayúsculas y minúsculas).| |
+| GET | /song/{songId}  |  Devuelve la canción con id=songId. Si la canción no existe devuelve un “404 Not Found”. | |
+| POST | /song | Añade una nueva canción cuyos datos se pasan en el cuerpo de la petición en formato JSON (no se debe pasar id, se genera automáticamente). Si el nombre de la canción no es válido (null o vacío) devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido de la canción. | |
+| PUT | /song  | Actualiza la canción cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id de la canción). Si la canción no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”. | |
+| DELETE | /song/{songId}  |  Elimina la canción con id=songId. Si la canción no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”.| |
 
 Cada **canción** tiene un identificador, _título, nombre del artista, álbum y año_. La representación JSON del recurso es:
 

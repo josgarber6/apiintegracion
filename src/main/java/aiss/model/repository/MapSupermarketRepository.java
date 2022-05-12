@@ -16,6 +16,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	Map<String, Order> orderMap;
 	private static MapSupermarketRepository instance=null;
 	private int index=0;			// Index to create supermarkets, products and orders' identifiers.
+
 	
 	
 	public static MapSupermarketRepository getInstance() {
@@ -34,11 +35,14 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		productMap = new HashMap<String,Product>();
 		
 		// Create products
-		Product patatas=new Product();
-		patatas.setName("Patatas");
-		patatas.setPrice("1,50€/kg");
-		patatas.setAvailability("20");
+		Product patatas = new Product("Patatas", "1,50€", "64", "2022-05-30");
 		addProduct(patatas);
+		
+		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "15/02/2023");
+		addProduct(cornFlakes);
+		
+		Product macarrones = new Product("Macarrones", "2", "150", "null");
+		addProduct(macarrones);
 		
 		// Create supermarkets
 		Supermarket mercadona=new Supermarket();
@@ -61,11 +65,16 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		
 		// Add products to supermarkets and orders
 		addProduct(mercadona.getId(), patatas.getId());
+		addProduct(mercadona.getId(), cornFlakes.getId());
+		addProduct(mercadona.getId(), macarrones.getId());
 		
-//		addProduct(dia.getId(), losingMyReligion.getId());
-//		addProduct(dia.getId(), gotye.getId());
+		addProduct(dia.getId(), patatas.getId());
+		addProduct(dia.getId(), cornFlakes.getId());
+		addProduct(dia.getId(), macarrones.getId());
 		
 		addProduct(o1.getId(), patatas.getId());
+		addProduct(o1.getId(), cornFlakes.getId());
+		addProduct(o1.getId(), macarrones.getId());
 		
 	}
 	
@@ -138,8 +147,9 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	public void updateProduct(Product p) {
 		Product product = productMap.get(p.getId());
 		product.setName(p.getName());
-		product.setPrice(p.getPrice());
-		product.setAvailability(p.getAvailability());
+		product.setPrice(""+p.getPrice());
+		product.setQuantity(""+p.getQuantity());;
+		product.setExpirationDate(""+p.getExpirationDate());
 	}
 
 	@Override

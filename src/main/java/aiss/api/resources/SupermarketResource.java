@@ -25,8 +25,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
-import aiss.api.resources.comparators.ComparatorNameSupermarket;
-import aiss.api.resources.comparators.ComparatorNameSupermarketReversed;
+
 import aiss.model.Supermarket;
 import aiss.model.Product;
 import aiss.model.repository.MapSupermarketRepository;
@@ -36,7 +35,7 @@ import aiss.model.repository.SupermarketRepository;
 
 
 
-@Path("/lists")
+@Path("/supermarkets")
 public class SupermarketResource {
 	
 	/* Singleton */
@@ -63,11 +62,10 @@ public class SupermarketResource {
 	{
 		List<Supermarket> result = new ArrayList<Supermarket>();
 		for (Supermarket market: repository.getAllSupermarkets()) {
-			
-			if (name == null || market.getName().equals(name)) {	// filtrado del nombre
-				if (isEmpty == null 	// filtrado de listas vacías
-					|| (isEmpty && (market.getProducts() == null || market.getProducts().size() == 0))
-					|| (!isEmpty && (market.getProducts() != null && market.getProducts().size() > 0))) {
+			if (name == null || Supermarket.getName().equals(name)) {	// filtrado del nombre
+				if (isEmpty == null 	// filtrado de supermercados vacías
+					|| (isEmpty && (Supermarket.getSongs() == null || Supermarket.getSongs().size() == 0))
+					|| (!isEmpty && (Supermarket.getSongs() != null && Supermarket.getSongs().size() > 0))) {
 					
 					result.add(market);
 				}

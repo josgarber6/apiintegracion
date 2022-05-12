@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
-import aiss.api.resources.PlaylistResource;
-import aiss.api.resources.SongResource;
+import aiss.api.resources.ProductResource;
+import aiss.api.resources.SupermarketResource;
 
 
 public class MarketApplication extends Application {
