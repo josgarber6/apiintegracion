@@ -21,17 +21,17 @@ El contrato de servicios de los productos se detalla a continuación.
 **Datos en formato JSON de salida*
 ```cpp
 {
-	"products": [
-	{
-		"id":"p3",
-		"name":"Macarrones",
-		"price":"2.5",
-		"rating":"4",
-		"quantity":"1991",
-		"expirationDate": "2023-05-18",
-		"type": "FOOD"
-	}
-	]
+  "products": [
+    {
+      "id": "p3",
+      "name": "Macarrones",
+      "price": "2.5",
+      "rating": "4",
+      "quantity": "1991",
+      "expirationDate": "2023-05-18",
+      "type": "FOOD"
+    }
+  ]
 }
 ```
 2. GET: /product/{productId}
