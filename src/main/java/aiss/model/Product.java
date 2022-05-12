@@ -13,7 +13,7 @@ public class Product {
 	private LocalDate expirationDate;
 	
 	public enum ProductType{
-		LEISURE, FOOD, CLOTHES,  HEALTH, 
+		LEISURE, FOOD, CLOTHES,  HEALTH, SPORT
 	}
 	
 
@@ -36,6 +36,7 @@ public class Product {
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
 		if(ISODateFormat.asMatchPredicate().test(date)) this.expirationDate = LocalDate.parse(date);
 		else if(date.equals("null")) this.expirationDate = LocalDate.MAX;
+		this.
 		else {
 			String[] ParseDate = date.split("/");
 			this.expirationDate = LocalDate.of(Integer.valueOf(ParseDate[2]), Integer.valueOf(ParseDate[1]), Integer.valueOf(ParseDate[0]));
