@@ -51,28 +51,44 @@ public class ProductResource {
 	@GET
 	@Produces("application/json")
 	public Collection<Product> getAll(@QueryParam("q") String query,
-			@QueryParam("qAux") String queryAux, 
+			@QueryParam("qAux") Integer queryAux,
+			@QueryParam("pExpired") Boolean queryExpiration,
 			@QueryParam("order") String order, 
-			@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset)
+			@QueryParam("limit") Integer limit, 
+			@QueryParam("offset") Integer offset)
 	{
 		List<Product> result = new ArrayList<Product>();
 		
 		for (Product product: repository.getAllProducts()) {
 			
-			Boolean Max_price_rating_quantity = ("price".equals(query) && product.getPrice() > Integer.valueOf(queryAux)) ||
-					("rating".equals(query) && product.getRating() > Integer.valueOf(queryAux)) || 
-					("quantity".equals(query) && product.getQuantity() > Integer.valueOf(queryAux));
+			Boolean Max_price_rating_quantity = queryAux != null && ("price".equals(query) && product.getPrice() > queryAux) ||
+					("rating".equals(query) && product.getRating() > queryAux) || 
+					("quantity".equals(query) && product.getQuantity() > queryAux);
 			
-			Boolean Min_price_rating_quantity = ("-price".equals(query) && product.getPrice() < Integer.valueOf(queryAux)) ||
-					("-rating".equals(query) && product.getRating() < Integer.valueOf(queryAux)) || 
-					("-quantity".equals(query) && product.getQuantity() < Integer.valueOf(queryAux));
+			Boolean Min_price_rating_quantity = queryAux != null && ("-price".equals(query) && product.getPrice() < queryAux) ||
+					("-rating".equals(query) && product.getRating() < queryAux) || 
+					("-quantity".equals(query) && product.getQuantity() < queryAux);
 			
-			if (query == null || product.getName().contains(query)
-				|| product.getType().name().contains(query)
-				|| Max_price_rating_quantity
-				|| Min_price_rating_quantity) {
+//			SE PUEDEN LLEVAR A CABO TODAS LAS COMBINACIONES POSIBLES DEL FILTRO NO ENUMERADO Y ENUMERADO
+			 
+			if (query == null && queryExpiration == null
+				|| query == null  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
+							|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
+				|| product.getName().contains(query) && queryExpiration == null
+				|| product.getType().name().contains(query) && queryExpiration == null
+				|| Max_price_rating_quantity && queryExpiration == null
+				|| Min_price_rating_quantity && queryExpiration == null
+				|| product.getName().contains(query) && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
+						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now())) 
+				|| product.getType().name().contains(query)  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
+						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
+				|| Max_price_rating_quantity  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
+						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
+				|| Min_price_rating_quantity  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
+						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))) {
 				result.add(product);
 			}
+			
 			
 			if (order != null) {
 //				if (order.equals("album")) {

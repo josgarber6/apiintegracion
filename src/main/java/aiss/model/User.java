@@ -7,7 +7,7 @@ public class User {
 	private String id;
 	private String name;
 	private String email;
-	private String pasword;
+	private String password;
 	private String token;
 	private String address;
 	
@@ -38,7 +38,7 @@ public class User {
 		super();
 		this.name = name;
 		this.email = email;
-		this.pasword = pasword;
+		this.password = pasword;
 		SecureToken tokenAux = new SecureToken();
 		this.token = tokenAux.nextToken();
 		this.address = address;
@@ -49,7 +49,7 @@ public class User {
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.pasword = pasword;
+		this.password = pasword;
 		SecureToken tokenAux = new SecureToken();
 		this.token = tokenAux.nextToken();
 		this.address = address;
@@ -81,12 +81,12 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPasword() {
-		return pasword;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPasword(String pasword) {
-		this.pasword = pasword;
+	public void setPassword(String pasword) {
+		this.password = pasword;
 	}
 
 	public String getToken() {
