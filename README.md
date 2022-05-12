@@ -7,59 +7,13 @@ La API REST estará formada por cuatro recursos que permitirán manipular grande
 El contrato de servicios de los productos se detalla a continuación.
 
 ### Recurso Product ###
-| HTTP  | URI | Descripción | Ejemplo |
-| ------------- | ------------- | ------------- | ------------- |
-| GET |  /product | Devuelve todos los productos de la aplicación. •	Es posible ordenar los productos por la categoria con el parámetro de query “order”, que acepta los valores “price”, “-price”, “quantity” o “-quantity”. •	También es posible filtrar los productos devueltas con el parámetro de query “q”, que devuelve aquellos productos cuya categoria, nombre contengan la cadena enviada (ignorando mayúsculas y minúsculas), o los valores “price”, “-price”, “rating” o “-rating” y “quantity” o “-quantity” que devuelve los productos que tengan el precio o la valoracion mayor o menor que la cadena enviada.| ```cpp
-{
-	"products": [
-	{
-		"id":"p3",
-		"name":"Macarrones",
-		"price":"2.5",
-		"rating":"4",
-		"quantity":"1991",
-		"expirationDate": "2023-05-18",
-		"type": "FOOD"
-	}
-	]
-}
-``` |
-| GET | /product/{productId}  |  Devuelve el producto con id=productId. Si el producto no existe devuelve un “404 Not Found”. | ```cpp
-{
-	"id":"p3",
-	"name":"Macarrones",
-	"price":"2.5",
-	"rating":"4",
-	"quantity":"1991",
-	"expirationDate": "2023-05-18",
-	"type": "FOOD"
-}
-``` |
-| POST | /product | Añade un nuevo producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (no se debe pasar id, se genera automáticamente). Si el nombre del producto no es válido (null o vacío), si la fecha de caducidad no es valida (anterior a la fecha actual o vacío), si el precio o la cantidad son negativos devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido del producto. |  ```cpp
-{
-	"id":"p3",
-	"name":"Macarrones",
-	"price":"2.5",
-	"rating":"4",
-	"quantity":"1991",
-	"expirationDate": "2023-05-18",
-	"type": "FOOD"
-}
-``` |
-| PUT | /product  | Actualiza el producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id del producto). Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”. | ```cpp
-{
-	"id":"p3",
-	"price":"2.5",
-	"rating":"4",
-	"quantity":"1991",
-	"expirationDate": "2023-05-18"
-}
-``` |
-| DELETE | /product/{productId}  |  Elimina el producto con id=productId. Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”.| ```cpp
-{
-	"id":"p3"
-}
-``` |
+| HTTP  | URI | Descripción |
+| ------------- | ------------- | ------------- |
+| GET |  /product | Devuelve todos los productos de la aplicación. •	Es posible ordenar los productos por la categoria con el parámetro de query “order”, que acepta los valores “price”, “-price”, “quantity” o “-quantity”. •	También es posible filtrar los productos devueltas con el parámetro de query “q”, que devuelve aquellos productos cuya categoria, nombre contengan la cadena enviada (ignorando mayúsculas y minúsculas), o los valores “price”, “-price”, “rating” o “-rating” y “quantity” o “-quantity” que devuelve los productos que tengan el precio o la valoracion mayor o menor que la cadena enviada.|
+| GET | /product/{productId}  |  Devuelve el producto con id=productId. Si el producto no existe devuelve un “404 Not Found”. |
+| POST | /product | Añade un nuevo producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (no se debe pasar id, se genera automáticamente). Si el nombre del producto no es válido (null o vacío), si la fecha de caducidad no es valida (anterior a la fecha actual o vacío), si el precio o la cantidad son negativos devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido del producto. |
+| PUT | /product  | Actualiza el producto cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id del producto). Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”. |
+| DELETE | /product/{productId}  |  Elimina el producto con id=productId. Si el producto no existe, devuelve un “404 Not Found”. Si se realiza correctamente, devuelve “204 No Content”.|
 
 Cada **producto** tiene un identificador, nombre, precio, valoracion, cantidad, fecha de caducidad y categoria del producto . La representación JSON del recurso es:
 
