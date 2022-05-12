@@ -21,6 +21,7 @@ public class PlaylistResourceTest {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		
+<<<<<<< HEAD
 		market = smr.addSupermarket(new Supermarket("Test market 1"));
 		market2 = smr.addSupermarket(new Supermarket("Test market 2"));
 		market3 = smr.addSupermarket(new Supermarket("Test market 3"));
@@ -28,15 +29,30 @@ public class PlaylistResourceTest {
 		
 	
 		product = sr.addProduct(new Product("Test name","Test price","Test availability"));
+=======
+		market = plr.addSupermarket(new Supermarket("Test market 1"));
+		market2 = plr.addSupermarket(new Playlist("Test market 2"));
+		market3 = plr.addSupermarket(new Playlist("Test market 3"));
+		market4 = plr.addSupermarket(new Playlist("Test market 4"));
+		
+	
+		product = sr.addProduct(new Song("Test name","Test price","Test availability"));
+>>>>>>> e5bc5d9e950718ba9a6d16c8243b8e90648cad3b
 		if(product!=null)
 			smr.addProduct(market.getId(), product.getId());
 	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {
+<<<<<<< HEAD
 		smr.deleteSupermarket(market.getId());
 		smr.deleteSupermarket(market3.getId());
 		smr.deleteSupermarket(market4.getId());
+=======
+		plr.deleteSupermarket(market.getId());
+		plr.deleteSupermarket(market3.getId());
+		plr.deleteSupermarket(market4.getId());
+>>>>>>> e5bc5d9e950718ba9a6d16c8243b8e90648cad3b
 		if(product!=null)
 			pr.deleteProduct(product.getId());
 	}
