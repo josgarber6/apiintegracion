@@ -35,7 +35,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		productMap = new HashMap<String,Product>();
 		
 		// Create products
-		Product patatas = new Product("Patatas", "1,50€", "64", "30/05/2022");
+		Product patatas = new Product("Patatas", "1,50€", "64", "2022-05-30");
 		addProduct(patatas);
 		
 		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "15/02/2023");
