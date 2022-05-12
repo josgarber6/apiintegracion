@@ -104,7 +104,7 @@ public class PlaylistResourceTest {
 		String marketName = "Updated supermarket name";
 		String marketDescription = "Updated supermarket description";
 
-		// Update playlist
+		// Update supermarket
 		market.setName(marketName);
 
 		boolean success = smr.updateSupermarket(market);
