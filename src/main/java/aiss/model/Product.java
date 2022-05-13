@@ -36,7 +36,7 @@ public class Product {
 		 * EL FORMATO DE LocalDate es yyyy-mm-dd
 		 */
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
-		if(ISODateFormat.asMatchPredicate().test(date)) {
+		if(ISODateFormat.asPredicate().test(date)) {
 			this.expirationDate = LocalDate.parse(date);
 		} else if (date.equals("null")) this.expirationDate = LocalDate.MAX;
 		else this.expirationDate = null;
@@ -64,7 +64,7 @@ public class Product {
 		 */
 		this.id = id;
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
-		if(ISODateFormat.asMatchPredicate().test(date)) {
+		if(ISODateFormat.asPredicate().test(date)) {
 			this.expirationDate = LocalDate.parse(date);
 		} else if (date.equals("null")) this.expirationDate = LocalDate.MAX;
 		else this.expirationDate = null;
@@ -112,7 +112,7 @@ public class Product {
 	 */
 	public void setExpirationDate(String expirationDate) {
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
-		if(ISODateFormat.asMatchPredicate().test(expirationDate)) {
+		if(ISODateFormat.asPredicate().test(expirationDate)) {
 			this.expirationDate = LocalDate.parse(expirationDate);
 		} else if (expirationDate.equals("null")) this.expirationDate = LocalDate.MAX;
 		else this.expirationDate = null;
