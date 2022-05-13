@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,9 +26,17 @@ import javax.ws.rs.core.UriInfo;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
+import aiss.api.resources.comparators.ComparatorIdProduct;
+import aiss.api.resources.comparators.ComparatorNameProduct;
+import aiss.api.resources.comparators.ComparatorPriceProduct;
+import aiss.api.resources.comparators.ComparatorPriceProductReversed;
+import aiss.api.resources.comparators.ComparatorQuantityProduct;
+import aiss.api.resources.comparators.ComparatorQuantityProductReversed;
+import aiss.api.resources.comparators.ComparatorRatingProduct;
+import aiss.api.resources.comparators.ComparatorRatingProductReversed;
 import aiss.model.Product;
-import aiss.model.repository.MapSupermarketRepository;
-import aiss.model.repository.SupermarketRepository;
+import aiss.model.repository.MapMarketRepository;
+import aiss.model.repository.MarketRepository;
 
 
 
@@ -35,10 +44,10 @@ import aiss.model.repository.SupermarketRepository;
 public class ProductResource {
 
 	public static ProductResource _instance=null;
-	SupermarketRepository repository;
+	MarketRepository repository;
 	
 	private ProductResource(){
-		repository=MapSupermarketRepository.getInstance();
+		repository=MapMarketRepository.getInstance();
 	}
 	
 	public static ProductResource getInstance()
@@ -91,15 +100,25 @@ public class ProductResource {
 			
 			
 			if (order != null) {
-//				if (order.equals("album")) {
-//					Collections.sort(result, new ComparatorAlbumproduct());
-//				} else if (order.equals("artist")) {
-//					Collections.sort(result, new ComparatorArtistproduct());
-//				} else if (order.equals("year")) {
-//					Collections.sort(result, new ComparatorYearproduct());
-//				} else {
-//					throw new BadRequestException("The order parameter must be 'album', 'artist' or 'year'.");
-//				}
+				if (order.equals("name")) {
+					Collections.sort(products, new ComparatorNameProduct());
+				} else if (order.equals("id")) {
+					Collections.sort(products, new ComparatorIdProduct());
+				} else if (order.equals("price")) {
+					Collections.sort(products, new ComparatorPriceProduct());
+				} else if (order.equals("-price")) {
+					Collections.sort(products, new ComparatorPriceProductReversed());
+				} else if (order.equals("quantity")) {
+					Collections.sort(products, new ComparatorQuantityProduct());
+				} else if (order.equals("-quantity")) {
+					Collections.sort(products, new ComparatorQuantityProductReversed());
+				} else if (order.equals("rating")) {
+					Collections.sort(products, new ComparatorRatingProduct());
+				} else if (order.equals("-rating")) {
+					Collections.sort(products, new ComparatorRatingProductReversed());
+				} else {
+					throw new BadRequestException("The order parameter must be 'album', 'artist' or 'year'.");
+				}
 			}
 			
 		}

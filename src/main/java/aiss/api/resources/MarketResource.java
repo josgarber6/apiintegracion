@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -25,59 +24,59 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
-
-import aiss.model.Supermarket;
+import aiss.api.resources.comparators.ComparatorNameMarket;
+import aiss.api.resources.comparators.ComparatorNameMarketReversed;
+import aiss.model.Market;
 import aiss.model.Product;
-import aiss.model.repository.MapSupermarketRepository;
-import aiss.model.repository.SupermarketRepository;
+import aiss.model.repository.MapMarketRepository;
+import aiss.model.repository.MarketRepository;
 
 
 
 
-
-@Path("/supermarkets")
-public class SupermarketResource {
+@Path("/Markets")
+public class MarketResource {
 	
 	/* Singleton */
-	private static SupermarketResource _instance=null;
-	SupermarketRepository repository;
+	private static MarketResource _instance=null;
+	MarketRepository repository;
 	
-	private SupermarketResource() {
-		repository=MapSupermarketRepository.getInstance();
+	private MarketResource() {
+		repository=MapMarketRepository.getInstance();
 
 	}
 	
-	public static SupermarketResource getInstance()
+	public static MarketResource getInstance()
 	{
 		if(_instance==null)
-				_instance=new SupermarketResource();
+				_instance = new MarketResource();
 		return _instance;
 	}
 	
 
 	@GET
 	@Produces("application/json")
-	public Collection<Supermarket> getAll(@QueryParam("order") String order,
+	public Collection<Market> getAll(@QueryParam("order") String order,
 			 @QueryParam("name") String name, @QueryParam("isEmpty") Boolean isEmpty)
 	{
-		List<Supermarket> result = new ArrayList<Supermarket>();
-		for (Supermarket market: repository.getAllSupermarkets()) {
-			if (name == null || Supermarket.getName().equals(name)) {	// filtrado del nombre
-				if (isEmpty == null 	// filtrado de supermercados vacías
-					|| (isEmpty && (Supermarket.getSongs() == null || Supermarket.getSongs().size() == 0))
-					|| (!isEmpty && (Supermarket.getSongs() != null && Supermarket.getSongs().size() > 0))) {
-					
-					result.add(market);
-				}
-					
-			}
+		List<Market> result = new ArrayList<Market>();
+		for (Market market: repository.getAllMarkets()) {
+//			if (name == null || Market.getName().equals(name)) {	// filtrado del nombre
+//				if (isEmpty == null 	// filtrado de supermercados vacías
+//					|| (isEmpty && (Market.getSongs() == null || Market.getSongs().size() == 0))
+//					|| (!isEmpty && (Market.getSongs() != null && Market.getSongs().size() > 0))) {
+//					
+//					result.add(market);
+//				}
+//					
+//			}
 			
 			if (order != null) {
 				if (order.equals("name")) {
-					Collections.sort(result, new ComparatorNameSupermarket());
+					Collections.sort(result, new ComparatorNameMarket());
 				}
 				else if (order.equals("-name")) {
-					Collections.sort(result, new ComparatorNameSupermarketReversed());
+					Collections.sort(result, new ComparatorNameMarketReversed());
 				}
 				else {
 					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
@@ -92,11 +91,11 @@ public class SupermarketResource {
 	@GET
 	@Path("/{id}")
 	@Produces("application/json")
-	public Supermarket get(@PathParam("id") String id)	{
-		Supermarket list = repository.getSupermarket(id);
+	public Market get(@PathParam("id") String id)	{
+		Market list = repository.getMarket(id);
 		
 		if (list == null) {
-			throw new NotFoundException("The supermarket with id="+ id +" was not found");			
+			throw new NotFoundException("The Market with id="+ id +" was not found");			
 		}
 		
 		return list;
@@ -105,16 +104,16 @@ public class SupermarketResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addSupermarket(@Context UriInfo uriInfo, Supermarket market) {
+	public Response addMarket(@Context UriInfo uriInfo, Market market) {
 		if (market.getName() == null || "".equals(market.getName()))
-			throw new BadRequestException("The name of the supermarket must not be null");
+			throw new BadRequestException("The name of the Market must not be null");
 		
 		if (market.getProducts()!=null)
 			throw new BadRequestException("The products property is not editable.");
 
-		repository.addSupermarket(market);
+		repository.addMarket(market);
 
-		// Builds the response. Returns the supermarket the has just been added.
+		// Builds the response. Returns the Market the has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
 		URI uri = ub.build(market.getId());
 		ResponseBuilder resp = Response.created(uri);
@@ -125,10 +124,10 @@ public class SupermarketResource {
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updateSupermarket(Supermarket market) {
-		Supermarket oldmarket = repository.getSupermarket(market.getId());
+	public Response updateMarket(Market market) {
+		Market oldmarket = repository.getMarket(market.getId());
 		if (oldmarket == null) {
-			throw new NotFoundException("The supermarket with id="+ market.getId() +" was not found");			
+			throw new NotFoundException("The Market with id="+ market.getId() +" was not found");			
 		}
 		
 		if (market.getProducts()!=null)
@@ -147,41 +146,41 @@ public class SupermarketResource {
 	
 	@DELETE
 	@Path("/{id}")
-	public Response removeSupermarket(@PathParam("id") String id) {
-		Supermarket toberemoved=repository.getSupermarket(id);
+	public Response removeMarket(@PathParam("id") String id) {
+		Market toberemoved=repository.getMarket(id);
 		if (toberemoved == null)
-			throw new NotFoundException("The supermarket with id="+ id +" was not found");
+			throw new NotFoundException("The Market with id="+ id +" was not found");
 		else
-			repository.deleteSupermarket(id);
+			repository.deleteMarket(id);
 		
 		return Response.noContent().build();
 	}
 	
 	
 	@POST	
-	@Path("/{supermarketId}/{productId}")
+	@Path("/{MarketId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addProduct(@Context UriInfo uriInfo,@PathParam("supermarketId") String supermarketId, @PathParam("productId") String songId)
+	public Response addProduct(@Context UriInfo uriInfo,@PathParam("MarketId") String MarketId, @PathParam("productId") String songId)
 	{				
 		
-		Supermarket market = repository.getSupermarket(supermarketId);
+		Market market = repository.getMarket(MarketId);
 		Product product = repository.getProduct(songId);
 		
 		if (market==null)
-			throw new NotFoundException("The supermarket with id=" + supermarketId + " was not found");
+			throw new NotFoundException("The Market with id=" + MarketId + " was not found");
 		
 		if (product == null)
 			throw new NotFoundException("The product with id=" + songId + " was not found");
 		
 		if (market.getProduct(songId)!=null)
-			throw new BadRequestException("The product is already included in the supermarket.");
+			throw new BadRequestException("The product is already included in the Market.");
 			
-		repository.addProduct(supermarketId, songId);		
+		repository.addProduct(MarketId, songId);		
 
 		// Builds the response
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(supermarketId);
+		URI uri = ub.build(MarketId);
 		ResponseBuilder resp = Response.created(uri);
 		resp.entity(market);			
 		return resp.build();
@@ -189,19 +188,19 @@ public class SupermarketResource {
 	
 	
 	@DELETE
-	@Path("/{supermarketId}/{productId}")
-	public Response removeProduct(@PathParam("supermarketId") String supermarketId, @PathParam("productId") String productId) {
-		Supermarket market = repository.getSupermarket(supermarketId);
+	@Path("/{MarketId}/{productId}")
+	public Response removeProduct(@PathParam("MarketId") String MarketId, @PathParam("productId") String productId) {
+		Market market = repository.getMarket(MarketId);
 		Product product = repository.getProduct(productId);
 		
 		if (market==null)
-			throw new NotFoundException("The supermarket with id=" + supermarketId + " was not found.");
+			throw new NotFoundException("The Market with id=" + MarketId + " was not found.");
 		
 		if (product == null)
 			throw new NotFoundException("The product with id=" + productId + " was not found.");
 		
 		
-		repository.removeProduct(supermarketId, productId);		
+		repository.removeProduct(MarketId, productId);		
 		
 		return Response.noContent().build();
 	}

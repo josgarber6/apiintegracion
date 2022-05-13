@@ -2,12 +2,12 @@ package aiss.model.repository;
 
 import java.util.Collection;
 
-import aiss.model.Supermarket;
+import aiss.model.Market;
 import aiss.model.User;
 import aiss.model.Order;
 import aiss.model.Product;
 
-public interface SupermarketRepository {
+public interface MarketRepository {
 	
 	
 	// Products
@@ -17,15 +17,15 @@ public interface SupermarketRepository {
 	public void updateProduct(Product p);
 	public void deleteProduct(String productId);
 	
-	// Supermarkets
-	public void addSupermarket(Supermarket s);
-	public Collection<Supermarket> getAllSupermarkets();
-	public Supermarket getSupermarket(String supermarketId);
-	public void updateSupermarket(Supermarket s);
-	public void deleteSupermarket(String supermarketId);
-	public Collection<Product> getAll(String supermarketId);
-	public void addProduct(String supermarketId, String productId);
-	public void removeProduct(String supermarketId, String productId);
+	// Markets
+	public void addMarket(Market s);
+	public Collection<Market> getAllMarkets();
+	public Market getMarket(String MarketId);
+	public void updateMarket(Market s);
+	public void deleteMarket(String MarketId);
+	public Collection<Product> getAll(String MarketId);
+	public void addProduct(String MarketId, String productId);
+	public void removeProduct(String MarketId, String productId);
 	
 	// Orders
 	public void addOrder(Order o);

@@ -184,6 +184,7 @@ Una **lista** tiene un _identificador, nombre, descripción y un conjunto de can
 ```cpp
 {
 	"id":"p5",
+	"name": "mercadona",
 	"dateStart":"2023-05-18",
 	"dateDelivery": "2023-05-20",
 	"shippingCost":"5",

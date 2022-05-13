@@ -5,9 +5,9 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import aiss.api.resources.MarketResource;
 import aiss.api.resources.OrderResource;
 import aiss.api.resources.ProductResource;
-import aiss.api.resources.SupermarketResource;
 import aiss.api.resources.UserResource;
 
 
@@ -19,7 +19,7 @@ public class MarketApplication extends Application {
 	// so that they can be found by RESTEasy.
 	public MarketApplication() {
 
-		singletons.add(SupermarketResource.getInstance());
+		singletons.add(MarketResource.getInstance());
 		singletons.add(ProductResource.getInstance());
 		singletons.add(OrderResource.getInstance());
 		singletons.add(UserResource.getInstance());

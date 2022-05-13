@@ -27,17 +27,17 @@ import org.jboss.resteasy.spi.NotFoundException;
 import aiss.api.resources.comparators.ComparatorNameUser;
 import aiss.api.resources.comparators.ComparatorNameUserReversed;
 import aiss.model.User;
-import aiss.model.repository.MapSupermarketRepository;
-import aiss.model.repository.SupermarketRepository;
+import aiss.model.repository.MapMarketRepository;
+import aiss.model.repository.MarketRepository;
 
 @Path("/users")
 public class UserResource {
 	
 	public static UserResource _instance = null;
-	SupermarketRepository repository;
+	MarketRepository repository;
 	
 	private UserResource() {
-		repository = MapSupermarketRepository.getInstance();
+		repository = MapMarketRepository.getInstance();
 	}
 	
 	public static UserResource getInstance() 
@@ -169,7 +169,7 @@ public class UserResource {
 			 token = user.getToken();
 		 }
 		 else {
-			 throw new  BadRequestException("The name and password are incorrect");
+			 throw new BadRequestException("The name and password are incorrect");
 		 }
 		 
 		 return token;

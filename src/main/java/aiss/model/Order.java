@@ -1,20 +1,24 @@
 package aiss.model;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Order {
 	
 	private String id;
-	private String date;
+	private LocalDate dateStart;
+	private LocalDate dateDelivery;
 	private String address;
-	private String shippingCosts;
-	private String supermarket;
+	private Double shippingCosts;
+	private String market;
+	private User user;
 	private List<Product> products;
 
 	public Order() {}
 	
 	public Order(String id, List<Product> ps) {
 		this.id = id;
+		this.dateStart = LocalDate.now();
 		this.products = ps;
 	}
 	
@@ -30,12 +34,12 @@ public class Order {
 		this.id = id;
 	}
 
-	public String getDate() {
-		return date;
+	public LocalDate getDate() {
+		return dateStart;
 	}
 
 	public void setDate(String date) {
-		this.date = date;
+		this.dateStart = LocalDate.parse(date);
 	}
 
 	public String getAddress() {
@@ -46,20 +50,20 @@ public class Order {
 		this.address = address;
 	}
 
-	public String getShippingCosts() {
+	public Double getShippingCosts() {
 		return shippingCosts;
 	}
 
 	public void setShippingCosts(String shippingCosts) {
-		this.shippingCosts = shippingCosts;
+		this.shippingCosts = Double.valueOf(shippingCosts);
 	}
 
-	public String getSupermarket() {
-		return supermarket;
+	public String getMarket() {
+		return market;
 	}
 
-	public void setSupermarket(String supermarket) {
-		this.supermarket = supermarket;
+	public void setMarket(String market) {
+		this.market = market;
 	}
 
 	public List<Product> getProducts() {
@@ -104,6 +108,22 @@ public class Order {
 		Product p = getProduct(id);
 		if (p!=null)
 			products.remove(p);
+	}
+
+	public LocalDate getDateDelivery() {
+		return dateDelivery;
+	}
+
+	public void setDateDelivery(String dateDelivery) {
+		this.dateDelivery = LocalDate.parse(dateDelivery);
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

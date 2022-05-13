@@ -28,23 +28,24 @@ import aiss.api.resources.comparators.ComparatorIdOrder;
 import aiss.api.resources.comparators.ComparatorIdOrderReversed;
 import aiss.model.Order;
 import aiss.model.Product;
-import aiss.model.repository.MapSupermarketRepository;
-import aiss.model.repository.SupermarketRepository;
+import aiss.model.User;
+import aiss.model.repository.MapMarketRepository;
+import aiss.model.repository.MarketRepository;
 
 @Path("/orders")
 public class OrderResource {
 	
 	/* Singleton */
-	private static OrderResource _instance=null;
-	SupermarketRepository repository;
+	private static OrderResource _instance = null;
+	MarketRepository repository;
 	
 	private OrderResource() {
-		repository=MapSupermarketRepository.getInstance();
+		repository=MapMarketRepository.getInstance();
 	}
 	
 	public static OrderResource getInstance() {
-		if(_instance==null)
-			_instance=new OrderResource();
+		if(_instance == null)
+			_instance = new OrderResource();
 		return _instance;
 	}
 	
@@ -97,13 +98,41 @@ public class OrderResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addOrder(@Context UriInfo uriInfo, Order order) {
-		if (order.getId() == null || "".equals(order.getId()))
+	public Response addOrder(@Context UriInfo uriInfo,
+			@PathParam("token") String token,
+			Order order, 
+			User user) {
+		/*
+		 * para que una nueva orden sea valida el token enviado en queryParam token
+		 * y el token del user dado tienen que ser iguales.
+		 * una nueva orden necesita tener los parametros market, shippingCosts, address
+		 * todos los otros campos tienen que ser null. Los otros parametros
+		 * se van rellenando cada uno por su cuenta, menos dateStart que se llena 
+		 * automaticamente con la fecha actual de cuando se crea el objeto order.
+		 * user se llena con el user que se la pasa al metodo.
+		 */
+		if(!token.equals(user.getToken()))
+			throw new BadRequestException("The token is incorrect");
+		
+		if (order.getMarket() == null || "".equals(order.getMarket()))
 			throw new BadRequestException("The name of the order must not be null");
 		
-		if (order.getProducts()!=null)
+		if(order.getAddress() == null || "".equals(order.getAddress()))
+			throw new BadRequestException("The address of the order must not be null.");
+		
+		if(order.getDate() != null )
+			throw new BadRequestException("The start date property is not editable.");
+		
+		if(order.getDateDelivery() != null )
+			throw new BadRequestException("The delivery date property is not editable.");
+		
+		if (order.getProducts() != null)
 			throw new BadRequestException("The products property is not editable.");
-
+		
+		if(order.getUser() == null)
+			throw new BadRequestException("The user must be not null");
+		
+		order.setUser(user);
 		repository.addOrder(order);
 
 		// Builds the response. Returns the order the has just been added.
@@ -116,27 +145,38 @@ public class OrderResource {
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updateOrder(Order order) {
+	public Response updateOrder(@PathParam("token") String token, Order order) {
+		/*
+		 * se confirma que la orden pertenece al que hace el update comprobando que 
+		 * el toke es el del usuario que tiene guardada la orden al crearla con addOrder.
+		 */
+		if(!token.equals(order.getUser().getToken()))
+			throw new BadRequestException("The token is incorrect");
+		
 		Order oldorder = repository.getOrder(order.getId());
 		if (oldorder == null) {
 			throw new NotFoundException("The order with id="+ order.getId() +" was not found");			
 		}
 		
-			
+		/*
+		 * los parametros que se pueden cambiar son address, market, shippingCosts y 
+		 * products
+		 */
+		
 		// Update address
-		if (order.getAddress()!=null)
+		if (order.getAddress() != null)
 			oldorder.setAddress(order.getAddress());
 		
-		// Update date
-		if (order.getDate()!=null)
-			oldorder.setDate(order.getDate());
+		// Update market
+		if (order.getMarket() != null)
+			oldorder.setMarket(order.getMarket());
 		
 		// Update shipping costs
-		if (order.getShippingCosts()!=null)
-			oldorder.setShippingCosts(order.getShippingCosts());
+		if (order.getShippingCosts() != null)
+			oldorder.setShippingCosts(""+order.getShippingCosts());
 		
 		// Update products
-		if (order.getProducts()!=null)
+		if (order.getProducts() != null)
 			oldorder.setProducts(order.getProducts());
 		
 		return Response.noContent().build();
@@ -144,10 +184,17 @@ public class OrderResource {
 	
 	@DELETE
 	@Path("/{id}")
-	public Response removeOrder(@PathParam("id") String id) {
-		Order toberemoved=repository.getOrder(id);
+	public Response removeOrder(@PathParam("id") String id, 
+			@PathParam("token") String token) {
+		Order toberemoved = repository.getOrder(id);
+		/*
+		 * se confirma que la orden pertenece al que hace el delete comprobando que 
+		 * el token es el del usuario que tiene guardada la orden al crearla con addOrder.
+		 */
 		if (toberemoved == null)
 			throw new NotFoundException("The order with id="+ id +" was not found");
+		else if(!token.equals(toberemoved.getUser().getToken())) 
+			throw new BadRequestException("The token is incorrect");
 		else
 			repository.deleteOrder(id);
 		
@@ -158,19 +205,28 @@ public class OrderResource {
 	@Path("/{orderId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addProduct(@Context UriInfo uriInfo,@PathParam("orderId") String orderId, @PathParam("productId") String productId)
+	public Response addProduct(@Context UriInfo uriInfo,
+			@PathParam("orderId") String orderId, 
+			@PathParam("productId") String productId,
+			@PathParam("token") String token)
 	{				
 		
 		Order order = repository.getOrder(orderId);
 		Product product = repository.getProduct(productId);
 		
-		if (order==null)
+		if (order == null)
 			throw new NotFoundException("The order with id=" + orderId + " was not found");
+		/*
+		 * se confirma que la orden pertenece al que hace el addProduct comprobando que 
+		 * el token es el del usuario que tiene guardada la orden al crearla con addOrder.
+		 */
+		if(!token.equals(order.getUser().getToken())) 
+			throw new BadRequestException("The token is incorrect");
 		
 		if (product == null)
 			throw new NotFoundException("The product with id=" + productId + " was not found");
 		
-		if (order.getProduct(productId)!=null)
+		if (order.getProduct(productId) != null)
 			throw new BadRequestException("The product is already included in the order.");
 			
 		repository.addProduct(orderId, productId);
@@ -185,12 +241,21 @@ public class OrderResource {
 	
 	@DELETE
 	@Path("/{orderId}/{productId}")
-	public Response removeproduct(@PathParam("orderId") String orderId, @PathParam("productId") String productId) {
+	public Response removeproduct(@PathParam("orderId") String orderId, 
+			@PathParam("productId") String productId,
+			@PathParam("token") String token) {
 		Order order = repository.getOrder(orderId);
 		Product product = repository.getProduct(productId);
 		
-		if (order==null)
+		if (order == null)
 			throw new NotFoundException("The order with id=" + orderId + " was not found");
+		
+		/*
+		 * se confirma que la orden pertenece al que hace el removeProduct comprobando que 
+		 * el token es el del usuario que tiene guardada la orden al crearla con addOrder.
+		 */
+		if(!token.equals(order.getUser().getToken())) 
+			throw new BadRequestException("The token is incorrect");
 		
 		if (product == null)
 			throw new NotFoundException("The product with id=" + productId + " was not found");

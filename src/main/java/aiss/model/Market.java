@@ -3,16 +3,17 @@ package aiss.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Supermarket {
+public class Market {
 
 	private String id;
 	private String name;
 	private String description;
 	private List<Product> products;
+	private List<Order> orders;
 	
-	public Supermarket() {}
+	public Market() {}
 	
-	public Supermarket(String name) {
+	public Market(String name) {
 		this.name = name;
 	}
 	
@@ -79,4 +80,41 @@ public class Supermarket {
 			products.remove(p);
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+	
+	public Order getOrder(String id) {
+		if(orders==null)
+			return null;
+		Order order = null;
+		for(Order o:orders)
+			if(o.getId().equals(id)) {
+				order=o;
+				break;
+			}
+		
+		return order;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+	
+	public void addOrder(Order o) {
+		if (orders==null)
+			orders = new ArrayList<Order>();
+		orders.add(o);
+	}
+	
+	public void deleteOrder(Order o) {
+		orders.remove(o);
+	}
+	
+	public void deleteOder(String id) {
+		Order o = getOrder(id);
+		if(o!=null) {
+			orders.remove(o);
+		}
+	}
 }

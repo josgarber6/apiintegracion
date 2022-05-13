@@ -6,25 +6,25 @@ import java.util.Map;
 
 import aiss.model.Order;
 import aiss.model.Product;
-import aiss.model.Supermarket;
+import aiss.model.Market;
 import aiss.model.User;
 
 
-public class MapSupermarketRepository implements SupermarketRepository{
+public class MapMarketRepository implements MarketRepository{
 
-	Map<String, Supermarket> supermarketMap;
+	Map<String, Market> MarketMap;
 	Map<String, Product> productMap;
 	Map<String, Order> orderMap;
 	Map<String, User> userMap;
-	private static MapSupermarketRepository instance=null;
-	private int index=0; // Index to create supermarkets, products and orders' identifiers.
+	private static MapMarketRepository instance=null;
+	private int index=0; // Index to create Markets, products and orders' identifiers.
 
 	
 	
-	public static MapSupermarketRepository getInstance() {
+	public static MapMarketRepository getInstance() {
 		
 		if (instance==null) {
-			instance = new MapSupermarketRepository();
+			instance = new MapMarketRepository();
 			instance.init();
 		}
 		
@@ -33,7 +33,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	
 	public void init() {
 		
-		supermarketMap = new HashMap<String,Supermarket>();
+		MarketMap = new HashMap<String,Market>();
 		productMap = new HashMap<String,Product>();
 		
 		// Create products
@@ -46,16 +46,16 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		Product macarrones = new Product("Macarrones", "2", "150", "null", "4", "FOOD");
 		addProduct(macarrones);
 		
-		// Create supermarkets
-		Supermarket mercadona=new Supermarket();
+		// Create Markets
+		Market mercadona=new Market();
 		mercadona.setName("Mercadona");
 		mercadona.setDescription("Supermercados Mercadona");
-		addSupermarket(mercadona);
+		addMarket(mercadona);
 		
-		Supermarket dia = new Supermarket();
+		Market dia = new Market();
 		dia.setName("Dia");
 		dia.setDescription("Supermercados Dia");
-		addSupermarket(dia);
+		addMarket(dia);
 		
 		// Create orders
 		Order o1=new Order();
@@ -63,7 +63,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
 		o1.setDate("10-05-2022");
 		o1.setShippingCosts("5,00€");
-		o1.setSupermarket("Mercadona");
+		o1.setMarket("Mercadona");
 		
 		// Create users
 		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
@@ -75,7 +75,7 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		User u3 = new User("pepe","a@aiss.com","1234","reina mercedes");
 		addUser(u3);
 		
-		// Add products to supermarkets and orders
+		// Add products to Markets and orders
 		addProduct(mercadona.getId(), patatas.getId());
 		addProduct(mercadona.getId(), cornFlakes.getId());
 		addProduct(mercadona.getId(), macarrones.getId());
@@ -90,49 +90,49 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		
 	}
 	
-	// Supermarket related operations
+	// Market related operations
 	@Override
-	public void addSupermarket(Supermarket s) {
+	public void addMarket(Market s) {
 		String id = "s" + index++;	
 		s.setId(id);
-		supermarketMap.put(id,s);
+		MarketMap.put(id,s);
 	}
 	
 	@Override
-	public Collection<Supermarket> getAllSupermarkets() {
-			return supermarketMap.values();
+	public Collection<Market> getAllMarkets() {
+			return MarketMap.values();
 	}
 
 	@Override
-	public Supermarket getSupermarket(String id) {
-		return supermarketMap.get(id);
+	public Market getMarket(String id) {
+		return MarketMap.get(id);
 	}
 	
 	@Override
-	public void updateSupermarket(Supermarket p) {
-		supermarketMap.put(p.getId(),p);
+	public void updateMarket(Market p) {
+		MarketMap.put(p.getId(),p);
 	}
 
 	@Override
-	public void deleteSupermarket(String id) {	
-		supermarketMap.remove(id);
+	public void deleteMarket(String id) {	
+		MarketMap.remove(id);
 	}
 	
 
 	@Override
-	public void addProduct(String supermarketId, String songId) {
-		Supermarket supermarket = getSupermarket(supermarketId);
-		supermarket.addProduct(productMap.get(songId));
+	public void addProduct(String MarketId, String songId) {
+		Market Market = getMarket(MarketId);
+		Market.addProduct(productMap.get(songId));
 	}
 
 	@Override
-	public Collection<Product> getAll(String supermarketId) {
-		return getSupermarket(supermarketId).getProducts();
+	public Collection<Product> getAll(String MarketId) {
+		return getMarket(MarketId).getProducts();
 	}
 
 	@Override
-	public void removeProduct(String supermarketId, String songId) {
-		getSupermarket(supermarketId).deleteProduct(songId);
+	public void removeProduct(String MarketId, String songId) {
+		getMarket(MarketId).deleteProduct(songId);
 	}
 
 	
@@ -192,9 +192,9 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	public void updateOrder(Order o) {
 		Order order = orderMap.get(o.getId());
 		order.setAddress(o.getAddress());
-		order.setDate(o.getDate());
-		order.setShippingCosts(o.getShippingCosts());
-		order.setSupermarket(o.getSupermarket());
+		order.setDate(""+o.getDate());
+		order.setShippingCosts(""+o.getShippingCosts());
+		order.setMarket(o.getMarket());
 	}
 
 
