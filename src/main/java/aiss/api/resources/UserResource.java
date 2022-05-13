@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -71,9 +72,9 @@ public class UserResource {
 		}
 		
 		if(limit != null && offset != null) {
-			users = users.subList(offset, users.size()).stream().limit(limit).toList();
+			users = users.subList(offset, users.size()).stream().limit(limit).collect(Collectors.toList());
 		} else if(limit != null) {
-			users = users.stream().limit(limit).toList();
+			users = users.stream().limit(limit).collect(Collectors.toList());
 		}
 		
 		return users;
