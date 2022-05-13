@@ -92,7 +92,7 @@ Cada **producto** tiene un identificador, nombre, precio, valoracion, cantidad, 
 ### Recurso User ###
 | HTTP  | URI | Descripción |
 | ------------- | ------------- | ------------- |
-| GET | /users | Ver todos los usuarios existentes. •	Es posible ordenar los usuarios por sus nombres con el parámetro de query "order", qeu solo acepta dos valores, "name" o "-name" que devuelve los usuarios ordenados en orden alfabetico o orden inverso.   •	Tambien se puede usar el parametro de query "limit" y "offset" para limitar el numero de usuarios mostrados y el comienzo de estos. |
+| GET | /users | Ver todos los usuarios existentes. •	Es posible ordenar los usuarios por sus nombres con el parámetro de query "order", que solo acepta dos valores, "name" o "-name" que devuelve los usuarios ordenados en orden alfabetico o orden inverso.   •	Tambien se puede usar el parametro de query "limit" y "offset" para limitar el numero de usuarios mostrados y el comienzo de estos. |
 | GET | /users/{userId} | Devuelve el usuario con i:userId. Si el usuario no existe devuelve un “404 Not Found”. |
 | POST | /users | Añadir un nuevo usuario. Los datos del usuario se proporcionan en el cuerpo de la petición en formato JSON. Si el nombre, la contraseña o la dirección del usuario no son válidos (nulo o vacío), devuelve un error “400 Bad Request”. Si se añade satisfactoriamente, devuelve “201 Created” con la referencia a la URI y el contenido de el pedido. |
 | PUT | /users | Actualiza el usuario cuyos datos se pasan en el cuerpo de la petición en formato JSON (deben incluir el id del usuario).  Si el usuario no existe, devuelve un “404 Not Found”. Solo se pueden actualizar el nombre, email, contraseña o la direccion. Si se realiza correctamente, devuelve “204 No Content”. |

@@ -8,6 +8,7 @@ import javax.ws.rs.core.Application;
 import aiss.api.resources.OrderResource;
 import aiss.api.resources.ProductResource;
 import aiss.api.resources.SupermarketResource;
+import aiss.api.resources.UserResource;
 
 
 public class MarketApplication extends Application {
@@ -21,6 +22,7 @@ public class MarketApplication extends Application {
 		singletons.add(SupermarketResource.getInstance());
 		singletons.add(ProductResource.getInstance());
 		singletons.add(OrderResource.getInstance());
+		singletons.add(UserResource.getInstance());
 	}
 
 	@Override

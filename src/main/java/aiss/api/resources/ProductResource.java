@@ -57,7 +57,7 @@ public class ProductResource {
 			@QueryParam("limit") Integer limit, 
 			@QueryParam("offset") Integer offset)
 	{
-		List<Product> result = new ArrayList<Product>();
+		List<Product> products = new ArrayList<Product>();
 		
 		for (Product product: repository.getAllProducts()) {
 			
@@ -86,7 +86,7 @@ public class ProductResource {
 						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
 				|| Min_price_rating_quantity  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
 						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))) {
-				result.add(product);
+				products.add(product);
 			}
 			
 			
@@ -104,18 +104,14 @@ public class ProductResource {
 			
 		}
 		
-		if (limit == null) {
-			return result;
+		if (limit != null && offset == null) {
+			products = products.stream().limit(limit).collect(Collectors.toList());
 		}
-		else {
-			if (offset == null) {
-				result = result.stream().limit(limit).collect(Collectors.toList());
-			} else {
-				result = result.subList(offset, result.size()).stream().limit(limit).collect(Collectors.toList());
-			}
+		else if(limit != null && offset != null){
+			products = products.subList(offset, products.size()).stream().limit(limit).collect(Collectors.toList());
 		}
 		
-		return result;
+		return products;
 		
 	}
 	
@@ -137,7 +133,7 @@ public class ProductResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response addproduct(@Context UriInfo uriInfo, Product product) {
+	public Response addProduct(@Context UriInfo uriInfo, Product product) {
 		if (product.getName() == null || "".equals(product.getName()))
 			throw new BadRequestException("The name of the product must not be null");
 		
@@ -169,7 +165,7 @@ public class ProductResource {
 	
 	@PUT
 	@Consumes("application/json")
-	public Response updateproduct(Product product) {
+	public Response updateProduct(Product product) {
 		Product oldproduct = repository.getProduct(product.getId());
 		if (oldproduct == null) {
 			throw new NotFoundException("The product with id=" + product.getId() + " was not found");
@@ -196,7 +192,7 @@ public class ProductResource {
 	
 	@DELETE
 	@Path("/{id}")
-	public Response removeproduct(@PathParam("id") String productId) {
+	public Response removeProduct(@PathParam("id") String productId) {
 		Product toberemoved = repository.getProduct(productId);
 		if (toberemoved==null)
 			throw new NotFoundException("The product with id=" + productId + " was not found");

@@ -3,6 +3,7 @@ package aiss.model.repository;
 import java.util.Collection;
 
 import aiss.model.Supermarket;
+import aiss.model.User;
 import aiss.model.Order;
 import aiss.model.Product;
 
@@ -32,5 +33,13 @@ public interface SupermarketRepository {
 	public Order getOrder(String orderId);
 	public void updateOrder(Order o);
 	public void deleteOrder(String orderId);
-
+	
+	// Users
+	public void addUser(User u);
+	public Collection<User> getAllUsers();
+	public User getUser(String userId);
+	public void updateUser(User u);
+	public String getToken(String userId);
+	public void deleteUser(String userId);
+	
 }

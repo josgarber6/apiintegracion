@@ -7,6 +7,7 @@ import java.util.Map;
 import aiss.model.Order;
 import aiss.model.Product;
 import aiss.model.Supermarket;
+import aiss.model.User;
 
 
 public class MapSupermarketRepository implements SupermarketRepository{
@@ -14,8 +15,9 @@ public class MapSupermarketRepository implements SupermarketRepository{
 	Map<String, Supermarket> supermarketMap;
 	Map<String, Product> productMap;
 	Map<String, Order> orderMap;
+	Map<String, User> userMap;
 	private static MapSupermarketRepository instance=null;
-	private int index=0;			// Index to create supermarkets, products and orders' identifiers.
+	private int index=0; // Index to create supermarkets, products and orders' identifiers.
 
 	
 	
@@ -62,6 +64,16 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		o1.setDate("10-05-2022");
 		o1.setShippingCosts("5,00€");
 		o1.setSupermarket("Mercadona");
+		
+		// Create users
+		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
+		addUser(u1);
+		
+		User u2 = new User("Jose Antonio Pascual","abc@aiss.com","qwert","Sevilla, Sierpes, 24");
+		addUser(u2);
+		
+		User u3 = new User("pepe","a@aiss.com","1234","reina mercedes");
+		addUser(u3);
 		
 		// Add products to supermarkets and orders
 		addProduct(mercadona.getId(), patatas.getId());
@@ -185,9 +197,49 @@ public class MapSupermarketRepository implements SupermarketRepository{
 		order.setSupermarket(o.getSupermarket());
 	}
 
+
 	@Override
 	public void deleteOrder(String orderId) {
 		orderMap.remove(orderId);
+	}
+	
+	// User related operations
+
+	@Override
+	public void addUser(User u) {
+		String id = "u" + index++;
+		u.setId(id);
+		userMap.put(id, u);
+	}
+
+	@Override
+	public Collection<User> getAllUsers() {
+		return userMap.values();
+	}
+
+	@Override
+	public User getUser(String userId) {
+		return userMap.get(userId);
+	}
+
+	@Override
+	public void updateUser(User u) {
+		User user = userMap.get(u.getId());
+		user.setName(u.getName());
+		user.setEmail(u.getEmail());
+		user.setPassword(u.getPassword());
+		user.setAddress(u.getAddress());
+	}
+
+	@Override
+	public String getToken(String userId) {
+		User user = userMap.get(userId);
+		return user.getToken();
+	}
+
+	@Override
+	public void deleteUser(String userId) {
+		userMap.remove(userId);
 	}
 	
 }

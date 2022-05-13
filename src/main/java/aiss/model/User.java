@@ -34,7 +34,7 @@ public class User {
 	public User() {
 	}
 
-	public User(String name, String email, String pasword, String token, String address) {
+	public User(String name, String email, String pasword, String address) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -44,7 +44,7 @@ public class User {
 		this.address = address;
 	}
 
-	public User(String id, String name, String email, String pasword, String token, String address) {
+	public User(String id, String name, String email, String pasword, String address) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -91,10 +91,6 @@ public class User {
 
 	public String getToken() {
 		return token;
-	}
-
-	public void   setToken(String token) {
-		this.token = token;
 	}
 
 	public String getAddress() {
