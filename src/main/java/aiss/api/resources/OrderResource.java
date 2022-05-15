@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.time.LocalDate;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -23,8 +24,6 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
-
-import com.google.appengine.repackaged.org.joda.time.LocalDate;
 
 import aiss.api.resources.comparators.ComparatorIdOrder;
 import aiss.api.resources.comparators.ComparatorIdOrderReversed;
