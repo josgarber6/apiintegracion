@@ -120,12 +120,10 @@ Cada **producto** tiene un identificador, nombre, precio, valoracion, cantidad, 
 **Datos en formato JSON de salida**
 ```cpp
 {
-	"user": {
-		"id": "u3",
-		"name": "Maria",
-		"email": "aa@aiss.com",
-		"address": "baños, 33"
-	}
+	"id": "u3",
+	"name": "Maria",
+	"email": "aa@aiss.com",
+	"address": "baños, 33"
 }
 ```
 
@@ -133,12 +131,10 @@ Cada **producto** tiene un identificador, nombre, precio, valoracion, cantidad, 
 **Datos en formato JSON de entrada**
 ```cpp
 {
-	"user": {
-		"name": "Maria",
-		"email": "aa@aiss.com",
-		"password": "secret",
-		"address": "baños, 33"
-	}
+	"name": "Maria",
+	"email": "aa@aiss.com",
+	"password": "secret",
+	"address": "baños, 33"
 }
 ```
 
@@ -146,13 +142,11 @@ Cada **producto** tiene un identificador, nombre, precio, valoracion, cantidad, 
 **Datos en formato JSON de entrada**
 ```cpp
 {
-	"user": {
-		"id": "u3",
-		"name": "Maria",
-		"email": "aa@aiss.com",
-		"password": "secret2",
-		"address": "baños, 33"
-	}
+	"id": "u3",
+	"name": "Maria",
+	"email": "aa@aiss.com",
+	"password": "secret2",
+	"address": "baños, 33"
 }
 ```
 

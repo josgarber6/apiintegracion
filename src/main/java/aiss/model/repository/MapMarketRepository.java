@@ -35,12 +35,14 @@ public class MapMarketRepository implements MarketRepository{
 		
 		MarketMap = new HashMap<String,Market>();
 		productMap = new HashMap<String,Product>();
+		orderMap = new HashMap<String,Order>();
+		userMap = new HashMap<String, User>();
 		
 		// Create products
-		Product patatas = new Product("Patatas", "1,50€", "64", "2022-05-30", "3", "FOOD");
+		Product patatas = new Product("Patatas", "1.50", "64", "2022-05-30", "3", "FOOD");
 		addProduct(patatas);
 		
-		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "15/02/2023", "2", "FOOD");
+		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "2023-02-15", "2", "FOOD");
 		addProduct(cornFlakes);
 		
 		Product macarrones = new Product("Macarrones", "2", "150", "null", "4", "FOOD");
@@ -61,9 +63,10 @@ public class MapMarketRepository implements MarketRepository{
 		Order o1=new Order();
 		o1.addProduct(patatas);
 		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
-		o1.setDate("10-05-2022");
-		o1.setShippingCosts("5,00€");
+		o1.setDate("2022-10-05");
+		o1.setShippingCosts("5.00");
 		o1.setMarket("Mercadona");
+		addOrder(o1);
 		
 		// Create users
 		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
@@ -84,9 +87,9 @@ public class MapMarketRepository implements MarketRepository{
 		addProduct(dia.getId(), cornFlakes.getId());
 		addProduct(dia.getId(), macarrones.getId());
 		
-		addProduct(o1.getId(), patatas.getId());
-		addProduct(o1.getId(), cornFlakes.getId());
-		addProduct(o1.getId(), macarrones.getId());
+//		addProduct(o1.getId(), patatas.getId());
+//		addProduct(o1.getId(), cornFlakes.getId());
+//		addProduct(o1.getId(), macarrones.getId());
 		
 	}
 	
@@ -120,9 +123,9 @@ public class MapMarketRepository implements MarketRepository{
 	
 
 	@Override
-	public void addProduct(String MarketId, String songId) {
+	public void addProduct(String MarketId, String productId) {
 		Market Market = getMarket(MarketId);
-		Market.addProduct(productMap.get(songId));
+		Market.addProduct(productMap.get(productId));
 	}
 
 	@Override
@@ -175,6 +178,7 @@ public class MapMarketRepository implements MarketRepository{
 	public void addOrder(Order o) {
 		String id = "o" + index++;
 		o.setId(id);
+		
 		orderMap.put(id, o);
 	}
 

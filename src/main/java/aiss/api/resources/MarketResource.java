@@ -34,7 +34,7 @@ import aiss.model.repository.MarketRepository;
 
 
 
-@Path("/Markets")
+@Path("/markets")
 public class MarketResource {
 	
 	/* Singleton */
@@ -158,10 +158,10 @@ public class MarketResource {
 	
 	
 	@POST	
-	@Path("/{MarketId}/{productId}")
+	@Path("/{marketId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addProduct(@Context UriInfo uriInfo,@PathParam("MarketId") String MarketId, @PathParam("productId") String songId)
+	public Response addProduct(@Context UriInfo uriInfo,@PathParam("marketId") String MarketId, @PathParam("productId") String songId)
 	{				
 		
 		Market market = repository.getMarket(MarketId);
@@ -188,8 +188,8 @@ public class MarketResource {
 	
 	
 	@DELETE
-	@Path("/{MarketId}/{productId}")
-	public Response removeProduct(@PathParam("MarketId") String MarketId, @PathParam("productId") String productId) {
+	@Path("/{marketId}/{productId}")
+	public Response removeProduct(@PathParam("marketId") String MarketId, @PathParam("productId") String productId) {
 		Market market = repository.getMarket(MarketId);
 		Product product = repository.getProduct(productId);
 		

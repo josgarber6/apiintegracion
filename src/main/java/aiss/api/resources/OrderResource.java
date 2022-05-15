@@ -24,6 +24,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
+import com.google.appengine.repackaged.org.joda.time.LocalDate;
+
 import aiss.api.resources.comparators.ComparatorIdOrder;
 import aiss.api.resources.comparators.ComparatorIdOrderReversed;
 import aiss.model.Order;
@@ -43,7 +45,8 @@ public class OrderResource {
 		repository=MapMarketRepository.getInstance();
 	}
 	
-	public static OrderResource getInstance() {
+	public static OrderResource getInstance() 
+	{
 		if(_instance == null)
 			_instance = new OrderResource();
 		return _instance;
@@ -99,7 +102,7 @@ public class OrderResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response addOrder(@Context UriInfo uriInfo,
-			@PathParam("token") String token,
+			@QueryParam("token") String token,
 			Order order, 
 			User user) {
 		/*
@@ -144,8 +147,20 @@ public class OrderResource {
 	}
 	
 	@PUT
+	@Path("/delivery/{orderId}")
+	public Response updateOrderDateDelivery(@QueryParam("token") String token,
+			@PathParam("orderId") String orderId) {
+		Order order = repository.getOrder(orderId);
+		if (order == null) {
+			throw new NotFoundException("The order with id="+ orderId +" was not found");			
+		}
+		else order.setDateDelivery(""+LocalDate.now());
+		return Response.noContent().build();
+	}
+	
+	@PUT
 	@Consumes("application/json")
-	public Response updateOrder(@PathParam("token") String token, Order order) {
+	public Response updateOrder(@QueryParam("token") String token, Order order) {
 		/*
 		 * se confirma que la orden pertenece al que hace el update comprobando que 
 		 * el toke es el del usuario que tiene guardada la orden al crearla con addOrder.
@@ -185,7 +200,7 @@ public class OrderResource {
 	@DELETE
 	@Path("/{id}")
 	public Response removeOrder(@PathParam("id") String id, 
-			@PathParam("token") String token) {
+			@QueryParam("token") String token) {
 		Order toberemoved = repository.getOrder(id);
 		/*
 		 * se confirma que la orden pertenece al que hace el delete comprobando que 
@@ -208,7 +223,7 @@ public class OrderResource {
 	public Response addProduct(@Context UriInfo uriInfo,
 			@PathParam("orderId") String orderId, 
 			@PathParam("productId") String productId,
-			@PathParam("token") String token)
+			@QueryParam("token") String token)
 	{				
 		
 		Order order = repository.getOrder(orderId);
@@ -243,7 +258,7 @@ public class OrderResource {
 	@Path("/{orderId}/{productId}")
 	public Response removeproduct(@PathParam("orderId") String orderId, 
 			@PathParam("productId") String productId,
-			@PathParam("token") String token) {
+			@QueryParam("token") String token) {
 		Order order = repository.getOrder(orderId);
 		Product product = repository.getProduct(productId);
 		

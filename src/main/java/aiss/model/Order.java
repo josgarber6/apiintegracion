@@ -14,7 +14,9 @@ public class Order {
 	private User user;
 	private List<Product> products;
 
-	public Order() {}
+	public Order() {
+		
+	}
 	
 	public Order(String id, List<Product> ps) {
 		this.id = id;
