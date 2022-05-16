@@ -22,7 +22,7 @@ public class Product {
 	}
 	
 	/**
-	 * Obtain a instance {@code Product} from a name, price, quantity, expiration date.
+	 * Obtain a instance {@code Product} from a name, price, quantity, expiration date, rating and type of product.
 	 * @param name String, name of the product.
 	 * @param price String, price of the product.
 	 * @param quantity String, quantity of the product.
@@ -48,7 +48,7 @@ public class Product {
 	}
 	
 	/**
-	 * Obtain a instance {@code Product} from a id, name, price, quantity, expiration date.
+	 * Obtain a instance {@code Product} from a id, name, price, quantity, expiration date, rating and type of product
 	 * @param id String, unique identifier
 	 * @param name String, name of the product.
 	 * @param price String, price of the product.

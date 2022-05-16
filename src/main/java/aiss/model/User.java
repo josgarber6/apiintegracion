@@ -33,23 +33,38 @@ public class User {
 	
 	public User() {
 	}
-
-	public User(String name, String email, String pasword, String address) {
+	
+	/**
+	 * Obtain a instance {@code User} from a name, email, password, address.
+	 * @param name String, name of the user.
+	 * @param email String, email of the user.
+	 * @param pasword String, password of the user.
+	 * @param address String, address of the user.
+	 */
+	public User(String name, String email, String password, String address) {
 		super();
 		this.name = name;
 		this.email = email;
-		this.password = pasword;
+		this.password = password;
 		SecureToken tokenAux = new SecureToken();
 		this.token = tokenAux.nextToken();
 		this.address = address;
 	}
-
-	public User(String id, String name, String email, String pasword, String address) {
+	
+	/**
+	 * Obtain a instance {@code User} from a id, name, email, password, address.
+	 * @param id String, id of the user.
+	 * @param name String, name of the user.
+	 * @param email String, email of the user.
+	 * @param pasword String, password of the user.
+	 * @param address String, address of the user.
+	 */
+	public User(String id, String name, String email, String password, String address) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.password = pasword;
+		this.password = password;
 		SecureToken tokenAux = new SecureToken();
 		this.token = tokenAux.nextToken();
 		this.address = address;

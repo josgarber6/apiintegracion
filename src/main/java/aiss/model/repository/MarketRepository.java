@@ -24,12 +24,14 @@ public interface MarketRepository {
 	public void updateMarket(Market s);
 	public void deleteMarket(String MarketId);
 	public Collection<Product> getAll(String MarketId);
-	public void addProduct(String MarketId, String productId);
-	public void removeProduct(String MarketId, String productId);
+	public void addProductToMarket(String MarketId, String productId);
+	public void removeProductOfMarket(String MarketId, String productId);
 	
 	// Orders
 	public void addOrder(Order o);
 	public Collection<Order> getAllOrders();
+	public void addProductToOrder(String orderId, String productId);
+	public void removeProductOfOrder(String orderId, String productId);
 	public Order getOrder(String orderId);
 	public void updateOrder(Order o);
 	public void deleteOrder(String orderId);

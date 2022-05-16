@@ -10,7 +10,7 @@ public class Order {
 	private LocalDate dateDelivery;
 	private String address;
 	private Double shippingCosts;
-	private String market;
+	private String idMarket;
 	private User user;
 	private List<Product> products;
 
@@ -61,11 +61,11 @@ public class Order {
 	}
 
 	public String getMarket() {
-		return market;
+		return idMarket;
 	}
 
 	public void setMarket(String market) {
-		this.market = market;
+		this.idMarket = market;
 	}
 
 	public List<Product> getProducts() {

@@ -59,37 +59,37 @@ public class MapMarketRepository implements MarketRepository{
 		dia.setDescription("Supermercados Dia");
 		addMarket(dia);
 		
-		// Create orders
-		Order o1=new Order();
-		o1.addProduct(patatas);
-		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
-		o1.setDate("2022-10-05");
-		o1.setShippingCosts("5.00");
-		o1.setMarket("Mercadona");
-		addOrder(o1);
-		
 		// Create users
 		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
 		addUser(u1);
 		
 		User u2 = new User("Jose Antonio Pascual","abc@aiss.com","qwert","Sevilla, Sierpes, 24");
 		addUser(u2);
-		
+				
 		User u3 = new User("pepe","a@aiss.com","1234","reina mercedes");
 		addUser(u3);
 		
+		// Create orders
+		Order o1=new Order();
+		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
+		o1.setDate("2022-10-05");
+		o1.setShippingCosts("5.00");
+		o1.setMarket("Mercadona");
+		o1.setUser(u1);
+		addOrder(o1);
+		
 		// Add products to Markets and orders
-		addProduct(mercadona.getId(), patatas.getId());
-		addProduct(mercadona.getId(), cornFlakes.getId());
-		addProduct(mercadona.getId(), macarrones.getId());
+		addProductToMarket(mercadona.getId(), patatas.getId());
+		addProductToMarket(mercadona.getId(), cornFlakes.getId());
+		addProductToMarket(mercadona.getId(), macarrones.getId());
 		
-		addProduct(dia.getId(), patatas.getId());
-		addProduct(dia.getId(), cornFlakes.getId());
-		addProduct(dia.getId(), macarrones.getId());
+		addProductToMarket(dia.getId(), patatas.getId());
+		addProductToMarket(dia.getId(), cornFlakes.getId());
+		addProductToMarket(dia.getId(), macarrones.getId());
 		
-//		addProduct(o1.getId(), patatas.getId());
-//		addProduct(o1.getId(), cornFlakes.getId());
-//		addProduct(o1.getId(), macarrones.getId());
+		addProductToOrder(o1.getId(), patatas.getId());
+		addProductToOrder(o1.getId(), cornFlakes.getId());
+		addProductToOrder(o1.getId(), macarrones.getId());
 		
 	}
 	
@@ -123,7 +123,7 @@ public class MapMarketRepository implements MarketRepository{
 	
 
 	@Override
-	public void addProduct(String MarketId, String productId) {
+	public void addProductToMarket(String MarketId, String productId) {
 		Market Market = getMarket(MarketId);
 		Market.addProduct(productMap.get(productId));
 	}
@@ -134,7 +134,7 @@ public class MapMarketRepository implements MarketRepository{
 	}
 
 	@Override
-	public void removeProduct(String MarketId, String songId) {
+	public void removeProductOfMarket(String MarketId, String songId) {
 		getMarket(MarketId).deleteProduct(songId);
 	}
 
@@ -205,6 +205,18 @@ public class MapMarketRepository implements MarketRepository{
 	@Override
 	public void deleteOrder(String orderId) {
 		orderMap.remove(orderId);
+	}
+	
+	@Override
+	public void addProductToOrder(String orderId, String productId) {
+		Order o = getOrder(orderId);
+		o.addProduct(getProduct(productId));
+	}
+
+	@Override
+	public void removeProductOfOrder(String orderId, String productId) {
+		Order o = getOrder(orderId);
+		o.deleteProduct(productId);
 	}
 	
 	// User related operations

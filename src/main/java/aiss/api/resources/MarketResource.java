@@ -176,7 +176,7 @@ public class MarketResource {
 		if (market.getProduct(songId)!=null)
 			throw new BadRequestException("The product is already included in the Market.");
 			
-		repository.addProduct(MarketId, songId);		
+		repository.addProductToMarket(MarketId, songId);		
 
 		// Builds the response
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
@@ -200,7 +200,7 @@ public class MarketResource {
 			throw new NotFoundException("The product with id=" + productId + " was not found.");
 		
 		
-		repository.removeProduct(MarketId, productId);		
+		repository.removeProductOfMarket(MarketId, productId);		
 		
 		return Response.noContent().build();
 	}

@@ -102,22 +102,18 @@ public class OrderResource {
 	@Produces("application/json")
 	public Response addOrder(@Context UriInfo uriInfo,
 			@QueryParam("token") String token,
-			Order order, 
-			User user) {
+			Order order) {
 		/*
 		 * para que una nueva orden sea valida el token enviado en queryParam token
 		 * y el token del user dado tienen que ser iguales.
-		 * una nueva orden necesita tener los parametros market, shippingCosts, address
+		 * una nueva orden necesita tener los parametros market, shippingCosts, address, user(ya tiene que existir)
 		 * todos los otros campos tienen que ser null. Los otros parametros
 		 * se van rellenando cada uno por su cuenta, menos dateStart que se llena 
 		 * automaticamente con la fecha actual de cuando se crea el objeto order.
-		 * user se llena con el user que se la pasa al metodo.
 		 */
-		if(!token.equals(user.getToken()))
-			throw new BadRequestException("The token is incorrect");
 		
 		if (order.getMarket() == null || "".equals(order.getMarket()))
-			throw new BadRequestException("The name of the order must not be null");
+			throw new BadRequestException("The idMarket of the order must not be null");
 		
 		if(order.getAddress() == null || "".equals(order.getAddress()))
 			throw new BadRequestException("The address of the order must not be null.");
@@ -134,7 +130,19 @@ public class OrderResource {
 		if(order.getUser() == null)
 			throw new BadRequestException("The user must be not null");
 		
-		order.setUser(user);
+		/*
+		 * COMO EL USUARIO YA EXISTE SOLAMENTE TENGO QUE PREGUNTAR EN MEMORIA PARA QUE TRAIGA ESTE USUARIO CON TODOS SUS 
+		 * DATOS Y COMPROBAR QUE LOS DATOS DE SU TOKEN Y EL TOKEN PASADO SON IGUALES. Y LUEGO LE ASIGNO ESE USUARIO AL PEDIDO.
+		 */
+		User orderUser = repository.getUser(order.getUser().getId());
+		
+		if( orderUser == null)
+			throw new BadRequestException("The user with id="+ order.getUser().getId() +" was not found");
+		
+		if(!token.equals(orderUser.getToken()))
+			throw new BadRequestException("The token is incorrect");
+		
+		order.setUser(orderUser);
 		repository.addOrder(order);
 
 		// Builds the response. Returns the order the has just been added.
@@ -146,7 +154,7 @@ public class OrderResource {
 	}
 	
 	@PUT
-	@Path("/delivery/{orderId}")
+	@Path("/delivered/{orderId}")
 	public Response updateOrderDateDelivery(@QueryParam("token") String token,
 			@PathParam("orderId") String orderId) {
 		Order order = repository.getOrder(orderId);
@@ -243,7 +251,7 @@ public class OrderResource {
 		if (order.getProduct(productId) != null)
 			throw new BadRequestException("The product is already included in the order.");
 			
-		repository.addProduct(orderId, productId);
+		repository.addProductToOrder(orderId, productId);
 
 		// Builds the response
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
@@ -275,7 +283,7 @@ public class OrderResource {
 			throw new NotFoundException("The product with id=" + productId + " was not found");
 		
 		
-		repository.removeProduct(orderId, productId);		
+		repository.removeProductOfOrder(orderId, productId);		
 		
 		return Response.noContent().build();
 	}
