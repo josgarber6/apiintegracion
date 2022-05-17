@@ -1,6 +1,7 @@
 # DESCRIPCION DE LOS ATROBUTOS DE LOS RECURSOS QUE TENEMOS EN LA API:
 
 Market:
+
 	- id: String, id unico asignado automaticamente.
 
 	- name: String, nombre del mercado.
@@ -12,6 +13,7 @@ Market:
 	- orders: List<Order>, todos los pedidos del mercado, la eliminacion del mercado implica la eliminacion de los pedidos.
 
 Order:
+
 	- id: String, id unico asignado automaticamente.
 
 	- idMarket: String, id unico asignado al mercado del pedido.
@@ -29,6 +31,7 @@ Order:
 	- products: List<Product>, todos los productos del pedido, la eliminacion del pedido no implica que se eliminen los productos de este pedido.
 
 Product:
+
 	- id: String, id unico asignado automaticamente.
 
 	- idMarket: String, id unico del market del producto.
@@ -46,6 +49,7 @@ Product:
 	- type: ProductType, enumerado ProductType con los valores {LEISURE, FOOD, CLOTHES,  HEALTH, SPORT}
 
 User:
+
 	- id: String, id unico asignado automaticamente.
 
 	- name: String, nombre del user.
