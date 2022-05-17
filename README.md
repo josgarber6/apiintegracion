@@ -1,43 +1,39 @@
 # DESCRIPCION DE LOS ATROBUTOS DE LOS RECURSOS QUE TENEMOS EN LA API:
 
-Market {
-	id: String, id unico asignado automaticamente.
-	name: String, nombre del mercado.
-	description: String, descripcion del mercado.
-	products: List<Product>, todos los productos del mercado, la eliminacion del mercado implica la eliminacion de los productos.
-	orders: List<Order>, todos los pedidos del mercado, la eliminacion del mercado implica la eliminacion de los pedidos.
-}
+Market:
+	- id: String, id unico asignado automaticamente.
+	- name: String, nombre del mercado.
+	- description: String, descripcion del mercado.
+	- products: List<Product>, todos los productos del mercado, la eliminacion del mercado implica la eliminacion de los productos.
+	- orders: List<Order>, todos los pedidos del mercado, la eliminacion del mercado implica la eliminacion de los pedidos.
 
-Order {
-	id: String, id unico asignado automaticamente.
-	idMarket: String, id unico asignado al mercado del pedido.
-	dateStart: LocalDate, fecha de la creacion del pedido, se le asigna automaticamente al crear el pedido.
-	dateDelivery: LocalDate, fecha de la entrega del pedido, se le asigna automaticamente mediante una ruta especifica get (orders/delivered/{orderId}) que hace update de este atributo a la fecha de cuando se llama a la ruta.
-	address: String, lugar de entrega del pedido.
-	shippingCosts: Double, coste de la entrega del pedido.
-	user: User, usuario que ha creado el pedido. Para crear el pedido con la ruta especifica post (orders) el usario que se añada el campo user de la nueva order tiene que existir ya y su token ser el que le mandas en el QueryParam token. **Para el usuario he pensado (JOAQUIN) que lo mejor sera en el apartado "user", de los parametros del Json que se manda para crear order, que tenga solo el atributo idUser entonces se buscaese user en los usuarios ya existentes y se hace setUser(usuario encontrado en la memoria) pero hay que ver como se comporta**.
-	products: List<Product>, todos los productos del pedido, la eliminacion del pedido no implica que se eliminen los productos de este pedido.
-}
+Order:
+	- id: String, id unico asignado automaticamente.
+	- idMarket: String, id unico asignado al mercado del pedido.
+	- dateStart: LocalDate, fecha de la creacion del pedido, se le asigna automaticamente al crear el pedido.
+	- dateDelivery: LocalDate, fecha de la entrega del pedido, se le asigna automaticamente mediante una ruta especifica get (orders/delivered/{orderId}) que hace update de este atributo a la fecha de cuando se llama a la ruta.
+	- address: String, lugar de entrega del pedido.
+	- shippingCosts: Double, coste de la entrega del pedido.
+	- user: User, usuario que ha creado el pedido. Para crear el pedido con la ruta especifica post (orders) el usario que se añada el campo user de la nueva order tiene que existir ya y su token ser el que le mandas en el QueryParam token. **Para el usuario he pensado (JOAQUIN) que lo mejor sera en el apartado "user", de los parametros del Json que se manda para crear order, que tenga solo el atributo idUser entonces se buscaese user en los usuarios ya existentes y se hace setUser(usuario encontrado en la memoria) pero hay que ver como se comporta**.
+	- products: List<Product>, todos los productos del pedido, la eliminacion del pedido no implica que se eliminen los productos de este pedido.
 
-Product {
-	id: String, id unico asignado automaticamente.
-	idMarket: String, id unico del market del producto.
-	name: String, nombre producto.
-	price: Double, precio producto.
-	rating: Integer, valoracion producto entre 1-5.
-	quantity: Integer, cantidad almacenada del producto.
-	expirationDate: LocalDate, fecha caducidad del producto.
-	type: ProductType, enumerado ProductType con los valores {LEISURE, FOOD, CLOTHES,  HEALTH, SPORT}
-}
+Product:
+	- id: String, id unico asignado automaticamente.
+	- idMarket: String, id unico del market del producto.
+	- name: String, nombre producto.
+	- price: Double, precio producto.
+	- rating: Integer, valoracion producto entre 1-5.
+	- quantity: Integer, cantidad almacenada del producto.
+	- expirationDate: LocalDate, fecha caducidad del producto.
+	- type: ProductType, enumerado ProductType con los valores {LEISURE, FOOD, CLOTHES,  HEALTH, SPORT}
 
-User {
-	id: String, id unico asignado automaticamente.
-	name: String, nombre del user.
-	email: String, email del user.
-	password: String, contraseña del user.
-	token: String, cadena de caracteres que se genera automaticamente al crearse cualquier usuario.
-	address: String, lugar de residencia del usuario. (Idea para implementar en el futuro que cuando se haga crea un pedido el atributo address sea por default el address del user que la creo sino indican uno especifico en el Json).
-}
+User:
+	- id: String, id unico asignado automaticamente.
+	- name: String, nombre del user.
+	- email: String, email del user.
+	- password: String, contraseña del user.
+	- token: String, cadena de caracteres que se genera automaticamente al crearse cualquier usuario.
+	- address: String, lugar de residencia del usuario. (Idea para implementar en el futuro que cuando se haga crea un pedido el atributo address sea por default el address del user que la creo sino indican - uno especifico en el Json).
 
 
 
