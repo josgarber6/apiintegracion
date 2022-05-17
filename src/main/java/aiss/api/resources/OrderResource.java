@@ -112,7 +112,7 @@ public class OrderResource {
 		 * automaticamente con la fecha actual de cuando se crea el objeto order.
 		 */
 		
-		if (order.getMarket() == null || "".equals(order.getMarket()))
+		if (order.getIdMarket() == null || "".equals(order.getIdMarket()))
 			throw new BadRequestException("The idMarket of the order must not be null");
 		
 		if(order.getAddress() == null || "".equals(order.getAddress()))
@@ -155,8 +155,7 @@ public class OrderResource {
 	
 	@PUT
 	@Path("/delivered/{orderId}")
-	public Response updateOrderDateDelivery(@QueryParam("token") String token,
-			@PathParam("orderId") String orderId) {
+	public Response updateOrderDateDelivery(@PathParam("orderId") String orderId) {
 		Order order = repository.getOrder(orderId);
 		if (order == null) {
 			throw new NotFoundException("The order with id="+ orderId +" was not found");			
@@ -190,8 +189,8 @@ public class OrderResource {
 			oldorder.setAddress(order.getAddress());
 		
 		// Update market
-		if (order.getMarket() != null)
-			oldorder.setMarket(order.getMarket());
+		if (order.getIdMarket() != null)
+			oldorder.setIdMarket(order.getIdMarket());
 		
 		// Update shipping costs
 		if (order.getShippingCosts() != null)

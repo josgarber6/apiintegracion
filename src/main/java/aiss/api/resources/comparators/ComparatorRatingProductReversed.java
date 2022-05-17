@@ -9,7 +9,7 @@ public class ComparatorRatingProductReversed implements Comparator<Product> {
 	@Override
 	public int compare(Product o1, Product o2) {
 		// TODO Auto-generated method stub
-		return o2.getRating().compareTo(o1.getRating());
+		return Integer.valueOf(o2.getRating()).compareTo(Integer.valueOf(o1.getRating()));
 	}
 
 }

@@ -8,8 +8,7 @@ public class ComparatorQuantityProduct implements Comparator<Product>{
 
 	@Override
 	public int compare(Product o1, Product o2) {
-		// TODO Auto-generated method stub
-		return o1.getQuantity().compareTo(o2.getQuantity());
+		return Integer.valueOf(o1.getQuantity()).compareTo(Integer.valueOf(o2.getQuantity()));
 	}
 
 }

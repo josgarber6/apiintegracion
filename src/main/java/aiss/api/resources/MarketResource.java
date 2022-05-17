@@ -161,22 +161,22 @@ public class MarketResource {
 	@Path("/{marketId}/{productId}")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Response addProduct(@Context UriInfo uriInfo,@PathParam("marketId") String MarketId, @PathParam("productId") String songId)
+	public Response addProduct(@Context UriInfo uriInfo,@PathParam("marketId") String MarketId, @PathParam("productId") String productId)
 	{				
 		
 		Market market = repository.getMarket(MarketId);
-		Product product = repository.getProduct(songId);
+		Product product = repository.getProduct(productId);
 		
 		if (market==null)
 			throw new NotFoundException("The Market with id=" + MarketId + " was not found");
 		
 		if (product == null)
-			throw new NotFoundException("The product with id=" + songId + " was not found");
+			throw new NotFoundException("The product with id=" + productId + " was not found");
 		
-		if (market.getProduct(songId)!=null)
+		if (market.getProduct(productId) != null)
 			throw new BadRequestException("The product is already included in the Market.");
 			
-		repository.addProductToMarket(MarketId, songId);		
+		repository.addProductToMarket(MarketId, productId);		
 
 		// Builds the response
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");

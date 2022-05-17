@@ -38,16 +38,6 @@ public class MapMarketRepository implements MarketRepository{
 		orderMap = new HashMap<String,Order>();
 		userMap = new HashMap<String, User>();
 		
-		// Create products
-		Product patatas = new Product("Patatas", "1.50", "64", "2022-05-30", "3", "FOOD");
-		addProduct(patatas);
-		
-		Product cornFlakes = new Product("CornFlakes", "2.50", "25", "2023-02-15", "2", "FOOD");
-		addProduct(cornFlakes);
-		
-		Product macarrones = new Product("Macarrones", "2", "150", "null", "4", "FOOD");
-		addProduct(macarrones);
-		
 		// Create Markets
 		Market mercadona=new Market();
 		mercadona.setName("Mercadona");
@@ -58,6 +48,16 @@ public class MapMarketRepository implements MarketRepository{
 		dia.setName("Dia");
 		dia.setDescription("Supermercados Dia");
 		addMarket(dia);
+		
+		// Create products
+		Product patatas = new Product(mercadona.getId(), "Patatas", "1.50", "64", "2022-05-30", "3", "FOOD");
+		addProduct(patatas);
+				
+		Product cornFlakes = new Product(mercadona.getId(), "CornFlakes", "2.50", "25", "2023-02-15", "2", "FOOD");
+		addProduct(cornFlakes);
+				
+		Product macarrones = new Product(dia.getId(), "Macarrones", "2", "150", "null", "4", "FOOD");
+		addProduct(macarrones);
 		
 		// Create users
 		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
@@ -74,17 +74,14 @@ public class MapMarketRepository implements MarketRepository{
 		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
 		o1.setDate("2022-10-05");
 		o1.setShippingCosts("5.00");
-		o1.setMarket("Mercadona");
+		o1.setIdMarket("Mercadona");
 		o1.setUser(u1);
 		addOrder(o1);
 		
 		// Add products to Markets and orders
 		addProductToMarket(mercadona.getId(), patatas.getId());
 		addProductToMarket(mercadona.getId(), cornFlakes.getId());
-		addProductToMarket(mercadona.getId(), macarrones.getId());
 		
-		addProductToMarket(dia.getId(), patatas.getId());
-		addProductToMarket(dia.getId(), cornFlakes.getId());
 		addProductToMarket(dia.getId(), macarrones.getId());
 		
 		addProductToOrder(o1.getId(), patatas.getId());
@@ -198,7 +195,7 @@ public class MapMarketRepository implements MarketRepository{
 		order.setAddress(o.getAddress());
 		order.setDate(""+o.getDate());
 		order.setShippingCosts(""+o.getShippingCosts());
-		order.setMarket(o.getMarket());
+		order.setIdMarket(o.getIdMarket());
 	}
 
 

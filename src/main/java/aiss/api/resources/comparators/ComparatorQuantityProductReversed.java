@@ -8,7 +8,6 @@ public class ComparatorQuantityProductReversed implements Comparator<Product>{
 	
 	@Override
 	public int compare(Product o1, Product o2) {
-		// TODO Auto-generated method stub
-		return o2.getQuantity().compareTo(o1.getQuantity());
+		return Integer.valueOf(o2.getQuantity()).compareTo(Integer.valueOf(o1.getQuantity()));
 	}
 }

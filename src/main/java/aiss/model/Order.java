@@ -6,11 +6,11 @@ import java.util.*;
 public class Order {
 	
 	private String id;
-	private LocalDate dateStart;
-	private LocalDate dateDelivery;
-	private String address;
-	private Double shippingCosts;
 	private String idMarket;
+	private String dateStart;
+	private String dateDelivery;
+	private String address;
+	private String shippingCosts;
 	private User user;
 	private List<Product> products;
 
@@ -20,7 +20,7 @@ public class Order {
 	
 	public Order(String id, List<Product> ps) {
 		this.id = id;
-		this.dateStart = LocalDate.now();
+		this.dateStart = ""+LocalDate.now();
 		this.products = ps;
 	}
 	
@@ -36,12 +36,12 @@ public class Order {
 		this.id = id;
 	}
 
-	public LocalDate getDate() {
+	public String getDate() {
 		return dateStart;
 	}
 
 	public void setDate(String date) {
-		this.dateStart = LocalDate.parse(date);
+		this.dateStart = ""+LocalDate.parse(date);
 	}
 
 	public String getAddress() {
@@ -52,19 +52,19 @@ public class Order {
 		this.address = address;
 	}
 
-	public Double getShippingCosts() {
+	public String getShippingCosts() {
 		return shippingCosts;
 	}
 
 	public void setShippingCosts(String shippingCosts) {
-		this.shippingCosts = Double.valueOf(shippingCosts);
+		this.shippingCosts = ""+Double.valueOf(shippingCosts);
 	}
 
-	public String getMarket() {
+	public String getIdMarket() {
 		return idMarket;
 	}
 
-	public void setMarket(String market) {
+	public void setIdMarket(String market) {
 		this.idMarket = market;
 	}
 
@@ -112,12 +112,12 @@ public class Order {
 			products.remove(p);
 	}
 
-	public LocalDate getDateDelivery() {
+	public String getDateDelivery() {
 		return dateDelivery;
 	}
 
 	public void setDateDelivery(String dateDelivery) {
-		this.dateDelivery = LocalDate.parse(dateDelivery);
+		this.dateDelivery = ""+LocalDate.parse(dateDelivery);
 	}
 
 	public User getUser() {

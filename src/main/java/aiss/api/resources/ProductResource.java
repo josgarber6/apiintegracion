@@ -70,31 +70,31 @@ public class ProductResource {
 		
 		for (Product product: repository.getAllProducts()) {
 			
-			Boolean Max_price_rating_quantity = queryAux != null && ("price".equals(query) && product.getPrice() > queryAux) ||
-					("rating".equals(query) && product.getRating() > queryAux) || 
-					("quantity".equals(query) && product.getQuantity() > queryAux);
+			Boolean Max_price_rating_quantity = queryAux != null && ("price".equals(query) && Integer.valueOf(product.getPrice()) >= queryAux) ||
+					("rating".equals(query) && Integer.valueOf(product.getRating()) >= queryAux) || 
+					("quantity".equals(query) && Integer.valueOf(product.getQuantity()) >= queryAux);
 			
-			Boolean Min_price_rating_quantity = queryAux != null && ("-price".equals(query) && product.getPrice() < queryAux) ||
-					("-rating".equals(query) && product.getRating() < queryAux) || 
-					("-quantity".equals(query) && product.getQuantity() < queryAux);
+			Boolean Min_price_rating_quantity = queryAux != null && ("-price".equals(query) && Integer.valueOf(product.getPrice()) <= queryAux) ||
+					("-rating".equals(query) && Integer.valueOf(product.getRating()) <= queryAux) || 
+					("-quantity".equals(query) && Integer.valueOf(product.getQuantity()) <= queryAux);
 			
 //			SE PUEDEN LLEVAR A CABO TODAS LAS COMBINACIONES POSIBLES DEL FILTRO NO ENUMERADO Y ENUMERADO
 			 
 			if (query == null && queryExpiration == null
-				|| query == null  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
-							|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
+				|| query == null  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
+							|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))
 				|| product.getName().contains(query) && queryExpiration == null
 				|| product.getType().name().contains(query) && queryExpiration == null
 				|| Max_price_rating_quantity && queryExpiration == null
 				|| Min_price_rating_quantity && queryExpiration == null
-				|| product.getName().contains(query) && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
-						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now())) 
-				|| product.getType().name().contains(query)  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
-						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
-				|| Max_price_rating_quantity  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
-						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))
-				|| Min_price_rating_quantity  && (queryExpiration && product.getExpirationDate().isAfter(LocalDate.now())
-						|| !queryExpiration && product.getExpirationDate().isBefore(LocalDate.now()))) {
+				|| product.getName().contains(query) && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
+						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now())) 
+				|| product.getType().name().contains(query)  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
+						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))
+				|| Max_price_rating_quantity  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
+						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))
+				|| Min_price_rating_quantity  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
+						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))) {
 				products.add(product);
 			}
 			
@@ -156,16 +156,17 @@ public class ProductResource {
 		if (product.getName() == null || "".equals(product.getName()))
 			throw new BadRequestException("The name of the product must not be null");
 		
-		if (product.getPrice() == null || product.getPrice() <= 0)
+		if (product.getPrice() == null || Integer.valueOf(product.getPrice()) <= 0)
 			throw new BadRequestException("The price of the product must not be null or lesser or equals to zero");
 		
-		if (product.getRating() == null || product.getRating() <= 0)
+		if (product.getRating() == null || Integer.valueOf(product.getRating()) <= 0)
 			throw new BadRequestException("The rating of the product must not be null or lesser or equals to zero");
 		
-		if(product.getQuantity() == null || product.getPrice() <= 0)
+		if(product.getQuantity() == null || Integer.valueOf(product.getQuantity()) <= 0)
 			throw new BadRequestException("The quantity of the product must not be null or lesser or equals to zero");
 		
-		if (product.getExpirationDate() == null || product.getExpirationDate().isBefore(LocalDate.now()) || product.getExpirationDate().isEqual(LocalDate.now()))
+		if (product.getExpirationDate() == null || LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()) 
+				|| LocalDate.parse(product.getExpirationDate()).isEqual(LocalDate.now()))
 			throw new BadRequestException("The expiration date of the prouduct must not be null or lesser or equal than the actual date");
 		
 		if (product.getType() == null)
@@ -191,19 +192,19 @@ public class ProductResource {
 		}
 		
 		// Update price
-		if (product.getPrice() != null && product.getPrice() > 0)
+		if (product.getPrice() != null && Integer.valueOf(product.getPrice()) > 0)
 			oldproduct.setPrice(""+product.getPrice());
 		
 		// Update rating
-		if (product.getRating() != null && product.getRating() > 0)
+		if (product.getRating() != null && Integer.valueOf(product.getRating()) > 0)
 			oldproduct.setRating(""+product.getRating());
 		
 		// Update quantity
-		if (product.getQuantity() != null && product.getQuantity() > 0)
+		if (product.getQuantity() != null && Integer.valueOf(product.getQuantity()) > 0)
 			oldproduct.setQuantity(""+product.getQuantity());
 		
 		// Update expirationDate
-		if (product.getExpirationDate() != null || product.getExpirationDate().isAfter(LocalDate.now()))
+		if (product.getExpirationDate() != null || LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now()))
 			oldproduct.setExpirationDate(""+product.getExpirationDate());
 		
 		return Response.noContent().build();

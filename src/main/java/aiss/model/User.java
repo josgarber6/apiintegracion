@@ -32,6 +32,8 @@ public class User {
 	}
 	
 	public User() {
+		SecureToken tokenAux = new SecureToken();
+		this.token = tokenAux.nextToken();
 	}
 	
 	/**
