@@ -128,18 +128,18 @@ public class Product {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
-		Integer q = Integer.valueOf(quantity);
+	public void setRating(String rating) {
+		Integer q = Integer.valueOf(rating);
 		if(q < 1 || q > 5) this.quantity = null;
-		else this.quantity = ""+Integer.valueOf(quantity);
+		else this.rating = ""+Integer.valueOf(rating);
 	}
 
 	public String getRating() {
 		return rating;
 	}
 
-	public void setRating(String rating) {
-		this.rating = ""+Integer.valueOf(rating);
+	public void setQuantity(String quantity) {
+		this.quantity = ""+Integer.valueOf(quantity);
 	}
 
 	public ProductType getType() {
