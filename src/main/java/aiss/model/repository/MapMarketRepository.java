@@ -202,6 +202,13 @@ public class MapMarketRepository implements MarketRepository {
 	public Order getOrder(String orderId) {
 		return orderMap.get(orderId);
 	}
+	
+	public List<Order> getOrdersByUser(String userId) {
+		Collection<Order>orders= getAllOrders();
+		return orders.stream()
+				.filter(x->x.getUser().getId().equals(userId))
+				.collect(Collectors.toList());
+	}
 
 	@Override
 	public void updateOrder(Order o) {

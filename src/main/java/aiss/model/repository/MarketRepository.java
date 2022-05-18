@@ -1,6 +1,7 @@
 package aiss.model.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import aiss.model.Market;
 import aiss.model.User;
@@ -32,6 +33,7 @@ public interface MarketRepository {
 	public void addProductToOrder(String orderId, String productId);
 	public void removeProductOfOrder(String orderId, String productId);
 	public Order getOrder(String orderId);
+	public List<Order> getOrdersByUser(String userId);
 	public void updateOrder(Order o);
 	public void deleteOrder(String orderId);
 	

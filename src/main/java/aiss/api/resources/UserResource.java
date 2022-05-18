@@ -25,8 +25,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
+import aiss.api.resources.comparators.ComparatorIdUser;
 import aiss.api.resources.comparators.ComparatorNameUser;
 import aiss.api.resources.comparators.ComparatorNameUserReversed;
+import aiss.model.Order;
 import aiss.model.User;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
@@ -53,27 +55,32 @@ public class UserResource {
 	@Produces("application/json")
 	public Collection<User> getAll(@QueryParam("order") String order, 
 			@QueryParam("limit") Integer limit, 
-			@QueryParam("offset") Integer offset)
+			@QueryParam("offset") Integer offset,
+			@QueryParam("name") String name)
 	{
 		List<User> users = new ArrayList<>();
 		
 		for(User user: repository.getAllUsers()) {
-			users.add(user);
+			if (name == null || user.getName().equals(name)) {
+				users.add(user);
+			}
 			
 			if(order != null) {
 				if(order.equals("name")) {
 					Collections.sort(users, new ComparatorNameUser());
 				} else if(order.equals("-name")) {
 					Collections.sort(users, new ComparatorNameUserReversed());
-				} else {
-					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
+				} else if(order.equals("id")) {
+					Collections.sort(users, new ComparatorIdUser());
+		        } else {
+					throw new BadRequestException("The order parameter must be 'name' , '-name' or 'id'.");
 				}
 			}
 		}
 		
 		if(limit != null && offset != null) {
 			users = users.subList(offset, users.size()).stream().limit(limit).collect(Collectors.toList());
-		} else if(limit != null) {
+		} else if(limit != null && offset == null) {
 			users = users.stream().limit(limit).collect(Collectors.toList());
 		}
 		
@@ -145,15 +152,23 @@ public class UserResource {
 	 
 	 @DELETE
 	 @Path("/{id}")
-	 public Response removeUser(@PathParam("userId") String userId) {
+	 public Response removeUser(@PathParam("id") String userId) {
 		 User toBeRemove = repository.getUser(userId);
+		 List<Order> toBeRemoveOrder = repository.getOrdersByUser(userId);
 		 
-		 if(toBeRemove == null) 
-			 throw new NotFoundException("The userwith id=" + userId + " was not found");
-		 else 
-			 repository.deleteUser(userId);
+		 if(toBeRemove == null) {
+			  throw new NotFoundException("The userwith id=" + userId + " was not found");
+		 }else {
+			 for(Order o : toBeRemoveOrder) {
+				 repository.deleteOrder(o.getId());
+			 }
+		 	 repository.deleteUser(userId);	
+		 }
+	 	 return Response.noContent().build();
+
+			 
 		 
-		 return Response.noContent().build();
+		 
 	 }
 	 
 	 @GET
