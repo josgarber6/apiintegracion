@@ -24,10 +24,10 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
+import aiss.api.resources.comparators.ComparatorIdMarket;
 import aiss.api.resources.comparators.ComparatorNameMarket;
 import aiss.api.resources.comparators.ComparatorNameMarketReversed;
 import aiss.model.Market;
-import aiss.model.Product;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
 
@@ -43,7 +43,6 @@ public class MarketResource {
 	
 	private MarketResource() {
 		repository=MapMarketRepository.getInstance();
-
 	}
 	
 	public static MarketResource getInstance()
@@ -57,33 +56,55 @@ public class MarketResource {
 	@GET
 	@Produces("application/json")
 	public Collection<Market> getAll(@QueryParam("order") String order,
-			 @QueryParam("name") String name, @QueryParam("isEmpty") Boolean isEmpty) {
-//		List<Market> result = new ArrayList<Market>();
-//		for (Market market: repository.getAllMarkets()) {
-//			if (name == null || Market.getName().equals(name)) {	// filtrado del nombre
-//				if (isEmpty == null 	// filtrado de supermercados vacías
-//					|| (isEmpty && (Market.getSongs() == null || Market.getSongs().size() == 0))
-//					|| (!isEmpty && (Market.getSongs() != null && Market.getSongs().size() > 0))) {
-//					
-//					result.add(market);
-//				}
-//					
-//			}
+			 @QueryParam("name") String name, 
+			 @QueryParam("isEmptyProducts") Boolean isEmptyProducts,
+			 @QueryParam("isEmptyOrders") Boolean isEmptyOrders) {
+		List<Market> result = new ArrayList<>();
+		for (Market market: repository.getAllMarkets()) {
+			if (name == null || market.getName().equals(name)) { // filtrado del nombre
+				/*
+				 * filtrado de supermercados vacíos:
+				 * Estan todas las posibles combinaciones 0 = QueryParam = null y
+				 * 1 = QueryParam != null 00, 01, 10, 11(como cada parametro puede ser true
+				 * y false tiene que haber todas las combinaciones posibles)
+				 */
+				if (isEmptyProducts == null && isEmptyOrders == null // 00 null && null
+					|| isEmptyProducts == null && (isEmptyOrders && (market.getOrders() == null || market.getOrders().isEmpty())) // 01 null  && true 
+					|| isEmptyProducts == null && (!isEmptyOrders && (market.getOrders() != null || !market.getOrders().isEmpty())) // 01 null  && false 
+					|| (isEmptyProducts && (market.getProducts() == null || market.getProducts().isEmpty())) && isEmptyOrders == null // 10 true  && null 
+					|| (!isEmptyProducts && (market.getProducts() != null || !market.getProducts().isEmpty())) && isEmptyOrders == null // 10 false  && null 
+					|| (!isEmptyProducts && (market.getProducts() != null || !market.getProducts().isEmpty())) // 11 false  && false
+						&& (!isEmptyOrders && (market.getOrders() != null || !market.getOrders().isEmpty()))
+					|| (!isEmptyProducts && (market.getProducts() != null || !market.getProducts().isEmpty())) // 11 false  && true 
+						&& (isEmptyOrders && (market.getOrders() == null || market.getOrders().isEmpty()))
+					|| (isEmptyProducts && (market.getProducts() == null || market.getProducts().isEmpty())) // 11 true  && false
+						&& (!isEmptyOrders && (market.getOrders() != null || !market.getOrders().isEmpty()))
+					|| (isEmptyProducts && (market.getProducts() == null || market.getProducts().isEmpty())) // 11 true && true 
+						&& (isEmptyOrders && (market.getOrders() == null || market.getOrders().isEmpty()))) {
+					result.add(market);
+				}
+					
+			}
 			
-//			if (order != null) {
-//				if (order.equals("name")) {
-//					Collections.sort(result, new ComparatorNameMarket());
-//				}
-//				else if (order.equals("-name")) {
-//					Collections.sort(result, new ComparatorNameMarketReversed());
-//				}
-//				else {
-//					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
-//				}
-//			}
-//			
-//		}
-		return repository.getAllMarkets();
+			if (order != null) {
+				if (order.equals("name")) {
+					Collections.sort(result, new ComparatorNameMarket());
+				}
+				else if (order.equals("-name")) {
+					Collections.sort(result, new ComparatorNameMarketReversed());
+				}
+				else if(order.equals("id")) {
+					Collections.sort(result, new ComparatorIdMarket());
+				}
+				else if(order.equals("-id")) {
+					Collections.sort(result, new ComparatorNameMarketReversed());
+				}
+				else {
+					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
+				}
+			}
+		}
+		return result;
 	}
 	
 	
