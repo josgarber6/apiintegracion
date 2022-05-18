@@ -2,7 +2,9 @@ package aiss.model.repository;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import aiss.model.Order;
 import aiss.model.Product;
@@ -10,7 +12,7 @@ import aiss.model.Market;
 import aiss.model.User;
 
 
-public class MapMarketRepository implements MarketRepository{
+public class MapMarketRepository implements MarketRepository {
 
 	Map<String, Market> MarketMap;
 	Map<String, Product> productMap;
@@ -74,15 +76,15 @@ public class MapMarketRepository implements MarketRepository{
 		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
 		o1.setDate("2022-10-05");
 		o1.setShippingCosts("5.00");
-		o1.setIdMarket("Mercadona");
+		o1.setIdMarket(mercadona.getId());
 		o1.setUser(u1);
 		addOrder(o1);
 		
 		// Add products to Markets and orders
-		addProductToMarket(mercadona.getId(), patatas.getId());
-		addProductToMarket(mercadona.getId(), cornFlakes.getId());
-		
-		addProductToMarket(dia.getId(), macarrones.getId());
+//		addProductToMarket(mercadona.getId(), patatas.getId());
+//		addProductToMarket(mercadona.getId(), cornFlakes.getId());
+//		
+//		addProductToMarket(dia.getId(), macarrones.getId());
 		
 		addProductToOrder(o1.getId(), patatas.getId());
 		addProductToOrder(o1.getId(), cornFlakes.getId());
@@ -119,21 +121,34 @@ public class MapMarketRepository implements MarketRepository{
 	}
 	
 
+//	@Override
+//	public void addProductToMarket(String MarketId, String productId) {
+//		Market Market = getMarket(MarketId);
+//		Market.addProduct(productMap.get(productId));
+//	}
+	
 	@Override
-	public void addProductToMarket(String MarketId, String productId) {
-		Market Market = getMarket(MarketId);
-		Market.addProduct(productMap.get(productId));
+	public List<Product> getAllProductsByMarket(String marketId) {
+		Collection<Product> products = getAllProducts();
+		return products.stream()
+				.filter(x -> x.getIdMarket().equals(marketId))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Order> getAllOrdersByMarket(String marketId) {
+		Collection<Order> orders = getAllOrders();
+		return orders.stream().filter(x -> x.getIdMarket().equals(marketId)).collect(Collectors.toList());
 	}
 
-	@Override
-	public Collection<Product> getAll(String MarketId) {
-		return getMarket(MarketId).getProducts();
-	}
-
-	@Override
-	public void removeProductOfMarket(String MarketId, String songId) {
-		getMarket(MarketId).deleteProduct(songId);
-	}
+//	@Override
+//	public Collection<Product> getAll(String MarketId) {
+//		return getMarket(MarketId).getProducts();
+//	}
+//
+//	@Override
+//	public void removeProductOfMarket(String MarketId, String songId) {
+//		getMarket(MarketId).deleteProduct(songId);
+//	}
 
 	
 	// Product related operations
@@ -175,7 +190,6 @@ public class MapMarketRepository implements MarketRepository{
 	public void addOrder(Order o) {
 		String id = "o" + index++;
 		o.setId(id);
-		
 		orderMap.put(id, o);
 	}
 
