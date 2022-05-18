@@ -11,7 +11,7 @@ public class User {
 	private String token;
 	private String address;
 	
-	public class SecureToken {
+	private class SecureToken {
 		
 		public static final String CHARACTERS = "/qwertyuiopasdfghjkl?zxcvbnmQWERTYUIOPASDFGHJKL@ZXCVBNM1234567890!";
 		
@@ -34,6 +34,25 @@ public class User {
 	public User() {
 		SecureToken tokenAux = new SecureToken();
 		this.token = tokenAux.nextToken();
+	}
+	
+	/**
+	 * Obtain a instance {@code User} from a id, name, email, password, address, token.
+	 * @param id String, id of the user.
+	 * @param name String, name of the user.
+	 * @param email String, email of the user.
+	 * @param pasword String, password of the user.
+	 * @param address String, address of the user.
+	 * @param token String, token of the user.
+	 */
+	public User(String id, String name, String email, String password, String address, String token) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.token = token;
+		this.address = address;
 	}
 	
 	/**

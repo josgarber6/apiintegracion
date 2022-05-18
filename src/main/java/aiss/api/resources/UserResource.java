@@ -30,7 +30,6 @@ import aiss.api.resources.comparators.ComparatorNameUser;
 import aiss.api.resources.comparators.ComparatorNameUserReversed;
 import aiss.model.Order;
 import aiss.model.User;
-import aiss.model.User.SecureToken;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
 

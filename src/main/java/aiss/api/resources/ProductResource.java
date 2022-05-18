@@ -43,7 +43,7 @@ import aiss.model.repository.MarketRepository;
 @Path("/products")
 public class ProductResource {
 
-	public static ProductResource _instance=null;
+	private static ProductResource _instance=null;
 	MarketRepository repository;
 	
 	private ProductResource(){

@@ -1,43 +1,49 @@
-package aiss.model.resources;
+package aiss.api.resources;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
+import java.net.URI;
 import java.util.Collection;
 
-import org.jboss.resteasy.spi.BadRequestException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.restlet.resource.ResourceException;
+import javax.ws.rs.core.UriInfo;
 
-import aiss.api.resources.MarketResource;
-import aiss.api.resources.OrderResource;
-import aiss.api.resources.ProductResource;
+import org.jboss.resteasy.spi.BadRequestException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import aiss.model.Market;
 import aiss.model.Order;
 import aiss.model.Product;
 import aiss.model.User;
 
 public class MarketResourceTest {
-
+	
 	static Market market1, market2, market3, market4, market5;
 	static Product product1, product2, product3, product4, product5, product6, product7, product8;
 	static Order order1, order2, order3, order4;
 	static User user;
+	static UriInfo mockUriInfoMarkets, mockUriInfoProducts, mockUriInfoOrders;
 	static MarketResource SourceMarket = MarketResource.getInstance();
 	static ProductResource SourceProduct = ProductResource.getInstance();
 	static OrderResource SourceOrder = OrderResource.getInstance();
-	
-	@BeforeClass
-	public static void setUp() throws Exception {
+
+	@Before
+	public void setUp() throws Exception {
 		
-		user = new User("u1", "Maria","aa@aiss.com","secret","baños, 33", "aaa");
-	
 		market1 = new Market("Mercadona", "Supermercados Mercadona");
 		market2 = new Market("Dia", "Supermercados Dia");
 		market5 = new Market("Mercadona", null);
 		
-		SourceMarket.addMarket(null, market1); SourceMarket.addMarket(null, market2);  SourceMarket.addMarket(null, market5);
+		user = new User("u1", "Maria","aa@aiss.com","secret","baños, 33", "aaa");
+		
+		String urlMarket = "http://localhost:8089/api/markets";
+		mockUriInfoMarkets = mock(UriInfo.class);
+		when(mockUriInfoMarkets.getRequestUri()).thenReturn(new URI(urlMarket));
+		
+		SourceMarket.addMarket(mockUriInfoMarkets, market1); SourceMarket.addMarket(mockUriInfoMarkets, market2);  
+		SourceMarket.addMarket(mockUriInfoMarkets, market5);
 		
 		product1 = new Product(market1.getId(), "Patatas", "1.50", "200", "2022-09-30", "3", "FOOD");
 		product2 = new Product(market1.getId(), "Macarrones", "2.50", "300", "2022-12-30", "3", "FOOD");
@@ -48,10 +54,14 @@ public class MarketResourceTest {
 		product7 = new Product(market2.getId(), "pepinillos", "2", "93", "2022-06-30", "2", "FOOD");
 		product8 = new Product(market2.getId(), "Call of Duty V", "45.50", "101", "null", "1", "LEISURE");
 		
-		SourceProduct.addProduct(null, product1); SourceProduct.addProduct(null, product2);
-		SourceProduct.addProduct(null, product3); SourceProduct.addProduct(null, product4);
-		SourceProduct.addProduct(null, product5); SourceProduct.addProduct(null, product6);
-		SourceProduct.addProduct(null, product7); SourceProduct.addProduct(null, product8);
+		String urlProduct = "http://localhost:8089/api/products";
+		mockUriInfoProducts = mock(UriInfo.class);
+		when(mockUriInfoProducts.getRequestUri()).thenReturn(new URI(urlProduct));
+		
+		SourceProduct.addProduct(mockUriInfoProducts, product1); SourceProduct.addProduct(mockUriInfoProducts, product2);
+		SourceProduct.addProduct(mockUriInfoProducts, product3); SourceProduct.addProduct(mockUriInfoProducts, product4);
+		SourceProduct.addProduct(mockUriInfoProducts, product5); SourceProduct.addProduct(mockUriInfoProducts, product6);
+		SourceProduct.addProduct(mockUriInfoProducts, product7); SourceProduct.addProduct(mockUriInfoProducts, product8);
 		
 
 		order1 = new Order("Avenida de la Reina Mercerdes, s/n", "5.00", market1.getId());
@@ -60,17 +70,18 @@ public class MarketResourceTest {
 		order4 = new Order("Murcia", "10.00", market1.getId());
 		order1.setUser(user); order2.setUser(user); order3.setUser(user); order4.setUser(user);
 		
-		SourceOrder.addOrder(null, "aaa", order1); SourceOrder.addOrder(null, "aaa", order2);
-		SourceOrder.addOrder(null, "aaa", order3); SourceOrder.addOrder(null, "aaa", order4);
+		String urlOrder = "http://localhost:8089/api/orders";
+		mockUriInfoOrders = mock(UriInfo.class);
+		when(mockUriInfoOrders.getRequestUri()).thenReturn(new URI(urlOrder));
 		
+		SourceOrder.addOrder(mockUriInfoOrders, "aaa", order1); SourceOrder.addOrder(mockUriInfoOrders, "aaa", order2);
+		SourceOrder.addOrder(mockUriInfoOrders, "aaa", order3); SourceOrder.addOrder(mockUriInfoOrders, "aaa", order4);
 	}
-	
 
-	@AfterClass
-	public static void tearDown() throws Exception {
-
+	@After
+	public void tearDown() throws Exception {
 	}
-	
+
 	@Test(expected = BadRequestException.class)
 	public void testAddMarketWithNameEqualNullShouldThrowBadRequestException() {
 		market3 = new Market(null, "Grandes almacenes");
@@ -120,73 +131,5 @@ public class MarketResourceTest {
 		}
 		
 	}
-
-//	@Test
-//	public void testGetSupermarket() {
-//		Supermarket s = smr.getSupermarket(market.getId());
-//		
-//		assertEquals("The id of the markets do not match", market.getId(), s.getId());
-//		assertEquals("The names of the markets do not match", market.getName(), s.getName());
-//		assertEquals("The descriptions of the markets do not match", market.getDescription(), s.getDescription());
-//		
-//		// Show result
-//		System.out.println("Supermarket id: " +  s.getId());
-//		System.out.println("Supermarket name: " +  s.getName());
-//		System.out.println("Supermarket name: " +  s.getDescription());
-//
-//	}
-//
-//	@Test
-//	public void testAddSupermarket() {
-//		String marketName = "Add supermarket test name";
-//		String marketDescription = "Add supermarket test description";
-//		
-//		market4 = smr.addSupermarket(new Supermarket(marketName,marketDescription));
-//		
-//		assertNotNull("Error when adding the supermarket", market4);
-//		assertEquals("The supermarket's name has not been setted correctly", marketName, markett4.getName());
-//		assertEquals("The supermarket's description has not been setted correctly", marketDescription, market4.getDescription());
-//	}
-//
-//	@Test
-//	public void testUpdateSupermarket() {
-//		String marketName = "Updated supermarket name";
-//		String marketDescription = "Updated supermarket description";
-//
-//		// Update supermarket
-//		market.setName(marketName);
-//
-//		boolean success = smr.updateSupermarket(market);
-//		
-//		assertTrue("Error when updating the supermarket", success);
-//		
-//		Supermarket sm  = smr.getSupermarket(market.getId());
-//		assertEquals("The supermarket's name has not been updated correctly", marketName, sm.getName());
-//
-//	}
-//
-//	@Test
-//	public void testDeleteSupermarket() {
-//		boolean success = smr.deleteSupermarket(market2.getId());
-//		assertTrue("Error when deleting the supermarket", success);
-//		
-//		Supermarket sm = smr.getSupermarket(market2.getId());
-//		assertNull("The supermarket has not been deleted correctly", sm);
-//	}
-//
-//	@Test
-//	public void testAddProduct() {
-//		if(product!=null) {
-//			boolean success = smr.addProduct(market3.getId(), product.getId());
-//			assertTrue("Error when adding the product", success);
-//		}
-//	}
-//
-//	@Test
-//	public void testRemoveProduct() {
-//		//TODO
-//		boolean success = smr.removeProduct(market3.getId(), product.getId());
-//		assertTrue("Error when removing the product", success);
-//	}
 
 }

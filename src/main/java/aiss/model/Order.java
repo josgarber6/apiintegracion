@@ -15,7 +15,20 @@ public class Order {
 	private List<Product> products;
 
 	public Order() {
-		
+		this.dateStart = ""+LocalDate.now();
+	}
+	
+	/**
+	 * Obtain a instance {@code Order} from a address, shippingCosts, idMarket.
+	 * @param address String, lugar de entrega del pedido.
+	 * @param shippingCosts String, precio del envio del pedido.
+	 * @param idMarket String, id del market al que pertenece el pedido.
+	 */
+	public Order(String address, String shippingCosts, String idMarket) {
+		this.address = address;
+		this.shippingCosts = shippingCosts;
+		this.idMarket = idMarket;
+		this.products = new ArrayList<>();
 	}
 	
 	public Order(String id, List<Product> lp) {
