@@ -8,7 +8,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.restlet.resource.ResourceException;
 
+import aiss.api.resources.OrderResource;
+import aiss.api.resources.ProductResource;
+import aiss.model.Order;
 import aiss.model.Playlist;
+import aiss.model.Product;
 import aiss.model.Song;
 
 public class OrderResourceTest {

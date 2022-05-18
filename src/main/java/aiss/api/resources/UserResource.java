@@ -30,6 +30,7 @@ import aiss.api.resources.comparators.ComparatorNameUser;
 import aiss.api.resources.comparators.ComparatorNameUserReversed;
 import aiss.model.Order;
 import aiss.model.User;
+import aiss.model.User.SecureToken;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
 
@@ -128,7 +129,11 @@ public class UserResource {
 	
 	 @PUT
 	 @Consumes("application/json")
-	 public Response updateUser(User user) {
+	 public Response updateUser(@QueryParam("token") String token, User user) {
+		 if (!token.equals(user.getToken())) {
+			 throw new BadRequestException("The token is incorrect");
+		 }
+		 
 		 User oldUser = repository.getUser(user.getId());
 		 
 		 if(oldUser == null) {
@@ -152,7 +157,13 @@ public class UserResource {
 	 
 	 @DELETE
 	 @Path("/{id}")
-	 public Response removeUser(@PathParam("id") String id) {
+	 public Response removeUser(@PathParam("id") String id,
+			 					@QueryParam("token") String token) {
+		 
+		 if(!token.equals(repository.getUser(id).getToken())) {
+			 throw new BadRequestException("The token is different.");
+		 }
+		 
 		 User toBeRemoved = repository.getUser(id);
 		 List<Order> toBeRemovedOrder = repository.getOrdersByUser(id);
 		 

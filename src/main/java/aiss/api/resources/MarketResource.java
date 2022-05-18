@@ -165,7 +165,7 @@ public class MarketResource {
 	@Path("/{id}")
 	public Response removeMarket(@PathParam("id") String id) {
 		Market toBeRemoved=repository.getMarket(id);
-		List<Order> toBeRemovedOrders = repository.getOrdersByUser(id);
+		Collection<Order> toBeRemovedOrders = repository.getAllOrdersByMarket(id);
 		List<Product> toBeRemovedProducts = repository.getAllProductsByMarket(id);
 		
 		if(toBeRemoved == null) {
