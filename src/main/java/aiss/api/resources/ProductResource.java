@@ -70,11 +70,11 @@ public class ProductResource {
 		
 		for (Product product: repository.getAllProducts()) {
 			
-			Boolean Max_price_rating_quantity = queryAux != null && ("price".equals(query) && Integer.valueOf(product.getPrice()) >= queryAux) ||
+			Boolean Max_price_rating_quantity = queryAux != null && ("price".equals(query) && Double.valueOf(product.getPrice()) >= queryAux) ||
 					("rating".equals(query) && Integer.valueOf(product.getRating()) >= queryAux) || 
 					("quantity".equals(query) && Integer.valueOf(product.getQuantity()) >= queryAux);
 			
-			Boolean Min_price_rating_quantity = queryAux != null && ("-price".equals(query) && Integer.valueOf(product.getPrice()) <= queryAux) ||
+			Boolean Min_price_rating_quantity = queryAux != null && ("-price".equals(query) && Double.valueOf(product.getPrice()) <= queryAux) ||
 					("-rating".equals(query) && Integer.valueOf(product.getRating()) <= queryAux) || 
 					("-quantity".equals(query) && Integer.valueOf(product.getQuantity()) <= queryAux);
 			
@@ -117,7 +117,7 @@ public class ProductResource {
 				} else if (order.equals("-rating")) {
 					Collections.sort(products, new ComparatorRatingProductReversed());
 				} else {
-					throw new BadRequestException("The order parameter must be 'album', 'artist' or 'year'.");
+					throw new BadRequestException("The order parameter must be id,idMarket,name,price,price,rating,quantity,expirationDate,type,availability");
 				}
 			}
 			
@@ -155,22 +155,20 @@ public class ProductResource {
 	public Response addProduct(@Context UriInfo uriInfo, Product product) {
 		if (product.getName() == null || "".equals(product.getName()))
 			throw new BadRequestException("The name of the product must not be null");
-		
-		if (product.getPrice() == null || Integer.valueOf(product.getPrice()) <= 0)
-			throw new BadRequestException("The price of the product must not be null or lesser or equals to zero");
-		
 		if (product.getRating() == null || Integer.valueOf(product.getRating()) <= 0)
 			throw new BadRequestException("The rating of the product must not be null or lesser or equals to zero");
+		if (product.getPrice() == null || Double.valueOf(product.getPrice()) <= 0)
+			throw new BadRequestException("The price of the product must not be null or lesser or equals to zero");
 		
-		if(product.getQuantity() == null || Integer.valueOf(product.getQuantity()) <= 0)
-			throw new BadRequestException("The quantity of the product must not be null or lesser or equals to zero");
+		if(product.getQuantity() == null || Integer.valueOf(product.getQuantity()) < 0)
+			throw new BadRequestException("The quantity of the product must not be null or lesser  to zero");
 		
 		if (product.getExpirationDate() == null || LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()) 
 				|| LocalDate.parse(product.getExpirationDate()).isEqual(LocalDate.now()))
 			throw new BadRequestException("The expiration date of the prouduct must not be null or lesser or equal than the actual date");
 		
 		if (product.getType() == null)
-			throw new BadRequestException("The type of the proudct must not be null");
+			throw new BadRequestException("The type of the prouduct must not be null");
 		
 		repository.addProduct(product);
 
@@ -192,7 +190,7 @@ public class ProductResource {
 		}
 		
 		// Update price
-		if (product.getPrice() != null && Integer.valueOf(product.getPrice()) > 0)
+		if (product.getPrice() != null && Double.valueOf(product.getPrice()) > 0)
 			oldproduct.setPrice(""+product.getPrice());
 		
 		// Update rating

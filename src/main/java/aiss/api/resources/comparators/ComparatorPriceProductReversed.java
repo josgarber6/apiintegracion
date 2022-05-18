@@ -8,7 +8,7 @@ public class ComparatorPriceProductReversed implements Comparator<Product>{
 	
 	@Override
 	public int compare(Product o1, Product o2) {
-		return Integer.valueOf(o2.getPrice()).compareTo(Integer.valueOf(o1.getPrice()));
+		return Double.valueOf(o2.getPrice()).compareTo(Double.valueOf(o1.getPrice()));
 	}
 
 }
