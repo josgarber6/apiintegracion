@@ -137,7 +137,9 @@ public class MapMarketRepository implements MarketRepository {
 	
 	public List<Order> getAllOrdersByMarket(String marketId) {
 		Collection<Order> orders = getAllOrders();
-		return orders.stream().filter(x -> x.getIdMarket().equals(marketId)).collect(Collectors.toList());
+		return orders.stream()
+				.filter(x -> x.getIdMarket().equals(marketId))
+				.collect(Collectors.toList());
 	}
 
 //	@Override

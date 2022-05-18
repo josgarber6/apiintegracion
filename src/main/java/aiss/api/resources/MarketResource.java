@@ -25,9 +25,12 @@ import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
 import aiss.api.resources.comparators.ComparatorIdMarket;
+import aiss.api.resources.comparators.ComparatorIdMarketReversed;
 import aiss.api.resources.comparators.ComparatorNameMarket;
 import aiss.api.resources.comparators.ComparatorNameMarketReversed;
 import aiss.model.Market;
+import aiss.model.Order;
+import aiss.model.Product;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
 
@@ -97,7 +100,7 @@ public class MarketResource {
 					Collections.sort(result, new ComparatorIdMarket());
 				}
 				else if(order.equals("-id")) {
-					Collections.sort(result, new ComparatorNameMarketReversed());
+					Collections.sort(result, new ComparatorIdMarketReversed());
 				}
 				else {
 					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
@@ -115,7 +118,7 @@ public class MarketResource {
 		Market list = repository.getMarket(id);
 		
 		if (list == null) {
-			throw new NotFoundException("The Market with id="+ id +" was not found");			
+			throw new NotFoundException("The Market with id=" + id + " was not found");			
 		}
 		
 		return list;
@@ -126,14 +129,11 @@ public class MarketResource {
 	@Produces("application/json")
 	public Response addMarket(@Context UriInfo uriInfo, Market market) {
 		if (market.getName() == null || "".equals(market.getName()))
-			throw new BadRequestException("The name of the Market must not be null");
-		
-		if (market.getProducts()!=null)
-			throw new BadRequestException("The products property is not editable.");
-
+			throw new BadRequestException("The name of the Market must not be null.");
+	
 		repository.addMarket(market);
 
-		// Builds the response. Returns the Market the has just been added.
+		// Builds the response. Returns the Market that has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
 		URI uri = ub.build(market.getId());
 		ResponseBuilder resp = Response.created(uri);
@@ -147,11 +147,8 @@ public class MarketResource {
 	public Response updateMarket(Market market) {
 		Market oldmarket = repository.getMarket(market.getId());
 		if (oldmarket == null) {
-			throw new NotFoundException("The Market with id="+ market.getId() +" was not found");			
+			throw new NotFoundException("The Market with id= "+ market.getId() +" was not found");			
 		}
-		
-		if (market.getProducts()!=null)
-			throw new BadRequestException("The products property is not editable.");
 		
 		// Update name
 		if (market.getName()!=null)
@@ -167,11 +164,23 @@ public class MarketResource {
 	@DELETE
 	@Path("/{id}")
 	public Response removeMarket(@PathParam("id") String id) {
-		Market toberemoved=repository.getMarket(id);
-		if (toberemoved == null)
-			throw new NotFoundException("The Market with id="+ id +" was not found");
-		else
-			repository.deleteMarket(id);
+		Market toBeRemoved=repository.getMarket(id);
+		List<Order> toBeRemovedOrders = repository.getOrdersByUser(id);
+		List<Product> toBeRemovedProducts = repository.getAllProductsByMarket(id);
+		
+		if(toBeRemoved == null) {
+			  throw new NotFoundException("The Market with id=" + id + " was not found");
+		 } else {
+			 for(Order o : toBeRemovedOrders) {
+				 repository.deleteOrder(o.getId());
+			 }
+			 
+			 for(Product p : toBeRemovedProducts) {
+				 repository.deleteProduct(p.getId());
+			 }
+			 
+			 repository.deleteMarket(id);
+		 }
 		
 		return Response.noContent().build();
 	}

@@ -90,11 +90,11 @@ public class UserResource {
 	@GET
 	@Path("/{id}")
 	@Produces("application/json")
-	public User get(@PathParam("id") String userId) {
-		User user = repository.getUser(userId);
+	public User get(@PathParam("id") String id) {
+		User user = repository.getUser(id);
 		
 		if(user == null) {
-			throw new NotFoundException("The user with id="+ userId +" was not found");			
+			throw new NotFoundException("The user with id=" + id + " was not found");			
 		}
 		
 		return user;
@@ -152,17 +152,17 @@ public class UserResource {
 	 
 	 @DELETE
 	 @Path("/{id}")
-	 public Response removeUser(@PathParam("id") String userId) {
-		 User toBeRemove = repository.getUser(userId);
-		 List<Order> toBeRemoveOrder = repository.getOrdersByUser(userId);
+	 public Response removeUser(@PathParam("id") String id) {
+		 User toBeRemoved = repository.getUser(id);
+		 List<Order> toBeRemovedOrder = repository.getOrdersByUser(id);
 		 
-		 if(toBeRemove == null) {
-			  throw new NotFoundException("The userwith id=" + userId + " was not found");
+		 if(toBeRemoved == null) {
+			  throw new NotFoundException("The userwith id=" + id + " was not found");
 		 }else {
-			 for(Order o : toBeRemoveOrder) {
+			 for(Order o : toBeRemovedOrder) {
 				 repository.deleteOrder(o.getId());
 			 }
-		 	 repository.deleteUser(userId);	
+		 	 repository.deleteUser(id);	
 		 }
 	 	 return Response.noContent().build();
 
@@ -173,19 +173,19 @@ public class UserResource {
 	 
 	 @GET
 	 @Path("/token/{id}")
-	 public String getToken(@PathParam("userId") String userId,
+	 public String getToken(@PathParam("userId") String id,
 			 @QueryParam("name") String name,
 			 @QueryParam("password") String password) {
 		 String token;
-		 User user = repository.getUser(userId);
+		 User user = repository.getUser(id);
 		 
 		 if(user == null) {
-			 throw new NotFoundException("The user with id=" + userId + " was not found");
+			 throw new NotFoundException("The user with id=" + id + " was not found");
 		 } else if(name.equals(user.getName()) && password.equals(user.getPassword())) {
 			 token = user.getToken();
 		 }
 		 else {
-			 throw new BadRequestException("The name and password are incorrect");
+			 throw new BadRequestException("The name and password are incorrect.");
 		 }
 		 
 		 return token;

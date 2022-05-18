@@ -68,11 +68,11 @@ public class Market {
 		return MapMarketRepository.getInstance().getAllOrdersByMarket(this.id);
 	}
 	
-	public Order getOrder(String id) {
+	public Order getOrder(String orderId) {
 		if (getOrders() == null) return null;
 		Order order = null;
 		for (Order o: getOrders()) {
-			if (o.getId().equals(id)) {
+			if (o.getId().equals(orderId)) {
 				order = o;
 				break;
 			}

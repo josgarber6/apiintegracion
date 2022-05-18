@@ -11,7 +11,7 @@
 
     <properties>
         <!-- PUT HERE YOUR projectId FROM GOOGLE CLOUD CONSOLE -->
-        <project.projectId>aiss-lab5</project.projectId>
+        <project.projectId>aiss-prueba-348713</project.projectId>
 
         <appengine.version>1.9.80</appengine.version>        <!-- AppEngine version -->
         <gcloud.version>2.1.0</gcloud.version>        <!-- GCloud version -->
@@ -212,6 +212,12 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-war-plugin</artifactId>
+    			<version>3.3.1</version>
+			</plugin>
 
             <!-- Hot reload of Java and static files -->
             <!-- http://stackoverflow.com/questions/21345177/is-there-any-way-to-trigger-the-maven-appengine-devserver-to-auto-refresh-static -->

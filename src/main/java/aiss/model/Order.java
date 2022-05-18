@@ -18,14 +18,14 @@ public class Order {
 		
 	}
 	
-	public Order(String id, List<Product> ps) {
+	public Order(String id, List<Product> lp) {
 		this.id = id;
 		this.dateStart = ""+LocalDate.now();
-		this.products = ps;
+		this.products = lp;
 	}
 	
-	public void setProducts(List<Product> ps) {
-		products = ps;
+	public void setProducts(List<Product> lp) {
+		products = lp;
 	}
 
 	public String getId() {
@@ -64,8 +64,8 @@ public class Order {
 		return idMarket;
 	}
 
-	public void setIdMarket(String market) {
-		this.idMarket = market;
+	public void setIdMarket(String idMarket) {
+		this.idMarket = idMarket;
 	}
 
 	public List<Product> getProducts() {
@@ -74,31 +74,34 @@ public class Order {
 	
 //	Getting the order price
 	
-	public String getOrderPrice(List<Product> ps) {
+	public String getOrderPrice(List<Product> lp) {
 		
-		Double sum = ps.stream().mapToDouble(x -> Double.valueOf(x.getPrice())).sum();
+		Double sum = lp.stream()
+				.mapToDouble(x -> Double.valueOf(x.getPrice()))
+				.sum();
 		return sum.toString();
 		
 	}
 	
-	public Product getProduct(String id) {
+	public Product getProduct(String productId) {
 		if (products==null)
 			return null;
 		
 		Product product =null;
+		
 		for(Product p: products)
-			if (p.getId().equals(id))
+			if (p.getId().equals(productId))
 			{
 				product=p;
 				break;
 			}
-		
 		return product;
 	}
 	
 	public void addProduct(Product p) {
 		if (products==null)
 			products = new ArrayList<Product>();
+		
 		products.add(p);
 	}
 	
@@ -106,8 +109,8 @@ public class Order {
 		products.remove(p);
 	}
 	
-	public void deleteProduct(String id) {
-		Product p = getProduct(id);
+	public void deleteProduct(String productId) {
+		Product p = getProduct(productId);
 		if (p!=null)
 			products.remove(p);
 	}
@@ -117,7 +120,7 @@ public class Order {
 	}
 
 	public void setDateDelivery(String dateDelivery) {
-		this.dateDelivery = ""+LocalDate.parse(dateDelivery);
+		this.dateDelivery = "" + LocalDate.parse(dateDelivery);
 	}
 
 	public User getUser() {
