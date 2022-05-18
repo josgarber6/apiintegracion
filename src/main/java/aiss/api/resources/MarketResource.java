@@ -57,10 +57,9 @@ public class MarketResource {
 	@GET
 	@Produces("application/json")
 	public Collection<Market> getAll(@QueryParam("order") String order,
-			 @QueryParam("name") String name, @QueryParam("isEmpty") Boolean isEmpty)
-	{
-		List<Market> result = new ArrayList<Market>();
-		for (Market market: repository.getAllMarkets()) {
+			 @QueryParam("name") String name, @QueryParam("isEmpty") Boolean isEmpty) {
+//		List<Market> result = new ArrayList<Market>();
+//		for (Market market: repository.getAllMarkets()) {
 //			if (name == null || Market.getName().equals(name)) {	// filtrado del nombre
 //				if (isEmpty == null 	// filtrado de supermercados vacías
 //					|| (isEmpty && (Market.getSongs() == null || Market.getSongs().size() == 0))
@@ -71,20 +70,20 @@ public class MarketResource {
 //					
 //			}
 			
-			if (order != null) {
-				if (order.equals("name")) {
-					Collections.sort(result, new ComparatorNameMarket());
-				}
-				else if (order.equals("-name")) {
-					Collections.sort(result, new ComparatorNameMarketReversed());
-				}
-				else {
-					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
-				}
-			}
-			
-		}
-		return result;
+//			if (order != null) {
+//				if (order.equals("name")) {
+//					Collections.sort(result, new ComparatorNameMarket());
+//				}
+//				else if (order.equals("-name")) {
+//					Collections.sort(result, new ComparatorNameMarketReversed());
+//				}
+//				else {
+//					throw new BadRequestException("The order parameter must be 'name' or '-name'.");
+//				}
+//			}
+//			
+//		}
+		return repository.getAllMarkets();
 	}
 	
 	
@@ -152,55 +151,6 @@ public class MarketResource {
 			throw new NotFoundException("The Market with id="+ id +" was not found");
 		else
 			repository.deleteMarket(id);
-		
-		return Response.noContent().build();
-	}
-	
-	
-	@POST	
-	@Path("/{marketId}/{productId}")
-	@Consumes("text/plain")
-	@Produces("application/json")
-	public Response addProduct(@Context UriInfo uriInfo,@PathParam("marketId") String MarketId, @PathParam("productId") String productId)
-	{				
-		
-		Market market = repository.getMarket(MarketId);
-		Product product = repository.getProduct(productId);
-		
-		if (market==null)
-			throw new NotFoundException("The Market with id=" + MarketId + " was not found");
-		
-		if (product == null)
-			throw new NotFoundException("The product with id=" + productId + " was not found");
-		
-		if (market.getProduct(productId) != null)
-			throw new BadRequestException("The product is already included in the Market.");
-			
-		repository.addProductToMarket(MarketId, productId);		
-
-		// Builds the response
-		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(MarketId);
-		ResponseBuilder resp = Response.created(uri);
-		resp.entity(market);			
-		return resp.build();
-	}
-	
-	
-	@DELETE
-	@Path("/{marketId}/{productId}")
-	public Response removeProduct(@PathParam("marketId") String MarketId, @PathParam("productId") String productId) {
-		Market market = repository.getMarket(MarketId);
-		Product product = repository.getProduct(productId);
-		
-		if (market==null)
-			throw new NotFoundException("The Market with id=" + MarketId + " was not found.");
-		
-		if (product == null)
-			throw new NotFoundException("The product with id=" + productId + " was not found.");
-		
-		
-		repository.removeProductOfMarket(MarketId, productId);		
 		
 		return Response.noContent().build();
 	}
