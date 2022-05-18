@@ -2,7 +2,9 @@ package aiss.model.repository;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import aiss.model.Order;
 import aiss.model.Product;
@@ -123,6 +125,21 @@ public class MapMarketRepository implements MarketRepository{
 	public void addProductToMarket(String MarketId, String productId) {
 		Market Market = getMarket(MarketId);
 		Market.addProduct(productMap.get(productId));
+	}
+	
+	@Override
+	public List<Product> getAllProductsByMarket(String marketId) {
+		Collection<Product> products = getAllProducts();
+		return products.stream()
+				.filter(x -> x.getIdMarket().equals(marketId))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Order> getAllOrdersByMarket(String marketId) {
+		Collection<Order> orders = getAllOrders();
+		return orders.stream()
+				.filter(x -> x.getIdMarket().equals(marketId))
+				.collect(Collectors.toList());
 	}
 
 	@Override

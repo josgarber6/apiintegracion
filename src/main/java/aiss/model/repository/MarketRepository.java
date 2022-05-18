@@ -24,6 +24,8 @@ public interface MarketRepository {
 	public void updateMarket(Market s);
 	public void deleteMarket(String MarketId);
 	public Collection<Product> getAll(String MarketId);
+	public Collection<Product> getAllProductsByMarket(String marketId);
+	public Collection<Order> getAllOrdersByMarket(String marketId);
 	public void addProductToMarket(String MarketId, String productId);
 	public void removeProductOfMarket(String MarketId, String productId);
 	
