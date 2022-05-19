@@ -1,4 +1,4 @@
-package aiss.api.resources;
+ package aiss.api.resources;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -172,7 +172,9 @@ public class ProductResource {
  		if(product.getExpirationDate().equals("null")) {
 			throw new BadRequestException("The expiration date of the prouduct can't be null");
 		}
-		if (product.getType() == null) throw new BadRequestException("The type of the prouduct must not be null");
+		
+		if (product.getType() == null)
+			throw new BadRequestException("The type of the prouduct must not be null");
 		
 		repository.addProduct(product);
 		

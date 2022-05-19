@@ -44,12 +44,14 @@ public class MapMarketRepository implements MarketRepository {
 		Market mercadona=new Market();
 		mercadona.setName("Mercadona");
 		mercadona.setDescription("Supermercados Mercadona");
-		addMarket(mercadona);
-		
+		Market market1 = new Market("Mercadona", "Supermercados Mercadona");
+		Market market2 = new Market("Dia", "Supermercados Dia");
+		Market market5 = new Market("Mercadona", null);
 		Market dia = new Market();
 		dia.setName("Dia");
 		dia.setDescription("Supermercados Dia");
-		addMarket(dia);
+		addMarket(mercadona); addMarket(market1); addMarket(market2);  
+		addMarket(market5); addMarket(dia);
 		
 		// Create products
 		Product patatas = new Product(mercadona.getId(), "Patatas", "1.50", "64", "2022-05-30", "3", "FOOD");
@@ -57,9 +59,30 @@ public class MapMarketRepository implements MarketRepository {
 				
 		Product cornFlakes = new Product(mercadona.getId(), "CornFlakes", "2.50", "25", "2023-02-15", "2", "FOOD");
 		addProduct(cornFlakes);
+		
+		Product macarronesDia = new Product(dia.getId(), "Macarrones", "2", "150", "null", "4", "FOOD");
+		addProduct(macarronesDia);
 				
-		Product macarrones = new Product(dia.getId(), "Macarrones", "2", "150", "null", "4", "FOOD");
-		addProduct(macarrones);
+		Product macarronesMer = new Product(mercadona.getId(), "Macarrones", "2", "150", "null", "4", "FOOD");
+		addProduct(macarronesMer);
+		
+		Product product1 = new Product(market1.getId(), "Patatas", "1.50", "200", "2022-09-30", "3", "FOOD");
+		Product product2 = new Product(market1.getId(), "Macarrones", "2.50", "300", "2022-12-30", "3", "FOOD");
+		Product product3 = new Product(market1.getId(), "PlayStation", "499.99", "5", "null", "4", "LEISURE");
+		Product product4 = new Product(market1.getId(), "Camiseta Nike", "35.34", "75", "null", "2", "CLOTHES");
+		Product product5 = new Product(market2.getId(), "Patatas", "2.50", "65", "2023-01-07", "4", "FOOD");
+		Product product6 = new Product(market2.getId(), "Cebollas", "1.25", "148", "2022-08-30", "5", "FOOD");
+		Product product7 = new Product(market2.getId(), "pepinillos", "2", "93", "2022-06-30", "2", "FOOD");
+		Product product8 = new Product(market2.getId(), "Call of Duty V", "45.50", "101", "null", "1", "LEISURE");
+		
+		addProduct(product1);
+		addProduct(product2);
+		addProduct(product3);
+		addProduct(product4);
+		addProduct(product5);
+		addProduct(product6);
+		addProduct(product7);
+		addProduct(product8);
 		
 		// Create users
 		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
@@ -78,17 +101,30 @@ public class MapMarketRepository implements MarketRepository {
 		o1.setShippingCosts("5.00");
 		o1.setIdMarket(mercadona.getId());
 		o1.setUser(u1);
-		addOrder(o1);
 		
-		// Add products to Markets and orders
-//		addProductToMarket(mercadona.getId(), patatas.getId());
-//		addProductToMarket(mercadona.getId(), cornFlakes.getId());
-//		
-//		addProductToMarket(dia.getId(), macarrones.getId());
+		Order order1 = new Order("Avenida de la Reina Mercerdes, s/n", "5.00", market1.getId());
+		Order order2 = new Order("Calle Sierpes", "5.00", market1.getId());
+		Order order3 = new Order("Avenida Pedro Porro", "10.00", market2.getId());
+		Order order4 = new Order("Murcia", "10.00", market2.getId());
+		
+		addOrder(o1);
+		addOrder(order1);
+		addOrder(order2);
+		addOrder(order3);
+		addOrder(order4);
 		
 		addProductToOrder(o1.getId(), patatas.getId());
 		addProductToOrder(o1.getId(), cornFlakes.getId());
-		addProductToOrder(o1.getId(), macarrones.getId());
+		addProductToOrder(o1.getId(), macarronesMer.getId());
+		addProductToOrder(order1.getId(),product1.getId());
+		addProductToOrder(order1.getId(), product2.getId());
+		addProductToOrder(order2.getId(), product3.getId());
+		addProductToOrder(order2.getId(), product4.getId());
+		addProductToOrder(order3.getId(), product5.getId());
+		addProductToOrder(order3.getId(), product6.getId());
+		addProductToOrder(order4.getId(), product6.getId());
+		addProductToOrder(order4.getId(), product8.getId());
+		
 		
 	}
 	
