@@ -173,17 +173,20 @@ public class ProductResource {
 		if(!ISODateFormat.asPredicate().test(product.getExpirationDate()) || !product.getExpirationDate().equals("null")) {
 			throw new BadRequestException("The expiration date of the prouduct must be null or format yyyy-mm-dd");
 		}
+		
 		if (product.getType() == null)
 			throw new BadRequestException("The type of the prouduct must not be null");
 		
 		repository.addProduct(product);
-
+		
 		// Builds the response. Returns the product the has just been added.
 		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
 		URI uri = ub.build(product.getId());
 		ResponseBuilder resp = Response.created(uri);
-		resp.entity(product);			
+		resp.entity(product);
+		
 		return resp.build();
+		
 	}
 	
 	
