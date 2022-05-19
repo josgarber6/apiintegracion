@@ -53,13 +53,11 @@ public class OrderResource {
 	
 	@GET
 	@Produces("application/json")
-	public Collection<Order> getAll(@QueryParam("order") String order,
-			 @QueryParam("id") String id, @QueryParam("isEmpty") Boolean isEmpty)
+	public Collection<Order> getAll(@QueryParam("order") String order, @QueryParam("isEmpty") Boolean isEmpty)
 	{
 		List<Order> result = new ArrayList<Order>();
 		for (Order o: repository.getAllOrders()) {
-			
-			if (id == null || o.getId().equals(id)) {	// filtrado del id
+				// filtrado del id
 				if (isEmpty == null 	// filtrado de pedidos vacíos
 					|| (isEmpty && (o.getProducts() == null || o.getProducts().size() == 0))
 					|| (!isEmpty && (o.getProducts() != null && o.getProducts().size() > 0))) {
@@ -80,8 +78,6 @@ public class OrderResource {
 					throw new BadRequestException("The order parameter must be 'id' or '-id'.");
 				}
 			}
-			
-		}
 		return result;
 	}
 	

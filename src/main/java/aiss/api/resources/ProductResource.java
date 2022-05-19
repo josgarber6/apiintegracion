@@ -1,4 +1,4 @@
-package aiss.api.resources;
+ package aiss.api.resources;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -172,7 +172,7 @@ public class ProductResource {
 		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
 		if(!ISODateFormat.asPredicate().test(product.getExpirationDate()) || !product.getExpirationDate().equals("null")) {
 			throw new BadRequestException("The expiration date of the prouduct must be null or format yyyy-mm-dd");
-		
+		}
 		if (product.getType() == null)
 			throw new BadRequestException("The type of the prouduct must not be null");
 		
