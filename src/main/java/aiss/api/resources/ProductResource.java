@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -153,6 +154,7 @@ public class ProductResource {
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Response addProduct(@Context UriInfo uriInfo, Product product) {
+		
 		if (product.getName() == null || "".equals(product.getName()))
 			throw new BadRequestException("The name of the product must not be null");
 		if (product.getRating() == null || Integer.valueOf(product.getRating()) <= 0)
@@ -166,6 +168,10 @@ public class ProductResource {
 		if (product.getExpirationDate() == null || LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()) 
 				|| LocalDate.parse(product.getExpirationDate()).isEqual(LocalDate.now()))
 			throw new BadRequestException("The expiration date of the prouduct must not be null or lesser or equal than the actual date");
+		
+		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
+		if(!ISODateFormat.asPredicate().test(product.getExpirationDate()) || !product.getExpirationDate().equals("null")) {
+			throw new BadRequestException("The expiration date of the prouduct must be null or format yyyy-mm-dd");
 		
 		if (product.getType() == null)
 			throw new BadRequestException("The type of the prouduct must not be null");
@@ -204,7 +210,10 @@ public class ProductResource {
 		// Update expirationDate
 		if (product.getExpirationDate() != null || LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now()))
 			oldproduct.setExpirationDate(""+product.getExpirationDate());
-		
+		Pattern ISODateFormat = Pattern.compile("^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$");
+		if(!ISODateFormat.asPredicate().test(product.getExpirationDate()) || !product.getExpirationDate().equals("null")) {
+			throw new BadRequestException("The expiration date of the prouduct must be null or format yyyy-mm-dd");
+		}
 		return Response.noContent().build();
 	}
 	
