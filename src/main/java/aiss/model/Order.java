@@ -29,6 +29,7 @@ public class Order {
 		this.shippingCosts = shippingCosts;
 		this.idMarket = idMarket;
 		this.products = new ArrayList<>();
+		this.dateStart= ""+LocalDate.now();
 	}
 	
 	public Order(String id, List<Product> lp) {

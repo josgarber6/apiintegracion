@@ -108,22 +108,17 @@ public class OrderResource {
 		 * automaticamente con la fecha actual de cuando se crea el objeto order.
 		 */
 		
-		if (order.getIdMarket().equals(null) || "".equals(order.getIdMarket()))
+		if (order.getIdMarket()==null || "".equals(order.getIdMarket()))
 			throw new BadRequestException("The idMarket of the order must not be null");
 		
-		if(order.getAddress().equals(null) || "".equals(order.getAddress()))
+		if(order.getAddress()==null || "".equals(order.getAddress()))
 			throw new BadRequestException("The address of the order must not be null.");
 		
-		if(!order.getDate().equals(null) )
-			throw new BadRequestException("The start date property is not editable.");
 		
-		if(!order.getDateDelivery().equals(null) )
-			throw new BadRequestException("The delivery date property is not editable.");
-		
-		if (order.getProducts().equals(null))
+		if (order.getProducts()==null)
 			throw new BadRequestException("The products must not be null.");
 		
-		if(order.getUser().equals(null))
+		if(order.getUser()==null)
 			throw new BadRequestException("The user must not be null");
 		
 		/*
