@@ -124,8 +124,8 @@ public class OrderResource {
 		if(order.getDateDelivery() != null )
 			throw new BadRequestException("The delivery date property is not editable.");
 		
-		if (order.getProducts() != null)
-			throw new BadRequestException("The products property is not editable.");
+		if (order.getProducts() == null)
+			throw new BadRequestException("The products must not be null.");
 		
 		if(order.getUser() == null)
 			throw new BadRequestException("The user must be not null");
