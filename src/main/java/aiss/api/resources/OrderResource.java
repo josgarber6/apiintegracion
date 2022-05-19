@@ -112,23 +112,23 @@ public class OrderResource {
 		 * automaticamente con la fecha actual de cuando se crea el objeto order.
 		 */
 		
-		if (order.getIdMarket() == null || "".equals(order.getIdMarket()))
+		if (order.getIdMarket().equals(null) || "".equals(order.getIdMarket()))
 			throw new BadRequestException("The idMarket of the order must not be null");
 		
-		if(order.getAddress() == null || "".equals(order.getAddress()))
+		if(order.getAddress().equals(null) || "".equals(order.getAddress()))
 			throw new BadRequestException("The address of the order must not be null.");
 		
-		if(order.getDate() != null )
+		if(!order.getDate().equals(null) )
 			throw new BadRequestException("The start date property is not editable.");
 		
-		if(order.getDateDelivery() != null )
+		if(!order.getDateDelivery().equals(null) )
 			throw new BadRequestException("The delivery date property is not editable.");
 		
-		if (order.getProducts() == null)
+		if (order.getProducts().equals(null))
 			throw new BadRequestException("The products must not be null.");
 		
-		if(order.getUser() == null)
-			throw new BadRequestException("The user must be not null");
+		if(order.getUser().equals(null))
+			throw new BadRequestException("The user must not be null");
 		
 		/*
 		 * COMO EL USUARIO YA EXISTE SOLAMENTE TENGO QUE PREGUNTAR EN MEMORIA PARA QUE TRAIGA ESTE USUARIO CON TODOS SUS 
@@ -262,7 +262,7 @@ public class OrderResource {
 	
 	@DELETE
 	@Path("/{orderId}/{productId}")
-	public Response removeproduct(@PathParam("orderId") String orderId, 
+	public Response removeProduct(@PathParam("orderId") String orderId, 
 			@PathParam("productId") String productId,
 			@QueryParam("token") String token) {
 		Order order = repository.getOrder(orderId);
