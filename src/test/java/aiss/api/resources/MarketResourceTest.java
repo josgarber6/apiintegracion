@@ -24,7 +24,7 @@ public class MarketResourceTest {
 	static Product product1, product2, product3, product4, product5, product6, product7, product8;
 	static Order order1, order2, order3, order4;
 	static User user;
-	static UriInfo mockUriInfoMarkets, mockUriInfoProducts, mockUriInfoOrders;
+	static UriInfo UriInfoMarkets, UriInfoProducts, UriInfoOrders;
 	static MarketResource SourceMarket = MarketResource.getInstance();
 	static ProductResource SourceProduct = ProductResource.getInstance();
 	static OrderResource SourceOrder = OrderResource.getInstance();
@@ -38,12 +38,8 @@ public class MarketResourceTest {
 		
 		user = new User("u1", "Maria","aa@aiss.com","secret","baños, 33", "aaa");
 		
-		String urlMarket = "http://localhost:8089/api/markets";
-		mockUriInfoMarkets = mock(UriInfo.class);
-		when(mockUriInfoMarkets.getRequestUri()).thenReturn(new URI(urlMarket));
-		
-		SourceMarket.addMarket(mockUriInfoMarkets, market1); SourceMarket.addMarket(mockUriInfoMarkets, market2);  
-		SourceMarket.addMarket(mockUriInfoMarkets, market5);
+		SourceMarket.addMarket(UriInfoMarkets, market1); SourceMarket.addMarket(UriInfoMarkets, market2);  
+		SourceMarket.addMarket(UriInfoMarkets, market5);
 		
 		product1 = new Product(market1.getId(), "Patatas", "1.50", "200", "2022-09-30", "3", "FOOD");
 		product2 = new Product(market1.getId(), "Macarrones", "2.50", "300", "2022-12-30", "3", "FOOD");
@@ -55,13 +51,13 @@ public class MarketResourceTest {
 		product8 = new Product(market2.getId(), "Call of Duty V", "45.50", "101", "null", "1", "LEISURE");
 		
 		String urlProduct = "http://localhost:8089/api/products";
-		mockUriInfoProducts = mock(UriInfo.class);
-		when(mockUriInfoProducts.getRequestUri()).thenReturn(new URI(urlProduct));
+		UriInfoProducts = mock(UriInfo.class);
+		when(UriInfoProducts.getRequestUri()).thenReturn(new URI(urlProduct));
 		
-		SourceProduct.addProduct(mockUriInfoProducts, product1); SourceProduct.addProduct(mockUriInfoProducts, product2);
-		SourceProduct.addProduct(mockUriInfoProducts, product3); SourceProduct.addProduct(mockUriInfoProducts, product4);
-		SourceProduct.addProduct(mockUriInfoProducts, product5); SourceProduct.addProduct(mockUriInfoProducts, product6);
-		SourceProduct.addProduct(mockUriInfoProducts, product7); SourceProduct.addProduct(mockUriInfoProducts, product8);
+		SourceProduct.addProduct(UriInfoProducts, product1); SourceProduct.addProduct(UriInfoProducts, product2);
+		SourceProduct.addProduct(UriInfoProducts, product3); SourceProduct.addProduct(UriInfoProducts, product4);
+		SourceProduct.addProduct(UriInfoProducts, product5); SourceProduct.addProduct(UriInfoProducts, product6);
+		SourceProduct.addProduct(UriInfoProducts, product7); SourceProduct.addProduct(UriInfoProducts, product8);
 		
 
 		order1 = new Order("Avenida de la Reina Mercerdes, s/n", "5.00", market1.getId());
@@ -71,11 +67,11 @@ public class MarketResourceTest {
 		order1.setUser(user); order2.setUser(user); order3.setUser(user); order4.setUser(user);
 		
 		String urlOrder = "http://localhost:8089/api/orders";
-		mockUriInfoOrders = mock(UriInfo.class);
-		when(mockUriInfoOrders.getRequestUri()).thenReturn(new URI(urlOrder));
+		UriInfoProducts = mock(UriInfo.class);
+		when(UriInfoProducts.getRequestUri()).thenReturn(new URI(urlOrder));
 		
-		SourceOrder.addOrder(mockUriInfoOrders, "aaa", order1); SourceOrder.addOrder(mockUriInfoOrders, "aaa", order2);
-		SourceOrder.addOrder(mockUriInfoOrders, "aaa", order3); SourceOrder.addOrder(mockUriInfoOrders, "aaa", order4);
+		SourceOrder.addOrder(UriInfoProducts, "aaa", order1); SourceOrder.addOrder(UriInfoProducts, "aaa", order2);
+		SourceOrder.addOrder(UriInfoProducts, "aaa", order3); SourceOrder.addOrder(UriInfoProducts, "aaa", order4);
 	}
 
 	@After

@@ -25,6 +25,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
+import aiss.api.resources.comparators.ComparatorDateStartOrder;
+import aiss.api.resources.comparators.ComparatorDateStartOrderReversed;
 import aiss.api.resources.comparators.ComparatorIdOrder;
 import aiss.api.resources.comparators.ComparatorIdOrderReversed;
 import aiss.model.Order;
@@ -53,7 +55,8 @@ public class OrderResource {
 	
 	@GET
 	@Produces("application/json")
-	public Collection<Order> getAll(@QueryParam("order") String order, @QueryParam("isEmpty") Boolean isEmpty)
+	public Collection<Order> getAll(@QueryParam("order") String order, 
+			@QueryParam("isEmpty") Boolean isEmpty)
 	{
 		List<Order> result = new ArrayList<Order>();
 		for (Order o: repository.getAllOrders()) {
@@ -73,6 +76,12 @@ public class OrderResource {
 				}
 				else if (order.equals("-id")) {
 					Collections.sort(result, new ComparatorIdOrderReversed());
+				}
+				else if(order.equals("date")) {
+					Collections.sort(result, new ComparatorDateStartOrder());
+				}
+				else if(order.equals("-date")) {
+					Collections.sort(result, new ComparatorDateStartOrderReversed());
 				}
 				else {
 					throw new BadRequestException("The order parameter must be 'id' or '-id'.");
