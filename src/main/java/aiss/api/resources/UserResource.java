@@ -110,7 +110,7 @@ public class UserResource {
 		if(user.getEmail() == null || user.getEmail().equals(""))
 			throw new  BadRequestException("The email of the product must not be null");
 		
-		if(user.getPassword() == null || user.getPassword().equals(""))
+		if(user.sendPassword() == null || user.sendPassword().equals(""))
 			throw new  BadRequestException("The password of the product must not be null");
 		
 		if(user.getAddress() == null || user.getAddress().equals(""))
@@ -129,7 +129,7 @@ public class UserResource {
 	 @PUT
 	 @Consumes("application/json")
 	 public Response updateUser(@QueryParam("token") String token, User user) {
-		 if (!token.equals(user.getToken())) {
+		 if (!token.equals(user.sendToken())) {
 			 throw new BadRequestException("The token is incorrect");
 		 }
 		 
@@ -145,8 +145,8 @@ public class UserResource {
 		 if(user.getEmail() != null || !"".equals(user.getEmail()))
 			 oldUser.setEmail(user.getEmail());
 		 
-		 if(user.getPassword() != null || !"".equals(user.getPassword()))
-			 oldUser.setPassword(user.getPassword());
+		 if(user.sendPassword() != null || !"".equals(user.sendPassword()))
+			 oldUser.setPassword(user.sendPassword());
 		 
 		 if(user.getAddress() != null || !"".equals(user.getAddress()))
 			 oldUser.setAddress(user.getAddress());
@@ -159,7 +159,7 @@ public class UserResource {
 	 public Response removeUser(@PathParam("id") String id,
 			 					@QueryParam("token") String token) {
 		 
-		 if(!token.equals(repository.getUser(id).getToken())) {
+		 if(!token.equals(repository.getUser(id).sendToken())) {
 			 throw new BadRequestException("The token is different.");
 		 }
 		 
@@ -191,8 +191,8 @@ public class UserResource {
 		 
 		 if(user == null) {
 			 throw new NotFoundException("The user with id=" + id + " was not found");
-		 } else if(name.equals(user.getName()) && password.equals(user.getPassword())) {
-			 token = user.getToken();
+		 } else if(name.equals(user.getName()) && password.equals(user.sendPassword())) {
+			 token = user.sendToken();
 		 }
 		 else {
 			 throw new BadRequestException("The name and password are incorrect.");
@@ -200,5 +200,23 @@ public class UserResource {
 		 
 		 return token;
 	 }
-
+	 
+	 @GET
+	 @Path("/password/{id}")
+	 public String getPassword(@PathParam("id") String id,
+			 @QueryParam("name") String name) {
+		 String password;
+		 User user = repository.getUser(id);
+		 
+		 if(user == null) {
+			 throw new NotFoundException("The user with id=" + id + " was not found");
+		 } else if(name.equals(user.getName())) {
+			 password = user.sendPassword();
+		 }
+		 else {
+			 throw new BadRequestException("The name and password are incorrect.");
+		 }
+		 
+		 return password;
+	 }
 }

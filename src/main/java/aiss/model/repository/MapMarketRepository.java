@@ -303,14 +303,14 @@ public class MapMarketRepository implements MarketRepository {
 		User user = userMap.get(u.getId());
 		user.setName(u.getName());
 		user.setEmail(u.getEmail());
-		user.setPassword(u.getPassword());
+		user.setPassword(u.sendPassword());
 		user.setAddress(u.getAddress());
 	}
 
 	@Override
 	public String getToken(String userId) {
 		User user = userMap.get(userId);
-		return user.getToken();
+		return user.sendToken();
 	}
 
 	@Override

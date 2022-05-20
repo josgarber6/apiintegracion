@@ -130,7 +130,7 @@ public class OrderResource {
 		if( orderUser == null)
 			throw new BadRequestException("The user with id="+ order.getUser().getId() +" was not found");
 		
-		if(!token.equals(orderUser.getToken()))
+		if(!token.equals(orderUser.sendToken()))
 			throw new BadRequestException("The token is incorrect");
 		
 		order.setUser(orderUser);
@@ -162,7 +162,7 @@ public class OrderResource {
 		 * se confirma que la orden pertenece al que hace el update comprobando que 
 		 * el toke es el del usuario que tiene guardada la orden al crearla con addOrder.
 		 */
-		if(!token.equals(order.getUser().getToken()))
+		if(!token.equals(order.getUser().sendToken()))
 			throw new BadRequestException("The token is incorrect");
 		
 		Order oldorder = repository.getOrder(order.getId());
@@ -205,7 +205,7 @@ public class OrderResource {
 		 */
 		if (toberemoved == null)
 			throw new NotFoundException("The order with id="+ id +" was not found");
-		else if(!token.equals(toberemoved.getUser().getToken())) 
+		else if(!token.equals(toberemoved.getUser().sendToken())) 
 			throw new BadRequestException("The token is incorrect");
 		else
 			repository.deleteOrder(id);
@@ -229,7 +229,7 @@ public class OrderResource {
 		 * se confirma que la orden pertenece al que hace el addProduct comprobando que 
 		 * el token es el del usuario que tiene guardada la orden al crearla con addOrder.
 		 */
-		if(!token.equals(order.getUser().getToken())) 
+		if(!token.equals(order.getUser().sendToken())) 
 			throw new BadRequestException("The token is incorrect");
 		
 		if (product == null)
@@ -261,7 +261,7 @@ public class OrderResource {
 		 * se confirma que la orden pertenece al que hace el removeProduct comprobando que 
 		 * el token es el del usuario que tiene guardada la orden al crearla con addOrder.
 		 */
-		if(!token.equals(order.getUser().getToken())) 
+		if(!token.equals(order.getUser().sendToken())) 
 			throw new BadRequestException("The token is incorrect");
 		
 		if (product == null)

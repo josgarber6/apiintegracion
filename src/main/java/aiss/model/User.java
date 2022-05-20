@@ -117,7 +117,7 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPassword() {
+	public String sendPassword() {
 		return password;
 	}
 
@@ -125,7 +125,7 @@ public class User {
 		this.password = password;
 	}
 
-	public String getToken() {
+	public String sendToken() {
 		return token;
 	}
 
