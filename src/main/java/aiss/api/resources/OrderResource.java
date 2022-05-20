@@ -213,12 +213,9 @@ public class OrderResource {
 		return Response.noContent().build();
 	}
 	
-	@POST	
+	@PUT	
 	@Path("/{orderId}/{productId}")
-	@Consumes("text/plain")
-	@Produces("application/json")
-	public Response addProduct(@Context UriInfo uriInfo,
-			@PathParam("orderId") String orderId, 
+	public Response addProduct(@PathParam("orderId") String orderId, 
 			@PathParam("productId") String productId,
 			@QueryParam("token") String token)
 	{				
@@ -238,17 +235,15 @@ public class OrderResource {
 		if (product == null)
 			throw new NotFoundException("The product with id=" + productId + " was not found");
 		
+		if(!order.getIdMarket().equals(product.getIdMarket()))
+			throw new BadRequestException("The product must belong to the same market as the order.");
+		
 		if (order.getProduct(productId) != null)
 			throw new BadRequestException("The product is already included in the order.");
 			
 		repository.addProductToOrder(orderId, productId);
 
-		// Builds the response
-		UriBuilder ub = uriInfo.getAbsolutePathBuilder().path(this.getClass(), "get");
-		URI uri = ub.build(orderId);
-		ResponseBuilder resp = Response.created(uri);
-		resp.entity(order);			
-		return resp.build();
+		return Response.noContent().build();
 	}
 	
 	@DELETE
