@@ -106,6 +106,10 @@ public class MapMarketRepository implements MarketRepository {
 		Order order2 = new Order("Calle Sierpes", "5.00", market1.getId());
 		Order order3 = new Order("Avenida Pedro Porro", "10.00", market2.getId());
 		Order order4 = new Order("Murcia", "10.00", market2.getId());
+		order1.setUser(u1);
+		order2.setUser(u1);
+		order3.setUser(u1);
+		order4.setUser(u1);
 		
 		addOrder(o1);
 		addOrder(order1);

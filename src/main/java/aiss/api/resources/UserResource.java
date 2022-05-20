@@ -183,7 +183,7 @@ public class UserResource {
 	 
 	 @GET
 	 @Path("/token/{id}")
-	 public String getToken(@PathParam("userId") String id,
+	 public String getToken(@PathParam("id") String id,
 			 @QueryParam("name") String name,
 			 @QueryParam("password") String password) {
 		 String token;
