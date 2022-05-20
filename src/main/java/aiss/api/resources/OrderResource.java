@@ -60,33 +60,33 @@ public class OrderResource {
 	{
 		List<Order> result = new ArrayList<Order>();
 		for (Order o: repository.getAllOrders()) {
-				// filtrado del id
-				if (isEmpty == null 	// filtrado de pedidos vacíos
-					|| (isEmpty && (o.getProducts() == null || o.getProducts().size() == 0))
-					|| (!isEmpty && (o.getProducts() != null && o.getProducts().size() > 0))) {
-					
-					result.add(o);
-				}
-					
+			// filtrado del id
+			if (isEmpty == null 	// filtrado de pedidos vacíos
+				|| (isEmpty && (o.getProducts() == null || o.getProducts().size() == 0))
+				|| (!isEmpty && (o.getProducts() != null && o.getProducts().size() > 0))) {
+				
+				result.add(o);
 			}
+					
+		}
 			
-			if (order != null) {
-				if (order.equals("id")) {
-					Collections.sort(result, new ComparatorIdOrder());
-				}
-				else if (order.equals("-id")) {
-					Collections.sort(result, new ComparatorIdOrderReversed());
-				}
-				else if(order.equals("date")) {
-					Collections.sort(result, new ComparatorDateStartOrder());
-				}
-				else if(order.equals("-date")) {
-					Collections.sort(result, new ComparatorDateStartOrderReversed());
-				}
-				else {
-					throw new BadRequestException("The order parameter must be 'id' or '-id'.");
-				}
+		if (order != null) {
+			if (order.equals("id")) {
+				Collections.sort(result, new ComparatorIdOrder());
 			}
+			else if (order.equals("-id")) {
+				Collections.sort(result, new ComparatorIdOrderReversed());
+			}
+			else if(order.equals("date")) {
+				Collections.sort(result, new ComparatorDateStartOrder());
+			}
+			else if(order.equals("-date")) {
+				Collections.sort(result, new ComparatorDateStartOrderReversed());
+			}
+			else {
+				throw new BadRequestException("The order parameter must be 'id' or '-id', 'date' or '-date'");
+			}
+		}
 		return result;
 	}
 	
@@ -160,7 +160,7 @@ public class OrderResource {
 		if (order == null) {
 			throw new NotFoundException("The order with id="+ orderId +" was not found");			
 		}
-		else order.setDateDelivery(""+LocalDate.now());
+		else order.setDeliveryDate(""+LocalDate.now());
 		return Response.noContent().build();
 	}
 	
@@ -169,7 +169,7 @@ public class OrderResource {
 	public Response updateOrder(@QueryParam("token") String token, Order order) {
 		/*
 		 * se confirma que la orden pertenece al que hace el update comprobando que 
-		 * el toke es el del usuario que tiene guardada la orden al crearla con addOrder.
+		 * el token es del usuario que tiene guardada la orden al crearla con addOrder.
 		 */
 		if(!token.equals(order.getUser().sendToken()))
 			throw new BadRequestException("The token is incorrect");

@@ -1,0 +1,848 @@
+openapi: 3.0.0
+servers: 
+  - url: 'http://localhost:8089/api'
+info:
+  description: API for warehouses, markets and its users
+  version: 1.0.0
+  title: Market_API
+tags:
+  - name: products
+    description: Products
+  - name: markets
+    description: Markets
+  - name: orders
+    description: Orders
+  - name: users
+    description: Users
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Get products
+      description: Get all products
+      operationId: getAllProducts
+      parameters:
+        - name: order
+          in: query
+          description: Order results by name, price, quantity, rating
+          required: false
+          schema:
+            type: string
+            enum:
+              - name
+              - '-name'
+              - price
+              - '-price'
+              - quantity
+              - '-quantity'
+              - expirationDate
+              - '-expirationDate'
+              - type
+              - '-type'
+              - rating
+              - '-rating'
+        - name: q
+          in: query
+          description: Query to filter
+          required: false
+          schema:
+            type: string
+        - name: qAux
+          in: query
+          description: Query to filter
+          required: false
+          schema:
+            type: string
+        - name: pExpired
+          in: query
+          description: Query to filter expired products
+          required: false
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          description:  Maximum number of results
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: offset
+          in: query
+          description: Offset of the results
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - products
+      summary: Create a product
+      description: Create a product
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        description: Product to create
+        required: true
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad request
+    put:
+      tags:
+        - products
+      summary: Update product
+      description: Update product
+      operationId: updateProduct
+      parameters:
+        - name: product
+          in: query
+          description: Product
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product updated
+        '400':
+          description: Bad request
+        '404':
+          description: Product not found
+  '/products/{productId}':
+    get:
+      tags:
+        - products
+      summary: Get a product
+      description: Get a product
+      operationId: getProduct
+      parameters:
+        - name: productId
+          in: path
+          description: Id of the product
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+    delete:
+      tags:
+        - products
+      summary: Delete product
+      description: Delete product
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          description: Id of the product
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product deleted
+        '404':
+          description: Product not found
+  /markets:
+    get:
+      tags:
+        - markets
+      summary: Get markets
+      description: Get all markets
+      operationId: getAllMarkets
+      parameters:
+        - name: order
+          in: query
+          description: Order results by name
+          required: false
+          schema:
+            type: string
+            enum:
+              - name
+              - '-name'
+              - id
+              - '-id'
+        - name: isEmptyProducts
+          in: query
+          description: Filter playlists with no products
+          required: false
+          schema:
+            type: boolean
+        - name: isEmptyOrders
+          in: query
+          description: Filter playlists with no orders
+          required: false
+          schema:
+            type: boolean
+        - name: name
+          in: query
+          description: Filter markets by name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/Market'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - markets
+      summary: Create a market
+      description: Create a market
+      operationId: addMarket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Market'
+        description: Market to create
+        required: true
+      responses:
+        '201':
+          description: Market created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Market'
+        '400':
+          description: Bad request
+    put:
+      tags:
+        - markets
+      summary: Update a market
+      description: Update a market
+      operationId: updateMarket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Market'
+        description: Market to update
+      responses:
+        '204':
+          description: Market updated
+        '400':
+          description: Bad request
+        '404':
+          description: Market not found   
+  '/market/{marketId}':
+    get:
+      tags:
+        - markets
+      summary: Get a market
+      description: Get a market
+      operationId: getMarket
+      parameters:
+        - name: marketId
+          in: path
+          description: Id of the market
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Market found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Market'
+        '404':
+          description: Market not found
+    delete:
+      tags:
+        - markets
+      summary: Delete market
+      description: Delete market
+      operationId: removeMarket
+      parameters:
+        - name: marketId
+          in: path
+          description: Id of the market
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Market deleted
+        '404':
+          description: Market not found      
+  /orders:
+    get:
+      tags:
+        - orders
+      summary: Get orders
+      description: Get all orders
+      operationId: getOrders
+      parameters:
+        - name: order
+          in: query
+          description: Order results by date and id
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - '-id'
+              - date
+              - '-date'
+        - name: isEmpty
+          in: query
+          description: Filter orders with no products
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - orders
+      summary: Create a order
+      description: Create a order
+      operationId: addOrder
+      parameters:
+        - name: token
+          in: query
+          description: Only posts the order if the token matches the current user
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        description: Order to create
+        required: true
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+    put:
+      tags:
+        - orders
+      summary: Update an order
+      description: Update an order
+      operationId: updateOrder
+      parameters:
+        - name: token
+          in: query
+          description: Only updates the order if the token matches the current user
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        description: Order to update
+      responses:
+        '204':
+          description: Order updated
+        '400':
+          description: Bad request
+        '404':
+          description: Order not found
+  '/orders/delivered/{orderId}':
+    get:
+      tags:
+        - orders
+      summary: Updates an order's delivery date
+      description: Updates an order
+      operationId: updateOrderDelivered
+      parameters:
+        - name: orderId
+          in: path
+          description: Id of the order
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not updated
+  '/orders/{orderId}':
+    get:
+      tags:
+        - orders
+      summary: Get an order
+      description: Get an order
+      operationId: getOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: Id of the order
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+    delete:
+      tags:
+        - orders
+      summary: Delete order
+      description: Delete orders
+      operationId: removeOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: Id of the order
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Only delete the order if the token matches the current user
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Order deleted
+        '404':
+          description: Order not found 
+    put:
+      tags:
+        - orders
+      summary: Add product to order
+      description: Add product to order
+      operationId: addProductOrder
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+      parameters:
+        - name: orderId
+          in: path
+          description: Id of the order
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Only puts the product to the order if the token matches the current user
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Product added to order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Bad request
+        '404':
+          description: Order or product not found
+  '/orders/{orderId}/{productId}':
+    delete:
+      tags:
+        - lists
+      summary: Delete product from order
+      description: Delete product from order
+      operationId: deleteProductOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: Id of the order
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Id of the product
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Only delete the product from the order if the token matches the current user
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product deleted from order
+        '404':
+          description: Order or product not found
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get users
+      description: Get all users
+      operationId: getUsers
+      parameters:
+        - name: order
+          in: query
+          description: Order results by name and id
+          required: false
+          schema:
+            type: string
+            enum:
+              - name
+              - '-name'
+              - id
+        - name: name
+          in: query
+          description: Query to filter
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description:  Maximum number of results
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: offset
+          in: query
+          description: Offset of the results
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - users
+      summary: Create a user
+      description: Create a user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to create
+        required: true
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+    put:
+      tags:
+        - users
+      summary: Update user
+      description: Update user
+      operationId: updateUser
+      parameters:
+        - name: token
+          in: query
+          description: Token of the user
+          required: true
+          schema:
+            type: string
+        - name: user
+          in: query
+          description: User
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User updated
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+  '/users/{userId}':
+    get:
+      tags:
+        - users
+      summary: Get a user
+      description: Get a user
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - users
+      summary: Delete users
+      description: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Token of the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted
+        '404':
+          description: User not found
+  '/users/token/{userId}':
+    get:
+      tags:
+        - users
+      summary: Get a users token
+      description: Get a token
+      operationId: getToken
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: User's name
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: User's password
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+  '/users/password/{userId}':
+    get:
+      tags:
+        - users
+      summary: Get a users password
+      description: Get a password
+      operationId: getPassword
+      parameters:
+        - name: userId
+          in: path
+          description: Id of the user
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: User's name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Password found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+components: 
+  schemas: 
+    Product: 
+      type: object 
+      required: 
+        - name 
+      properties: 
+        id: 
+          type: string
+        name: 
+          type: string 
+        price: 
+          type: number
+        quantity: 
+          type: integer 
+        expirationDate: 
+          type: string 
+        category:
+          type: string
+        rating:
+          type: integer
+        availability:
+          type: boolean
+      example:
+        id: p1
+        name: Pan
+        price: 2
+        quantity: 2
+        expirationDate: '2011-04-28'
+        category: 'FOOD'
+        rating: 4
+        availability: true
+    Market:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+      example:
+        id: m0
+        name: 'Más'
+        description: 'none.'
+        products:
+          - id: p3
+            name: 'Balón'
+            price: 5
+            quantity: 24
+            expirationDate: null
+            category: 'SPORTS'
+    Order:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+        shippingCosts:
+          type: number
+        marketId:
+          type: string
+        userId:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      example:
+        id: o2
+        date: '2023-05-11'
+        shippingCosts: 2.50
+        marketId: 'm3'
+        userId: null
+        products:
+          - id: p3
+            name: 'Balón'
+            price: 5
+            quantity: 24
+            expirationDate: null
+            category: 'SPORTS'
+    User:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: number
+        password:
+          type: string
+        address:
+          type: string
+        token:
+          type: string
+      example:
+        id: 'u2'
+        name: 'Irene'
+        password: 'tdlp15'
+        address: 'calle 35ª'
+        token: '2345678909654t32'

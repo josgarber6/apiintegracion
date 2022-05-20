@@ -167,18 +167,14 @@ public class UserResource {
 		 List<Order> toBeRemovedOrder = repository.getOrdersByUser(id);
 		 
 		 if(toBeRemoved == null) {
-			  throw new NotFoundException("The userwith id=" + id + " was not found");
+			  throw new NotFoundException("The user with id=" + id + " was not found");
 		 }else {
-			 for(Order o : toBeRemovedOrder) {
+			 for(Order o: toBeRemovedOrder) {
 				 repository.deleteOrder(o.getId());
 			 }
 		 	 repository.deleteUser(id);	
 		 }
 	 	 return Response.noContent().build();
-
-			 
-		 
-		 
 	 }
 	 
 	 @GET

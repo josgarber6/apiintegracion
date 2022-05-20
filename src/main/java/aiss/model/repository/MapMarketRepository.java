@@ -97,7 +97,7 @@ public class MapMarketRepository implements MarketRepository {
 		// Create orders
 		Order o1=new Order();
 		o1.setAddress("Avenida de la Reina Mercerdes, s/n");
-		o1.setDate("2022-10-05");
+		o1.setStartDate("2022-10-05");
 		o1.setShippingCosts("5.00");
 		o1.setIdMarket(mercadona.getId());
 		o1.setUser(u1);
@@ -245,8 +245,9 @@ public class MapMarketRepository implements MarketRepository {
 		return orderMap.get(orderId);
 	}
 	
+	@Override
 	public List<Order> getOrdersByUser(String userId) {
-		Collection<Order>orders= getAllOrders();
+		Collection<Order>orders= orderMap.values();
 		return orders.stream()
 				.filter(x->x.getUser().getId().equals(userId))
 				.collect(Collectors.toList());
@@ -256,7 +257,7 @@ public class MapMarketRepository implements MarketRepository {
 	public void updateOrder(Order o) {
 		Order order = orderMap.get(o.getId());
 		order.setAddress(o.getAddress());
-		order.setDate(""+o.getDate());
+		order.setStartDate(""+o.getStartDate());
 		order.setShippingCosts(""+o.getShippingCosts());
 		order.setIdMarket(o.getIdMarket());
 	}

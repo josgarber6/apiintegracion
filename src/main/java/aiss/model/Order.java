@@ -7,15 +7,15 @@ public class Order {
 	
 	private String id;
 	private String idMarket;
-	private String dateStart;
-	private String dateDelivery;
+	private String startDate;
+	private String deliveryDate;
 	private String address;
 	private String shippingCosts;
 	private User user;
 	private List<Product> products;
 
 	public Order() {
-		this.dateStart = ""+LocalDate.now();
+		this.startDate = ""+LocalDate.now();
 	}
 	
 	/**
@@ -29,19 +29,15 @@ public class Order {
 		this.shippingCosts = shippingCosts;
 		this.idMarket = idMarket;
 		this.products = new ArrayList<>();
-		this.dateStart= ""+LocalDate.now();
+		this.startDate= ""+LocalDate.now();
 	}
 	
 	public Order(String id, List<Product> lp) {
 		this.id = id;
-		this.dateStart = ""+LocalDate.now();
+		this.startDate = ""+LocalDate.now();
 		this.products = lp;
 	}
 	
-	public void setProducts(List<Product> lp) {
-		products = lp;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -50,12 +46,28 @@ public class Order {
 		this.id = id;
 	}
 
-	public String getDate() {
-		return dateStart;
+	public String getIdMarket() {
+		return idMarket;
+	}
+	
+	public void setIdMarket(String idMarket) {
+		this.idMarket = idMarket;
+	}
+	
+	public String getStartDate() {
+		return startDate;
 	}
 
-	public void setDate(String date) {
-		this.dateStart = ""+LocalDate.parse(date);
+	public void setStartDate(String startDate) {
+		this.startDate = ""+LocalDate.parse(startDate);
+	}
+	
+	public String getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(String deliveryDate) {
+		this.deliveryDate = "" + LocalDate.parse(deliveryDate);
 	}
 
 	public String getAddress() {
@@ -74,16 +86,20 @@ public class Order {
 		this.shippingCosts = ""+Double.valueOf(shippingCosts);
 	}
 
-	public String getIdMarket() {
-		return idMarket;
+	public User getUser() {
+		return user;
 	}
 
-	public void setIdMarket(String idMarket) {
-		this.idMarket = idMarket;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public List<Product> getProducts() {
 		return products;
+	}
+	
+	public void setProducts(List<Product> lp) {
+		products = lp;
 	}
 	
 //	Getting the order price
@@ -129,20 +145,4 @@ public class Order {
 			products.remove(p);
 	}
 
-	public String getDateDelivery() {
-		return dateDelivery;
-	}
-
-	public void setDateDelivery(String dateDelivery) {
-		this.dateDelivery = "" + LocalDate.parse(dateDelivery);
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
 }
