@@ -70,57 +70,48 @@ public class ProductResource {
 		
 		for (Product product: repository.getAllProducts()) {
 			
-			Boolean Max_price_rating_quantity = queryAux != null && ("price".equals(query) && Double.valueOf(product.getPrice()) >= queryAux) ||
+			Boolean Max_price_rating_quantity = queryAux != null && (("price".equals(query) && Double.valueOf(product.getPrice()) >= queryAux) ||
 					("rating".equals(query) && Integer.valueOf(product.getRating()) >= queryAux) || 
-					("quantity".equals(query) && Integer.valueOf(product.getQuantity()) >= queryAux);
+					("quantity".equals(query) && Integer.valueOf(product.getQuantity()) >= queryAux));
 			
-			Boolean Min_price_rating_quantity = queryAux != null && ("-price".equals(query) && Double.valueOf(product.getPrice()) <= queryAux) ||
+			Boolean Min_price_rating_quantity = queryAux != null && (("-price".equals(query) && Double.valueOf(product.getPrice()) <= queryAux) ||
 					("-rating".equals(query) && Integer.valueOf(product.getRating()) <= queryAux) || 
-					("-quantity".equals(query) && Integer.valueOf(product.getQuantity()) <= queryAux);
+					("-quantity".equals(query) && Integer.valueOf(product.getQuantity()) <= queryAux));
 			
 //			SE PUEDEN LLEVAR A CABO TODAS LAS COMBINACIONES POSIBLES DEL FILTRO NO ENUMERADO Y ENUMERADO
 			 
-			if (query == null && queryExpiration == null
-				|| query == null  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
-							|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))
-				|| product.getName().contains(query) && queryExpiration == null
-				|| product.getType().name().contains(query) && queryExpiration == null
-				|| Max_price_rating_quantity && queryExpiration == null
-				|| Min_price_rating_quantity && queryExpiration == null
-				|| product.getName().contains(query) && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
-						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now())) 
-				|| product.getType().name().contains(query)  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
-						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))
-				|| Max_price_rating_quantity  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
-						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))
-				|| Min_price_rating_quantity  && (queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now())
-						|| !queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now()))) {
-				products.add(product);
-			}
-			
-			
-			if (order != null) {
-				if (order.equals("name")) {
-					Collections.sort(products, new ComparatorNameProduct());
-				} else if (order.equals("id")) {
-					Collections.sort(products, new ComparatorIdProduct());
-				} else if (order.equals("price")) {
-					Collections.sort(products, new ComparatorPriceProduct());
-				} else if (order.equals("-price")) {
-					Collections.sort(products, new ComparatorPriceProductReversed());
-				} else if (order.equals("quantity")) {
-					Collections.sort(products, new ComparatorQuantityProduct());
-				} else if (order.equals("-quantity")) {
-					Collections.sort(products, new ComparatorQuantityProductReversed());
-				} else if (order.equals("rating")) {
-					Collections.sort(products, new ComparatorRatingProduct());
-				} else if (order.equals("-rating")) {
-					Collections.sort(products, new ComparatorRatingProductReversed());
-				} else {
-					throw new BadRequestException("The order parameter must be id,idMarket,name,price,price,rating,quantity,expirationDate,type,availability");
+			if (query == null || product.getName().equals(query) || product.getType().equals(query) ||
+					Max_price_rating_quantity || Min_price_rating_quantity) {
+				
+				if(queryExpiration == null || 
+						(queryExpiration && LocalDate.parse(product.getExpirationDate()).isBefore(LocalDate.now())) ||
+						(!queryExpiration && LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now()))) {
+					products.add(product);
 				}
 			}
 			
+		}
+		
+		if (order != null) {
+			if (order.equals("name")) {
+				Collections.sort(products, new ComparatorNameProduct());
+			} else if (order.equals("id")) {
+				Collections.sort(products, new ComparatorIdProduct());
+			} else if (order.equals("price")) {
+				Collections.sort(products, new ComparatorPriceProduct());
+			} else if (order.equals("-price")) {
+				Collections.sort(products, new ComparatorPriceProductReversed());
+			} else if (order.equals("quantity")) {
+				Collections.sort(products, new ComparatorQuantityProduct());
+			} else if (order.equals("-quantity")) {
+				Collections.sort(products, new ComparatorQuantityProductReversed());
+			} else if (order.equals("rating")) {
+				Collections.sort(products, new ComparatorRatingProduct());
+			} else if (order.equals("-rating")) {
+				Collections.sort(products, new ComparatorRatingProductReversed());
+			} else {
+				throw new BadRequestException("The order parameter must be id,idMarket,name,price,price,rating,quantity,expirationDate,type,availability");
+			}
 		}
 		
 		if (limit != null && offset == null) {

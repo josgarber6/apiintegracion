@@ -74,6 +74,7 @@ public class MapMarketRepository implements MarketRepository {
 		Product product6 = new Product(market2.getId(), "Cebollas", "1.25", "148", "2022-08-30", "5", "FOOD");
 		Product product7 = new Product(market2.getId(), "pepinillos", "2", "93", "2022-06-30", "2", "FOOD");
 		Product product8 = new Product(market2.getId(), "Call of Duty V", "45.50", "101", "null", "1", "LEISURE");
+		Product product9 = new Product(market5.getId(), "aceite", "5.6", "2", "2021-05-14", "4", "FOOD");
 		
 		addProduct(product1);
 		addProduct(product2);
@@ -83,6 +84,7 @@ public class MapMarketRepository implements MarketRepository {
 		addProduct(product6);
 		addProduct(product7);
 		addProduct(product8);
+		addProduct(product9);
 		
 		// Create users
 		User u1 = new User("Maria","aa@aiss.com","secret","baños, 33");
