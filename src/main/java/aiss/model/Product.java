@@ -14,7 +14,7 @@ public class Product {
 	private String expirationDate;
 	private ProductType type;
 	
-	public enum ProductType{
+	public enum ProductType {
 		LEISURE, FOOD, CLOTHES,  HEALTH, SPORT
 	}
 	

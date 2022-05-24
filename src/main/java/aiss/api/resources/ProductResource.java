@@ -3,6 +3,7 @@
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,7 @@ import aiss.api.resources.comparators.ComparatorRatingProductReversed;
 import aiss.api.resources.comparators.ComparatorTypeProduct;
 import aiss.api.resources.comparators.ComparatorTypeProductReversed;
 import aiss.model.Product;
+import aiss.model.Product.ProductType;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
 
@@ -74,6 +76,10 @@ public class ProductResource {
 	{
 		List<Product> products = new ArrayList<Product>();
 		
+		String typesProducts = "LEISURE,FOOD,CLOTHES,HEALTH,SPORT";
+		
+		List<String> types = Arrays.asList(typesProducts.split(","));
+		
 		for (Product product: repository.getAllProducts()) {
 			
 			Boolean Max_price_rating_quantity = queryAux != null && (("price".equals(query) && Double.valueOf(product.getPrice()) >= queryAux) ||
@@ -86,7 +92,7 @@ public class ProductResource {
 			
 //			SE PUEDEN LLEVAR A CABO TODAS LAS COMBINACIONES POSIBLES DEL FILTRO NO ENUMERADO Y ENUMERADO
 			 
-			if (query == null || product.getName().equals(query) || product.getType().equals(query) ||
+			if (query == null || product.getName().equals(query) || types.contains(query) && product.getType().equals(ProductType.valueOf(query)) ||
 					Max_price_rating_quantity || Min_price_rating_quantity) {
 				
 				if(queryExpiration == null || 
