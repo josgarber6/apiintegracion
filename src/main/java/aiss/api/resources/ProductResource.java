@@ -26,14 +26,20 @@ import javax.ws.rs.core.UriInfo;
 import org.jboss.resteasy.spi.BadRequestException;
 import org.jboss.resteasy.spi.NotFoundException;
 
+import aiss.api.resources.comparators.ComparatorDateExpiredProduct;
+import aiss.api.resources.comparators.ComparatorDateExpiredProductReversed;
 import aiss.api.resources.comparators.ComparatorIdProduct;
+import aiss.api.resources.comparators.ComparatorIdProductReversed;
 import aiss.api.resources.comparators.ComparatorNameProduct;
+import aiss.api.resources.comparators.ComparatorNameProductReversed;
 import aiss.api.resources.comparators.ComparatorPriceProduct;
 import aiss.api.resources.comparators.ComparatorPriceProductReversed;
 import aiss.api.resources.comparators.ComparatorQuantityProduct;
 import aiss.api.resources.comparators.ComparatorQuantityProductReversed;
 import aiss.api.resources.comparators.ComparatorRatingProduct;
 import aiss.api.resources.comparators.ComparatorRatingProductReversed;
+import aiss.api.resources.comparators.ComparatorTypeProduct;
+import aiss.api.resources.comparators.ComparatorTypeProductReversed;
 import aiss.model.Product;
 import aiss.model.repository.MapMarketRepository;
 import aiss.model.repository.MarketRepository;
@@ -95,8 +101,20 @@ public class ProductResource {
 		if (order != null) {
 			if (order.equals("name")) {
 				Collections.sort(products, new ComparatorNameProduct());
+			} else if (order.equals("-name")) {
+				Collections.sort(products, new ComparatorNameProductReversed());
 			} else if (order.equals("id")) {
 				Collections.sort(products, new ComparatorIdProduct());
+			} else if (order.equals("-id")) {
+				Collections.sort(products, new ComparatorIdProductReversed());
+			} else if (order.equals("date")) {
+				Collections.sort(products, new ComparatorDateExpiredProduct());
+			} else if (order.equals("-date")) {
+				Collections.sort(products, new ComparatorDateExpiredProductReversed());
+			} else if (order.equals("type")) {
+				Collections.sort(products, new ComparatorTypeProduct());
+			} else if (order.equals("-type")) {
+				Collections.sort(products, new ComparatorTypeProductReversed());
 			} else if (order.equals("price")) {
 				Collections.sort(products, new ComparatorPriceProduct());
 			} else if (order.equals("-price")) {
