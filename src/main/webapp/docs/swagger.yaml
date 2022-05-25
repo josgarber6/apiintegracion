@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers: 
-  - url: 'http://markets-api-350814.appspot.com/api'
+  - url: 'http://localhost:8089/api'
 info:
   description: API for warehouses, markets and its users
   version: 1.0.0
@@ -25,21 +25,23 @@ paths:
       parameters:
         - name: order
           in: query
-          description: Order results by name, price, quantity, rating
+          description: Order results by name, id, date, type, price, quantity, rating
           required: false
           schema:
             type: string
             enum:
               - name
               - '-name'
+              - id
+              - '-id'
+              - date
+              - '-date'
+              - type
+              - '-type'
               - price
               - '-price'
               - quantity
               - '-quantity'
-              - expirationDate
-              - '-expirationDate'
-              - type
-              - '-type'
               - rating
               - '-rating'
         - name: q
