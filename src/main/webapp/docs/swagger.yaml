@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers: 
-  - url: 'http://localhost:8089/api'
+  - url: 'https://market-api-350814.appspot.com/api'
 info:
   description: API for warehouses, markets and its users
   version: 1.0.0
