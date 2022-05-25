@@ -310,7 +310,7 @@ paths:
       parameters:
         - name: order
           in: query
-          description: Order results by date and id
+          description: Order results by id and date
           required: false
           schema:
             type: string
@@ -351,7 +351,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: '#/components/schemas/OrderCreate'
         description: Order to create
         required: true
       responses:
@@ -390,7 +390,7 @@ paths:
         '404':
           description: Order not found
   '/orders/delivered/{orderId}':
-    get:
+    put:
       tags:
         - orders
       summary: Updates an order's delivery date
@@ -404,14 +404,10 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: Order updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
+        '204':
+          description: Order's delivery date updated
         '404':
-          description: Order not updated
+          description: Order not found 
   '/orders/{orderId}':
     get:
       tags:
@@ -438,8 +434,8 @@ paths:
     delete:
       tags:
         - orders
-      summary: Delete order
-      description: Delete orders
+      summary: Delete an order
+      description: Delet an order
       operationId: removeOrder
       parameters:
         - name: orderId
@@ -459,45 +455,11 @@ paths:
           description: Order deleted
         '404':
           description: Order not found 
-    put:
-      tags:
-        - orders
-      summary: Add product to order
-      description: Add product to order
-      operationId: addProductOrder
-      requestBody:
-        content:
-          text/plain:
-            schema:
-              type: string
-      parameters:
-        - name: orderId
-          in: path
-          description: Id of the order
-          required: true
-          schema:
-            type: string
-        - name: token
-          in: query
-          description: Only puts the product to the order if the token matches the current user
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: Product added to order
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Bad request
-        '404':
-          description: Order or product not found
+      
   '/orders/{orderId}/{productId}':
     delete:
       tags:
-        - lists
+        - orders
       summary: Delete product from order
       description: Delete product from order
       operationId: deleteProductOrder
@@ -523,6 +485,36 @@ paths:
       responses:
         '204':
           description: Product deleted from order
+        '404':
+          description: Order or product not found
+    put:
+      tags:
+        - orders
+      summary: Add a product to an order
+      description: Add a product to an order
+      operationId: addProductOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: Id of the order
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Id of the product
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Only ad the product to the order if the token matches the current user
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product added to the order
         '404':
           description: Order or product not found
   /users:
@@ -577,14 +569,14 @@ paths:
     post:
       tags:
         - users
-      summary: Create a user
-      description: Create a user
+      summary: Create an user
+      description: Create an user
       operationId: createUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserCreate'
         description: User to create
         required: true
       responses:
@@ -599,9 +591,15 @@ paths:
     put:
       tags:
         - users
-      summary: Update user
-      description: Update user
+      summary: Update an user
+      description: Update an user
       operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+        description: User to update
       parameters:
         - name: token
           in: query
@@ -626,8 +624,8 @@ paths:
     get:
       tags:
         - users
-      summary: Get a user
-      description: Get a user
+      summary: Get an user
+      description: Get an user
       operationId: getUser
       parameters:
         - name: userId
@@ -673,7 +671,7 @@ paths:
     get:
       tags:
         - users
-      summary: Get a users token
+      summary: Get an users token
       description: Get a token
       operationId: getToken
       parameters:
@@ -700,16 +698,18 @@ paths:
           description: Token found
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/User'
+              schema: 
+                $ref: '#/components/schemas/Token'
+                
+                  
         '404':
           description: User not found
   '/users/password/{userId}':
     get:
       tags:
         - users
-      summary: Get a users password
-      description: Get a password
+      summary: Get an users password
+      description: Get an password
       operationId: getPassword
       parameters:
         - name: userId
@@ -730,7 +730,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Password'
         '404':
           description: User not found
 components: 
@@ -760,6 +760,7 @@ components:
       type: object 
       required: 
         - name
+        - idMarket
         - price
         - quantity
         - expirationDate
@@ -767,22 +768,25 @@ components:
       properties: 
         name: 
           type: string 
+        idMarket:
+          type: string
         price: 
           type: number
         quantity: 
           type: integer 
         expirationDate: 
           type: string 
-        category:
+        type:
           type: string
         rating:
           type: integer
       example:
         name: Pan
+        idMarket: s0
         price: 2
         quantity: 2
-        expirationDate: '2011-04-28'
-        category: 'FOOD'
+        expirationDate: '2030-04-28'
+        type: 'FOOD'
         rating: 4
     Product: 
       type: object 
@@ -791,6 +795,8 @@ components:
       properties: 
         id: 
           type: string
+        idMarket:
+          type: string
         name: 
           type: string 
         price: 
@@ -799,7 +805,7 @@ components:
           type: integer 
         expirationDate: 
           type: string 
-        category:
+        type:
           type: string
         rating:
           type: integer
@@ -807,11 +813,12 @@ components:
           type: boolean
       example:
         id: p1
+        idMarket: s0
         name: Pan
         price: 2
         quantity: 2
-        expirationDate: '2011-04-28'
-        category: 'FOOD'
+        expirationDate: '2030-04-28'
+        type: 'FOOD'
         rating: 4
         availability: true
     MarketUpdate:
@@ -852,38 +859,59 @@ components:
           type: string
         description:
           type: string
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
         orders:
           type: array
           items:
             $ref: '#/components/schemas/Order'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
       example:
-        id: m0
+        id: s0
         name: 'Más'
         description: 'none.'
-        products:
-          - id: p3
-            name: 'Balón'
-            price: 5
-            quantity: 24
-            expirationDate: null
-            category: 'SPORTS'
         orders: 
           - id: o2
-            date: '2023-05-11'
+            idMarket: s0
+            startDate: '2022-05-11'
+            deliveryDate: null
+            address: "Avenida de la Reina Mercerdes, s/n"
             shippingCosts: 2.50
-            marketId: 'm3'
-            userId: null
+            user:
+              - id: u18
+                name: Maria
+                email: aa@aiss.com
+                address: baños
             products:
               - id: p3
+                idMarket: s0
                 name: 'Balón'
                 price: 5
+                rating: 3
                 quantity: 24
                 expirationDate: null
-                category: 'SPORTS'
+                type: 'SPORTS'
+                availability: true
+              - id: p4
+                idMarket: s1
+                name: 'Coco'
+                price: 2
+                rating: 5
+                quantity: 4
+                expirationDate: null
+                type: 'FOOD'
+                availability: true
+        products:
+          - id: p3
+            idMarket: s0
+            name: 'Balón'
+            price: 5
+            rating: 4
+            quantity: 24
+            expirationDate: null
+            type: 'SPORTS'
+            availability: true
     Order:
       type: object
       required:
@@ -891,31 +919,88 @@ components:
       properties:
         id:
           type: string
+        idMarket:
+          type: string
         date:
           type: string
         shippingCosts:
           type: number
         marketId:
           type: string
-        userId:
-          type: string
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
         products:
           type: array
           items:
             $ref: '#/components/schemas/Product'
       example:
         id: o2
-        date: '2023-05-11'
+        idMarket: 's3'
+        startDate: '2022-05-11'
+        deliveryDate: null
+        address: 'Avenida Pedro Garcia'
         shippingCosts: 2.50
-        marketId: 'm3'
-        userId: null
+        user:
+          - id: 'u2'
+            name: 'Irene'
+            email: 'aa@aiss.com'
+            address: 'calle 35ª'
+        products:
+          - id: p3
+            name: 'Balón'
+            price: 5
+            rating: 3
+            quantity: 24
+            expirationDate: null
+            type: 'SPORTS'
+            availability: true
+    OrderCreate:
+      type: object
+      required:
+        - idMarket
+        - address
+        - products
+        - user
+      properties:
+        id:
+          type: string
+        idMarket:
+          type: string
+        date:
+          type: string
+        shippingCosts:
+          type: number
+        marketId:
+          type: string
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+            
+      example:
+        idMarket: 's3'
+        address: 'Avenida Pedro Garcia'
+        shippingCosts: 2.50
+        user:
+          - id: 'u2'
+            name: 'Irene'
+            email: 'aa@aiss.com'
+            address: 'calle 35ª'
         products:
           - id: p3
             name: 'Balón'
             price: 5
             quantity: 24
             expirationDate: null
-            category: 'SPORTS'
+            type: 'SPORTS'
+        
+        
     User:
       type: object
       required:
@@ -936,5 +1021,52 @@ components:
       example:
         id: 'u2'
         name: 'Irene'
-        password: 'tdlp15'
+        email: 'aa@aiss.com'
         address: 'calle 35ª'
+    UserCreate:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - address
+      properties:
+        name:
+          type: string
+        email:
+          type: number
+        password:
+          type: string
+        address:
+          type: string
+      example:
+        "name": "Irene"
+        "password": "hola"
+        "email": "aa@aiss.com"
+        "address": "calle 35ª"
+    UserUpdate:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: number
+        password:
+          type: string
+        address:
+          type: string
+      example:
+        "id": "u2"
+        "name": "Manolo"
+    Token:
+      type: string
+      example:
+        'token': 'OOUzTS2uHZzp73jeuelp'
+    Password:
+      type: string
+      example:
+        'password': '1234'
