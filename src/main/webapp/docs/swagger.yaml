@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers: 
-  - url: 'http://localhost:8089/api'
+  - url: 'http://markets-api-350814.appspot.com/api'
 info:
   description: API for warehouses, markets and its users
   version: 1.0.0
@@ -46,16 +46,18 @@ paths:
               - '-rating'
         - name: q
           in: query
-          description: Query to filter
+          description: Query to filter, the products con be filter by name, type or if q is price, -price, rating, -rating, quantity or -quantity it filter depending on the value of qAux (if it starts with "-" the filtered products will have the attribute <= than qAux, otherwise the products will have it >= ).
           required: false
           schema:
             type: string
         - name: qAux
           in: query
-          description: Query to filter
+          description: Query Aux required when QueryParam q is price, -price, rating, -rating, quantity or -quantity
           required: false
           schema:
-            type: string
+            type: integer
+            format: int32
+            minimum: 0
         - name: pExpired
           in: query
           description: Query to filter expired products
@@ -97,7 +99,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductCreate'
         description: Product to create
         required: true
       responses:
@@ -115,13 +117,13 @@ paths:
       summary: Update product
       description: Update product
       operationId: updateProduct
-      parameters:
-        - name: product
-          in: query
-          description: Product
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+        description: Product to update
+        required: true
       responses:
         '204':
           description: Product updated
@@ -180,7 +182,7 @@ paths:
       parameters:
         - name: order
           in: query
-          description: Order results by name
+          description: Order results by name or id
           required: false
           schema:
             type: string
@@ -191,13 +193,13 @@ paths:
               - '-id'
         - name: isEmptyProducts
           in: query
-          description: Filter playlists with no products
+          description: Filter markets with no products
           required: false
           schema:
             type: boolean
         - name: isEmptyOrders
           in: query
-          description: Filter playlists with no orders
+          description: Filter markets with no orders
           required: false
           schema:
             type: boolean
@@ -226,7 +228,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Market'
+              $ref: '#/components/schemas/MarketCreate'
         description: Market to create
         required: true
       responses:
@@ -248,7 +250,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Market'
+              $ref: '#/components/schemas/MarketUpdate'
         description: Market to update
       responses:
         '204':
@@ -733,6 +735,55 @@ paths:
           description: User not found
 components: 
   schemas: 
+    ProductUpdate: 
+      type: object 
+      required: 
+        - id
+      properties: 
+        id: 
+          type: string 
+        price: 
+          type: number
+        quantity: 
+          type: integer 
+        expirationDate: 
+          type: string 
+        rating:
+          type: integer
+      example:
+        id: p1
+        price: 2
+        quantity: 2
+        expirationDate: '2011-04-28'
+        rating: 4
+    ProductCreate: 
+      type: object 
+      required: 
+        - name
+        - price
+        - quantity
+        - expirationDate
+        - rating 
+      properties: 
+        name: 
+          type: string 
+        price: 
+          type: number
+        quantity: 
+          type: integer 
+        expirationDate: 
+          type: string 
+        category:
+          type: string
+        rating:
+          type: integer
+      example:
+        name: Pan
+        price: 2
+        quantity: 2
+        expirationDate: '2011-04-28'
+        category: 'FOOD'
+        rating: 4
     Product: 
       type: object 
       required: 
@@ -763,6 +814,33 @@ components:
         category: 'FOOD'
         rating: 4
         availability: true
+    MarketUpdate:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'm1'
+        name: 'Más'
+        description: 'Supermercado MAS de los remedios'
+    MarketCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        name: 'Más'
+        description: 'Supermercado MAS de los remedios'
     Market:
       type: object
       required:
@@ -793,6 +871,19 @@ components:
             quantity: 24
             expirationDate: null
             category: 'SPORTS'
+        orders: 
+          - id: o2
+            date: '2023-05-11'
+            shippingCosts: 2.50
+            marketId: 'm3'
+            userId: null
+            products:
+              - id: p3
+                name: 'Balón'
+                price: 5
+                quantity: 24
+                expirationDate: null
+                category: 'SPORTS'
     Order:
       type: object
       required:
@@ -847,4 +938,3 @@ components:
         name: 'Irene'
         password: 'tdlp15'
         address: 'calle 35ª'
-        token: '2345678909654t32'

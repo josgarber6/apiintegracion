@@ -224,7 +224,7 @@ public class ProductResource {
 			oldproduct.setQuantity(""+product.getQuantity());
 		
 		// Update expirationDate
-		if (product.getExpirationDate() != null || LocalDate.parse(product.getExpirationDate()).isAfter(LocalDate.now()))
+		if (product.getExpirationDate() != null)
 			oldproduct.setExpirationDate(""+product.getExpirationDate());
 		if(product.getExpirationDate().equals("null")) {
 			throw new BadRequestException("The expiration date of the prouduct can't be null");
