@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -169,6 +170,10 @@ public class ProductResource {
 	@Produces("application/json")
 	public Response addProduct(@Context UriInfo uriInfo, Product product) {
 		
+		Set<String> idMarkets = repository.getAllMarkets().stream().map(x -> x.getId()).collect(Collectors.toSet());
+		
+		if(product.getIdMarket() == null || "".equals(product.getIdMarket()) || !idMarkets.contains(product.getIdMarket()))
+			throw new BadRequestException("The product must have a valid idMarket");
 		if (product.getName() == null || "".equals(product.getName()))
 			throw new BadRequestException("The name of the product must not be null");
 		if (product.getRating() == null || Integer.valueOf(product.getRating()) <= 0)
