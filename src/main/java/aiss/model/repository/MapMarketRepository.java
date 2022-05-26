@@ -14,8 +14,8 @@ import aiss.model.User;
 
 public class MapMarketRepository implements MarketRepository {
 
-	Map<String, Market> MarketMap;
-	Map<String, Product> productMap;
+	Map<String, Market> marketMap;
+	public static Map<String, Product> productMap;
 	Map<String, Order> orderMap;
 	Map<String, User> userMap;
 	private static MapMarketRepository instance=null;
@@ -35,7 +35,7 @@ public class MapMarketRepository implements MarketRepository {
 	
 	public void init() {
 		
-		MarketMap = new HashMap<String,Market>();
+		marketMap = new HashMap<String,Market>();
 		productMap = new HashMap<String,Product>();
 		orderMap = new HashMap<String,Order>();
 		userMap = new HashMap<String, User>();
@@ -139,27 +139,27 @@ public class MapMarketRepository implements MarketRepository {
 	public void addMarket(Market s) {
 		String id = "s" + index++;	
 		s.setId(id);
-		MarketMap.put(id,s);
+		marketMap.put(id,s);
 	}
 	
 	@Override
 	public Collection<Market> getAllMarkets() {
-			return MarketMap.values();
+			return marketMap.values();
 	}
 
 	@Override
 	public Market getMarket(String id) {
-		return MarketMap.get(id);
+		return marketMap.get(id);
 	}
 	
 	@Override
 	public void updateMarket(Market p) {
-		MarketMap.put(p.getId(),p);
+		marketMap.put(p.getId(),p);
 	}
 
 	@Override
 	public void deleteMarket(String id) {	
-		MarketMap.remove(id);
+		marketMap.remove(id);
 	}
 	
 
