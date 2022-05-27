@@ -24,7 +24,6 @@ public class ProductResource {
 			System.err.println("Error when retrieving all products: " + cr.getResponse().getStatus());
 			throw re;
 		}
-		
 		return Arrays.asList(products);
 	}
 	
@@ -65,7 +64,6 @@ public class ProductResource {
 			System.err.println("Error when updating the product: " + cr.getResponse().getStatus());
 			success = false;
 		}
-		
 		return success;
 	}
 	
@@ -77,15 +75,12 @@ public class ProductResource {
 			cr = new ClientResource(uri + "/" + productId);
 			cr.setEntityBuffering(true);		// Needed for using RESTlet from JUnit tests
 			cr.delete();
-			
 		} catch (ResourceException re) {
 			System.err.println("Error when deleting the product: " + cr.getResponse().getStatus());
 			success = false;
 			throw re;
 		}
-		
 		return success;
-		
 	}
 
 }

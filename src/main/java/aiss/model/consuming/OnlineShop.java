@@ -39,6 +39,17 @@ public class OnlineShop {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    public OnlineShop() {}
+    public OnlineShop(String name, String url, String rating, String description, List<MarketProduct> ls) {
+    	
+    	this.name = name;
+    	this.url = url;
+    	this.rating = Integer.valueOf(rating);
+    	this.description = description;
+    	this.products = ls;
+    	
+    }
+    
     @JsonProperty("id")
     public String getId() {
         return id;
