@@ -33,6 +33,7 @@ public class MarketProduct {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public MarketProduct() {}
+    
     public MarketProduct(Product gp, String price, String stock, String popularity) {
     	this.product = gp;
     	this.price = Double.valueOf(price);

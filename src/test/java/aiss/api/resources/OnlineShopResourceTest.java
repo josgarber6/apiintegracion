@@ -18,42 +18,29 @@ import aiss.model.consuming.Product;
 public class OnlineShopResourceTest {
 	
 	static OnlineShop shop, shop2, shop3, shop4;
-	static MarketProduct marketProduct, marketProduct2, marketProduct3, marketProduct4;
-	static Product product, product2, product3, product4;
-	static List<MarketProduct> ls, ls2, ls3, ls4;
+	static MarketProduct marketProduct1, marketProduct2, marketProduct3, marketProduct4;
+	static Product product1, product2, product3, product4;
+	static List<MarketProduct> ls1, ls2, ls3, ls4;
 	static OnlineShopResource osr = new OnlineShopResource();
 	static ProductResource pr = new ProductResource();
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
 		
-		product = pr.getProduct("p0");
+		product1 = pr.getProduct("p0");
 		product2 = pr.getProduct("p1");
 		product3 = pr.getProduct("p2");
 		product4 = pr.getProduct("p3");
 		
-		marketProduct = new MarketProduct(product, "15.99", "25", "4");
-		marketProduct2 = new MarketProduct(product2, "50.0", "100", "3.5");
-		marketProduct3 = new MarketProduct(product3, "15.95", "20", "4.5");
-		marketProduct4 = new MarketProduct(product4, "25.90", "99", "2.6");
+		marketProduct1 = new MarketProduct(product1, "15.99", "25", "4");
+		marketProduct2 = new MarketProduct(product2, "50.0", "100", "3");
+		marketProduct3 = new MarketProduct(product3, "15.95", "20", "5");
+		marketProduct4 = new MarketProduct(product4, "25.90", "99", "1");
 		
-		ls.add(marketProduct);
-		
-		ls2.add(marketProduct);
-		ls2.add(marketProduct2);
-		
-		ls3.add(marketProduct2);
-		ls3.add(marketProduct3);
-		
-		ls4.add(marketProduct);
-		ls4.add(marketProduct2);
-		ls4.add(marketProduct3);
-		ls4.add(marketProduct4);
-		
-		shop = osr.addOnlineShop(new OnlineShop("Mercadona", "https://www.mercadona.es/", "4.5", "Supermercados Mercadona", ls));
-		shop2 = osr.addOnlineShop(new OnlineShop("Dia", "https://www.dia.es/", "3", "Siempre cerca de ti", ls2));
+		shop = osr.addOnlineShop(new OnlineShop("Mercadona", "https://www.mercadona.es/", "4", "Supermercados Mercadona", null));
+		shop2 = osr.addOnlineShop(new OnlineShop("Dia", "https://www.dia.es/", "3", "Siempre cerca de ti", null));
 		shop3 = osr.addOnlineShop(new OnlineShop("Carrefour", "https://www.carrefour.es/", "4", "Ahorra con Carrefour online", ls3));
-		shop4 = osr.addOnlineShop(new OnlineShop("Lidl", "https://www.lidl.es/", "3.5", "¡Marca la diferencia!", ls4));
+		shop4 = osr.addOnlineShop(new OnlineShop("Lidl", "https://www.lidl.es/", "5", "ï¿½Marca la diferencia!", ls4));
 	
 	}
 
@@ -62,8 +49,8 @@ public class OnlineShopResourceTest {
 		osr.deleteOnlineShop(shop.getId());
 		osr.deleteOnlineShop(shop3.getId());
 		osr.deleteOnlineShop(shop4.getId());
-		if(product!=null)
-			pr.deleteProduct(product.getId());
+		if(product1!=null)
+			pr.deleteProduct(product1.getId());
 	}
 	
 	@Test
@@ -123,15 +110,15 @@ public class OnlineShopResourceTest {
 
 	@Test
 	public void testAddSong() {
-		if(product!=null) {
-			boolean success = osr.addProduct(shop3.getId(), product.getId());
+		if(product1!=null) {
+			boolean success = osr.addProduct(shop3.getId(), product1.getId());
 			assertTrue("Error when adding the product", success);
 		}
 	}
 
 	@Test
 	public void testRemoveSong() {
-		boolean success = osr.removeProduct(shop3.getId(), product.getId());
+		boolean success = osr.removeProduct(shop3.getId(), product1.getId());
 		assertTrue("Error when removing the song", success);
 	}
 

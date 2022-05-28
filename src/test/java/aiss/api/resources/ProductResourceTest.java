@@ -1,6 +1,9 @@
 package aiss.api.resources;
 
+import aiss.api.consuming.resources.OnlineShopResource;
 import aiss.api.consuming.resources.ProductResource;
+import aiss.model.consuming.MarketProduct;
+import aiss.model.consuming.OnlineShop;
 import aiss.model.consuming.Product;
 
 import static org.junit.Assert.*;
@@ -15,16 +18,26 @@ import org.restlet.resource.ResourceException;
 public class ProductResourceTest {
 	
 	static Product product1, product2, product3, product4;
+	static OnlineShop online1, online2, online3, online4;
+	static MarketProduct MercadoProduct1, SupersolProduct1, DiaProduct1, MASProduct1;
 	static ProductResource pr = new ProductResource();
+	static OnlineShopResource or = new OnlineShopResource();
 
 	@BeforeClass
 	public static void setup() throws Exception {
 		
 		// Test product 1
-		product1 = pr.addProduct(new Product("Patatas", "3", "5","100","Food","1.5"));
+		product1 = pr.addProduct(new Product("Patatas", "3.25", "5","100","Food","1.5"));
 		
 		// Test product 2
 		product2 = pr.addProduct(new Product("CornFlakes", "4.5", "40","1000","Food","5.0"));
+		
+		MercadoProduct1 = new MarketProduct(product1, "3.50", "10", "25");
+		SupersolProduct1 = new MarketProduct(product1, "2.0", "22", "5");
+		DiaProduct1 = new MarketProduct(product1, "4.66", "50", "10");
+		MASProduct1 = new MarketProduct(product1, "2.50", "30", "25");
+		
+		
 		
 	}
 	
@@ -44,7 +57,7 @@ public class ProductResourceTest {
 		System.out.println("Listing all products:");
 		int i=1;
 		for (Product p : products) {
-			System.out.println("Product " + i++ + " : " + p.getName() + " (ID=" + p.getId() + ")");
+			System.out.println("Product " + i++ + " : " + p.getName() + " (ID=" + p.getId() + ")" + " (PRICE=" + p.getAveragePrice() + ")" + " (POPULARITY=" + p.getAveragePopularity() + ")" + " (STOCK=" + p.getTotalStock() + ")");
 		}
 	}
 	
@@ -76,41 +89,29 @@ public class ProductResourceTest {
 
 	}
 	
-//	@Test
-//	public void testUpdateProduct() {
-//		
-//		String productName = "Zanahoria";
-//		String averagePopularity = "4.0";
-//		String availability = "5";
-//		String totalStock = "20";
-//		String averagePrice = "1.5";
-//		String category = "FOOD";
-//		
-//		
-//		// Update product
-//		product2.setName(productName);
-//		product2.setAveragePopularity(Double.valueOf(averagePopularity));
-//		product2.setAvailability(Integer.valueOf(availability));
-//		product2.setTotalStock(Integer.valueOf(totalStock));
-//		product2.setAveragePrice(Double.valueOf(averagePrice));
-//		product2.setCategory(category);
-//		
-//		boolean success = pr.updateProduct(product2);
-//		
-//		assertTrue("Error when updating the product", success);
-//		
-//		Product product  = pr.getProduct(product2.getId());
-//		
-//		if (success) {
-//			System.out.println("Canción actualizada correctamente");
-//		}
-//		assertEquals("The product's name has not been updated correctly", productName, product.getName());
-//		assertEquals("The product's average popularity has not been updated correctly", averagePopularity, product.getAveragePopularity());
-//		assertEquals("The product's availability has not been updated correctly", availability, product.getAvailability());
-//		assertEquals("The product's total stock has not been updated correctly", totalStock, product.getTotalStock());
-//		assertEquals("The product's total average price has not been updated correctly", averagePrice, product.getAveragePrice());
-//		assertEquals("The product's total category has not been updated correctly", category, product.getCategory());
-//	}
+	@Test
+	public void testUpdateProduct() {
+		
+		String productName = "Zanahoria";
+		String category = "FOOD";
+		
+		
+		// Update product
+		product2.setName(productName);
+		product2.setCategory(category);
+		
+		boolean success = pr.updateProduct(product2);
+		
+		assertTrue("Error when updating the product", success);
+		
+		Product product  = pr.getProduct(product2.getId());
+		
+		if (success) {
+			System.out.println("Product actualizada correctamente");
+		}
+		assertEquals("The product's name has not been updated correctly", productName, product.getName());
+		assertEquals("The product's total category has not been updated correctly", category, product.getCategory());
+	}
 	
 	@Test(expected = ResourceException.class)
 	public void testDeleteProduct() {
