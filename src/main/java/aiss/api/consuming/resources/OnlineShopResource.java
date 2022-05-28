@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import aiss.model.consuming.MarketProduct;
 import aiss.model.consuming.OnlineShop;
 
 public class OnlineShopResource {
@@ -92,14 +93,14 @@ public class OnlineShopResource {
 		return success;
 	}
 	
-	public boolean addProduct(String onlineShopId, String productId) {
+	public boolean addProduct(String onlineShopId, String productId, MarketProduct productToAdd) {
 		// Use	cr.post(" ") to avoid RESTlet crashing
 		ClientResource cr = null;
 		boolean success = true;
 		try {
 			cr = new ClientResource(uri + "/" + onlineShopId + "/" + productId);
 			cr.setEntityBuffering(true);
-			cr.post(" ");
+			cr.post(productToAdd, MarketProduct.class);
 		} catch (ResourceException re) {
 			System.err.println("Error when adding the product into the online shop: " + cr.getResponse().getStatus());
 			success = false;

@@ -111,7 +111,7 @@ public class OnlineShopResourceTest {
 	@Test
 	public void testAddSong() {
 		if(product1!=null) {
-			boolean success = osr.addProduct(shop3.getId(), product1.getId());
+			boolean success = osr.addProduct(shop3.getId(), product1.getId(), marketProduct1 );
 			assertTrue("Error when adding the product", success);
 		}
 	}

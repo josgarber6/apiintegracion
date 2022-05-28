@@ -18,7 +18,7 @@ import org.restlet.resource.ResourceException;
 public class ProductResourceTest {
 	
 	static Product product1, product2, product3, product4;
-	static OnlineShop online1, online2, online3, online4;
+	static OnlineShop Mercadona, Supersol, Dia, MAS;
 	static MarketProduct MercadoProduct1, SupersolProduct1, DiaProduct1, MASProduct1;
 	static ProductResource pr = new ProductResource();
 	static OnlineShopResource or = new OnlineShopResource();
@@ -32,12 +32,10 @@ public class ProductResourceTest {
 		// Test product 2
 		product2 = pr.addProduct(new Product("CornFlakes", "4.5", "40","1000","Food","5.0"));
 		
-		MercadoProduct1 = new MarketProduct(product1, "3.50", "10", "25");
-		SupersolProduct1 = new MarketProduct(product1, "2.0", "22", "5");
-		DiaProduct1 = new MarketProduct(product1, "4.66", "50", "10");
-		MASProduct1 = new MarketProduct(product1, "2.50", "30", "25");
-		
-		
+		Mercadona = or.addOnlineShop(new OnlineShop("Mercadona", "https://www.mercadona.es/", "4", "Supermercados Mercadona", null));
+		Supersol = or.addOnlineShop(new OnlineShop("Supersol", "https://www.supersol.es/", "4", "Supermercados Supersol", null));
+		Dia = or.addOnlineShop(new OnlineShop("Dia", "https://www.dia.es/", "4", "Supermercados Dia", null));
+		MAS = or.addOnlineShop(new OnlineShop("MAS", "https://www.mas.es/", "4", "Supermercados MAS", null));
 		
 	}
 	
@@ -45,6 +43,20 @@ public class ProductResourceTest {
 	public static void tearDown() throws Exception {
 		pr.deleteProduct(product1.getId());
 		pr.deleteProduct(product2.getId());
+	}
+	
+	@Test
+	public void testAppProductToShop() {
+		
+		MercadoProduct1 = new MarketProduct(product1, "3.50", "10", "25");
+		SupersolProduct1 = new MarketProduct(product1, "2.0", "22", "5");
+		DiaProduct1 = new MarketProduct(product1, "4.66", "50", "10");
+		MASProduct1 = new MarketProduct(product1, "2.50", "30", "25");
+		
+		or.addProduct(Mercadona.getId(), product1.getId(), MercadoProduct1);
+		or.addProduct(Supersol.getId(), product1.getId(), SupersolProduct1);
+		or.addProduct(Dia.getId(), product1.getId(), DiaProduct1);
+		or.addProduct(MAS.getId(), product1.getId(), MASProduct1);
 	}
 	
 	@Test
