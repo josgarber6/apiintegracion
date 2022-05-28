@@ -89,18 +89,32 @@ public class OnlineShopResourceTest {
 		String rating = "5";
 		List<MarketProduct> newListProduct = ls4;
 		
-		shop4 = osr.addOnlineShop(new OnlineShop(shopName,url,shopDescription,rating,newListProduct));
+		shop4 = osr.addOnlineShop(new OnlineShop(shopName,url,rating,shopDescription,newListProduct));
 		
 		assertNotNull("Error when adding the shop", shop4);
 		assertEquals("The shop's name has not been setted correctly", shopName, shop4.getName());
 		assertEquals("The shop's url has not been setted correctly", url, shop4.getUrl());
 		assertEquals("The shop's description has not been setted correctly", shopDescription, shop4.getDescription());
-		assertEquals("The shop's rating has not been setted correctly", rating, shop4.getRating());
+		assertEquals("The shop's rating has not been setted correctly", Integer.valueOf(rating), shop4.getRating());
 		assertEquals("The shop's products have not been setted correctly", newListProduct, shop4.getProducts());
 	}
 	
 	@Test
-	public void testDeletePlaylist() {
+	public void testUpdateShop() {
+		String shopName = "Updated shop name";
+		shop4.setName(shopName);
+
+		boolean success = osr.updateOnlineShop(shop4);
+		
+		assertTrue("Error when updating the playlist", success);
+		
+		OnlineShop pl  = osr.getOnlineShop(shop4.getId());
+		assertEquals("The playlist's name has not been updated correctly", shopName, pl.getName());
+
+	}
+	
+	@Test
+	public void testDeleteOnlineShop() {
 		boolean success = osr.deleteOnlineShop(shop2.getId());
 		assertTrue("Error when deleting the shop", success);
 		
@@ -109,17 +123,17 @@ public class OnlineShopResourceTest {
 	}
 
 	@Test
-	public void testAddSong() {
+	public void testAddProduct() {
 		if(product1!=null) {
-			boolean success = osr.addProduct(shop3.getId(), product1.getId(), marketProduct1 );
+			boolean success = osr.addProduct(shop3.getId(), product1.getId(), marketProduct1);
 			assertTrue("Error when adding the product", success);
 		}
 	}
 
 	@Test
-	public void testRemoveSong() {
+	public void testRemoveProduct() {
 		boolean success = osr.removeProduct(shop3.getId(), product1.getId());
-		assertTrue("Error when removing the song", success);
+		assertTrue("Error when removing the product", success);
 	}
 
 }
