@@ -60,7 +60,7 @@ public class OnlineShopResource {
 		return resultOnlineShop;
 	}
 	
-	public boolean updatePlaylist(OnlineShop os) {
+	public boolean updateOnlineShop(OnlineShop os) {
 		ClientResource cr = null;
 		boolean success = true;
 		try {
