@@ -15,7 +15,7 @@ import aiss.model.consuming.Product;
 
 public class ProductResourceTest {
 	
-	static Product product1, product2, product3, product4;
+	static Product product1, product2, product3;
 	static OnlineShop Mercadona, Supersol, Dia, MAS;
 	static MarketProduct MercadoProduct1, SupersolProduct1, DiaProduct1, MASProduct1;
 	static ProductResource pr = new ProductResource();
@@ -23,12 +23,9 @@ public class ProductResourceTest {
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		
-		// Test product 1
-		product1 = pr.addProduct(new Product("Patatas", "3.25", "5","100","Food","1.5"));
 				
-		// Test product 2
-		product2 = pr.addProduct(new Product("CornFlakes", "4.5", "40","1000","Food","5.0"));
+		product2 = pr.addProduct(new Product("CornFlakes", "Food"));
+		product1 = pr.addProduct(new Product("Patatas", "FOOD"));
 				
 		Mercadona = or.addOnlineShop(new OnlineShop("Mercadona", "https://www.mercadona.es/", "4", "Supermercados Mercadona", null));
 		Supersol = or.addOnlineShop(new OnlineShop("Supersol", "https://www.supersol.es/", "4", "Supermercados Supersol", null));
@@ -38,23 +35,12 @@ public class ProductResourceTest {
 
 	@AfterClass
 	public static void tearDown() throws Exception {
+		pr.deleteProduct(product3.getId());
 		pr.deleteProduct(product1.getId());
-		pr.deleteProduct(product2.getId());
-	}
-
-	@Test
-	public void testAppProductToShop() {
-		
-		MercadoProduct1 = new MarketProduct(product1, "3.50", "10", "25");
-		SupersolProduct1 = new MarketProduct(product1, "2.0", "22", "5");
-		DiaProduct1 = new MarketProduct(product1, "4.66", "50", "10");
-		MASProduct1 = new MarketProduct(product1, "2.50", "30", "25");
-		
-		boolean success1 = or.addProduct(Mercadona.getId(), product1.getId(), MercadoProduct1);
-		or.addProduct(Supersol.getId(), product1.getId(), SupersolProduct1);
-		or.addProduct(Dia.getId(), product1.getId(), DiaProduct1);
-		or.addProduct(MAS.getId(), product1.getId(), MASProduct1);
-		assertTrue("Error when adding the product", success1);
+		or.deleteOnlineShop(Mercadona.getId());
+		or.deleteOnlineShop(Supersol.getId());
+		or.deleteOnlineShop(Dia.getId());
+		or.deleteOnlineShop(MAS.getId());
 	}
 	
 	@Test
@@ -74,29 +60,53 @@ public class ProductResourceTest {
 	@Test
 	public void testGetProduct() {
 		Product product = pr.getProduct(product2.getId());
+		assertNotNull("The products is null", product);
+		assertEquals("The category of the products do not match", product2.getCategory(), product.getCategory());
+		assertEquals("The name of the products do not match", product2.getName(), product.getName());
 		assertEquals("The id of the products do not match", product2.getId(), product.getId());
 
 		// Show result
-		System.out.println("Product name: " +  product.getId());
+		System.out.println("Product id: " +  product.getId());
+		System.out.println("Product name: " +  product.getName());
 		System.out.println("Product average popularity: " +  product.getAveragePopularity());
+		System.out.println("Product availability: " +  product.getAvailability());
+		System.out.println("Product category: " +  product.getCategory());
+		System.out.println("Product average price: " +  product.getAveragePrice());
 	}
 	
 	@Test
 	public void testAddProduct() {
 		
-		String productName = "Patatas";
-		String averagePopularity = "3";
-		String availability = "5";
-		String totalStock = "10";
-		String averagePrice = "1.5";
-		String category = "FOOD";
+		String productName = "Pantalon Zara";
+		String category = "ROPA";
 		
-		product4 = pr.addProduct(new Product(productName, averagePopularity, availability, totalStock, category, averagePrice));
+		product3 = pr.addProduct(new Product(productName, category));
 		
-		assertNotNull("Error when adding the product", product4);
-		assertEquals("The product's name has not been setted correctly", productName, product4.getName());
-		assertEquals("The product's category has not been setted correctly", category, product4.getCategory());
+		assertNotNull("Error when adding the product", product3);
+		assertEquals("The product's name has not been setted correctly", productName, product3.getName());
+		assertEquals("The product's category has not been setted correctly", category, product3.getCategory());
 
+	}
+	
+	@Test
+	public void testAppProductToShop() {
+		
+		MercadoProduct1 = new MarketProduct(product1, "3.50", "10", "25");
+		SupersolProduct1 = new MarketProduct(product1, "2.0", "22", "5");
+		DiaProduct1 = new MarketProduct(product1, "4.66", "50", "10");
+		MASProduct1 = new MarketProduct(product1, "2.50", "30", "25");
+		
+		if(product1 != null) {
+			boolean success1 = or.addProduct(Mercadona.getId(), product1.getId(), MercadoProduct1);
+			boolean success2 =  or.addProduct(Supersol.getId(), product1.getId(), SupersolProduct1);
+			boolean success3 = or.addProduct(Dia.getId(), product1.getId(), DiaProduct1);
+			boolean success4 = or.addProduct(MAS.getId(), product1.getId(), MASProduct1);
+			
+			assertTrue("Error when adding the product1 to Mercadona", success1);
+			assertTrue("Error when adding the product1 to Supersol", success2);
+			assertTrue("Error when adding the product1 to Dia", success3);
+			assertTrue("Error when adding the product1 to MAS", success4);
+		}
 	}
 	
 	
@@ -105,7 +115,7 @@ public class ProductResourceTest {
 	public void testUpdateProduct() {
 		
 		String productName = "Zanahoria";
-		String category = "FOOD";
+		String category = "ROPA";
 		
 		
 		// Update product
@@ -129,11 +139,11 @@ public class ProductResourceTest {
 	public void testDeleteProduct() {
 		
 		// Delete products
-		boolean success = pr.deleteProduct(product4.getId());
+		boolean success = pr.deleteProduct(product2.getId());
 		
 		assertTrue("Error when deleting the product", success);
 		
-		Product product = pr.getProduct(product4.getId());
+		Product product = pr.getProduct(product2.getId());
 		assertNull("The product has not been deleted correctly", product);
 	}
 

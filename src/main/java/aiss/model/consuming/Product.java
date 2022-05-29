@@ -41,6 +41,12 @@ public class Product {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Product() {}
+    
+    public Product(String name, String type) {
+    	this.name = name;
+    	this.category = type;
+    }
+    
     public Product(String id, String name, String averagePopularity, String availability, String totalStock, String category, String averagePrice) {
     	this.id = id;
     	this.name = name;
